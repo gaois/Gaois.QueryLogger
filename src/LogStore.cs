@@ -12,9 +12,9 @@ namespace Gaois.QueryLogger.Data
         /// <summary>
         /// Logs query data in a data store
         /// </summary>
-        /// <param name="query">The <see cref="Query"/> object to be logged</param>
+        /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         /// <param name="connectionString">The connection string for a SQL Server database</param>
-        public static void LogQuery(Query query, string connectionString)
+        public static void LogQuery(string connectionString, params Query[] queries)
         {
             using (SqlConnection db = new SqlConnection(connectionString))
             {
@@ -32,11 +32,7 @@ namespace Gaois.QueryLogger.Data
                     db.Execute(@"INSERT INTO QueryLog (QueryID, ApplicationName, QueryCategory, QueryText, Host, IPAddress, 
                             ExecutedSuccessfully, ExecutionTime, ResultCount, LogDate, JsonData) 
                         VALUES (@QueryID, @ApplicationName, @QueryCategory, @QueryText, @Host, @IPAddress, 
-                            @ExecutedSuccessfully, @ExecutionTime, @ResultCount, @LogDate, @JsonData)", 
-                        new { QueryID = query.QueryID, ApplicationName = query.ApplicationName, QueryCategory = query.QueryCategory, 
-                            QueryText = query.QueryText, Host = query.Host, IPAddress = query.IPAddress, 
-                            ExecutedSuccessfully = query.ExecutedSuccessfully, ExecutionTime = query.ExecutionTime, 
-                            ResultCount = query.ResultCount, LogDate = query.LogDate, JsonData = query.JsonData });
+                            @ExecutedSuccessfully, @ExecutionTime, @ResultCount, @LogDate, @JsonData)", queries);
                 }
                 catch (Exception exception)
                 {

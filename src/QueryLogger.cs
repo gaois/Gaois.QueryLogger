@@ -12,28 +12,31 @@ namespace Gaois.QueryLogger
         /// <summary>
         /// Logs query data to a data store
         /// </summary>
-        /// <param name="query">The <see cref="Query"/> object to be logged</param>
+        /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         /// <param name="connectionString">The connection string for a SQL Server database</param>
-        public static void Log(Query query, string connectionString)
+        public static void Log(string connectionString, params Query[] queries)
         {
             QueryLoggerSettings settings = new QueryLoggerSettings();
-            Log(query, settings, connectionString);
+            Log(connectionString, settings, queries);
         }
 
         /// <summary>
         /// Logs query data to a data store
         /// </summary>
-        /// <param name="query">The <see cref="Query"/> object to be logged</param>
+        /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         /// <param name="settings">The <see cref="QueryLoggerSettings"/> to configure the logger with</param>
         /// <param name="connectionString">The connection string for a SQL Server database</param>
-        public static void Log(Query query, QueryLoggerSettings settings, string connectionString)
+        public static void Log(string connectionString, QueryLoggerSettings settings, params Query[] queries)
         {
-            query.IPAddress = ProcessIPAddress(query.IPAddress, settings);
-            query.LogDate = DateTime.UtcNow;
+            foreach (Query query in queries)
+            {
+                query.IPAddress = ProcessIPAddress(query.IPAddress, settings);
+                query.LogDate = DateTime.UtcNow;
+            }
 
             try
             {
-                LogStore.LogQuery(query, connectionString);
+                LogStore.LogQuery(connectionString, queries);
             }
             catch (Exception exception)
             {

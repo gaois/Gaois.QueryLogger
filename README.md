@@ -9,7 +9,7 @@ Gaois.QueryLogger is a [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotn
 **Note:** This is a **prerelease version** for testing purposes. Expect some breaking changes and renamed API methods before we reach a 1.0 release.
 
 - [Features](#features)
-- [Install and setup](#install-and-setup)
+- [Installation and setup](#installation-and-setup)
 - [Usage](#usage)
 - [Who is using this?](#who-is-using-this)
 - [Roadmap](#roadmap)
@@ -17,11 +17,11 @@ Gaois.QueryLogger is a [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotn
 ## Features
 
 - Log query terms and associated metadata to SQL Server.
-- Metadata include a unique query ID, a query category, the host server, user IP address, and date information.
+- Metadata include a unique query ID, application name, query category, host server, client IP address, query execution success, query execution duration, result count, and date information.
 - Queries can share a GUID, meaning you can group multiple associated queries.
-- By default, the library partially anonymises user IP addresses by removing the last octet of IPv4 user IP addresses. This setting can be turned off.
+- By default, the library partially anonymises user IP addresses by removing the last octet of IPv4 client IP addresses. This setting can be turned off.
 
-## Install and setup
+## Installation and setup
 
 ### Database
 
@@ -30,55 +30,70 @@ Gaois.QueryLogger is a [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotn
 
 ### Application
 
-Add the NuGet package [Gaois.QueryLogger](https://www.nuget.org/packages/Fiontar.Localization/) to any ASP.NET Framework 4.6.1+ or ASP.NET Core 2.0+ project.
+Add the NuGet package [Gaois.QueryLogger](https://www.nuget.org/packages/Gaois.QueryLogger/) to any ASP.NET Framework 4.6.1+ or ASP.NET Core 2.0+ project.
 
 ```cmd
 dotnet add package Gaois.QueryLogger
 ```
 
-Add `using Gaois.QueryLogger;` at the top of any C# file to access the library's static methods.
+Add the `using Gaois.QueryLogger` directive to any C# file to access the library's static methods.
 
 ## Usage
 
 ### Log a query
 
-The `QueryLogger.Log()` method accepts a query object and a SQL Server database connection string:
+The `QueryLogger.Log()` method accepts a SQL Server database connection string and a variable number of `Query` objects.
+
+Example usage (ASP.NET Core):
 
 ```csharp
 var queryData = new Query()
 {
     QueryID = Guid.NewGuid(),
     ApplicationName = "My Application",
-    QueryCategory = "people_search",
+    QueryCategory = "birth_records",
     QueryText = "John Doe Jr.",
     Host = HttpContext.Request.Host.ToString();,
     IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
+    ResultCount = 27
 };
 
-QueryLogger.Log(queryData, connectionString);
+QueryLogger.Log(connectionString, queryData);
 ```
 
 ### Associate related queries
 
-If you wish to associate
+If you wish to group related queries together — for example different search queries executed on a single page — pass the associated queries the same `QueryID` parameter:
 
 ```csharp
-var queryData = new Query()
+Guid queryID = Guid.NewGuid();
+
+var births = new Query()
 {
-    QueryID = Guid.NewGuid(),
+    QueryID = queryID,
     ApplicationName = "My Application",
-    QueryCategory = "people_search",
+    QueryCategory = "birth_records",
     QueryText = "John Doe Jr.",
     Host = HttpContext.Request.Host.ToString();,
     IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
 };
 
-QueryLogger.Log(queryData, connectionString);
+var deaths = new Query()
+{
+    QueryID = queryID,
+    ApplicationName = "My Application",
+    QueryCategory = "death_records",
+    QueryText = "John Doe Jr.",
+    Host = HttpContext.Request.Host.ToString();,
+    IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
+};
+
+QueryLogger.Log(connectionString, births, deaths);
 ```
 
 ### Configure IP anonymisation
 
-The `QueryLogger.Log()` method has an overload that accepts a `QueryLoggerSettings` object. Use the settings object to configure user IP address anonymisation.
+The `Log()` method has an overload that accepts a `QueryLoggerSettings` object. Use the settings object to configure user IP address anonymisation.
 
 ```csharp
 
@@ -91,16 +106,26 @@ var queryData = new Query()
 {
     QueryID = Guid.NewGuid(),
     ApplicationName = "My Application",
-    QueryCategory = "people_search",
+    QueryCategory = "birth_records",
     QueryText = "John Doe Jr.",
     Host = HttpContext.Request.Host.ToString();,
     IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
 };
 
-QueryLogger.Log(queryData, settings, connectionString);
+QueryLogger.Log(connectionString, settings, queryData);
 ```
 
-At present the available anonymisation levels are
+At present the available anonymisation levels are **None** (no anonymisation is applied) and **Partial** (the last octet of an IPv4 client IP address is removed).
+
+You can also prevent the logger from collecting IP addresses in the first place by configuring the `StoreClientIPAddress` setting:
+
+```csharp
+
+var settings = new QueryLoggerSettings()
+{
+    StoreClientIPAddress = false
+};
+```
 
 ## Who is using this?
 
