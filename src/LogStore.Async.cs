@@ -6,16 +6,17 @@ using Dapper;
 namespace Gaois.QueryLogger.Data
 {
     /// <summary>
-    /// Stores log data in a SQL Server database
+    /// Stores log data in a SQL Server database asynchronously
     /// </summary>
     public static partial class LogStore
     {
         /// <summary>
-        /// Logs query data in a data store
+        /// Logs query data in a data store asynchronously
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         /// <param name="connectionString">The connection string for a SQL Server database</param>
-        public static void LogQuery(string connectionString, params Query[] queries)
+        /// <returns>The number of queries successfully logged</returns>
+        public static async Task<int> LogQueryAsync(string connectionString, params Query[] queries)
         {
             using (SqlConnection db = new SqlConnection(connectionString))
             {
@@ -35,7 +36,8 @@ namespace Gaois.QueryLogger.Data
 
                 try
                 {
-                    db.Execute(sql, queries);
+                    var count = await db.ExecuteAsync(sql, queries);
+                    return count;
                 }
                 catch (Exception exception)
                 {

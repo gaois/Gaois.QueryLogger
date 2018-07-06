@@ -9,6 +9,7 @@ namespace Gaois.QueryLogger
         /// Specifies whether the client IP address should be logged. The default value is true.
         /// </summary>
         public bool StoreClientIPAddress = true;
+
         /// <summary>
         /// Sets the level of client IP address anonymization. Defaults to partial anonymization.
         /// </summary>

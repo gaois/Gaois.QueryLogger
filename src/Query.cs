@@ -18,7 +18,7 @@ namespace Gaois.QueryLogger
         public string ApplicationName { get; set; }
 
         /// <summary>
-        /// Can relate the query to a category specified by the application
+        /// Relates the query to a category specified by the application
         /// </summary>
         public string QueryCategory { get; set; }
 

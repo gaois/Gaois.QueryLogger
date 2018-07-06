@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Gaois.QueryLogger.Data;
 
 namespace Gaois.QueryLogger
@@ -6,7 +7,7 @@ namespace Gaois.QueryLogger
     /// <summary>
     /// Logs query data to a data store
     /// </summary>
-    public static class QueryLogger
+    public static partial class QueryLogger
     {
         /// <summary>
         /// Logs query data to a data store
@@ -29,8 +30,8 @@ namespace Gaois.QueryLogger
         {
             foreach (Query query in queries)
             {
-                query.IPAddress = ProcessIPAddress(query.IPAddress, settings);
-                query.LogDate = DateTime.UtcNow;
+                query.IPAddress = IPAddressProcessor.Process(query.IPAddress, settings);
+                query.LogDate = (query.LogDate == null) ? DateTime.UtcNow : query.LogDate;
             }
 
             try
@@ -41,42 +42,6 @@ namespace Gaois.QueryLogger
             {
                 throw exception;
             }
-        }
-
-        private static string ProcessIPAddress(string ip, QueryLoggerSettings settings)
-        { 
-            if (settings.StoreClientIPAddress == false)
-            {
-                return "PRIVATE";
-            }
-
-            if (String.IsNullOrEmpty(ip)) 
-            {
-                return "UNKNOWN";
-            }
-
-            string result;
-
-            switch (settings.AnonymizeIPAddress)
-            {
-                case IPAddressAnonymizationLevel.None:
-                    result = ip;
-                    break;
-                case IPAddressAnonymizationLevel.Partial:
-                    result = PartiallyAnonymizeIP(ip);
-                    break;
-                default:
-                    result = String.Empty;
-                    break;
-            }
-
-            return result;
-        }
-
-        private static string PartiallyAnonymizeIP(string ip)
-        {
-            int lastPosition = ip.LastIndexOf(".");
-            return (lastPosition > 0) ? ip.Substring(0, lastPosition) : ip;
         }
     }
 }
