@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using Gaois.QueryLogger.Data;
 
 namespace Gaois.QueryLogger

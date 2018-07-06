@@ -4,7 +4,7 @@
 
 A simple, configurable query logger for ASP.NET and ASP.NET Core applications. It is the query logger used internally by [Fiontar & Scoil na Gaeilge](https://www.gaois.ie), Dublin City University, Ireland to log search statistics to SQL Server. In the future, the library will support additional backend data stores.
 
-Gaois.QueryLogger is a [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) library and it supports applications built with ASP.NET Framework 4.6.1 or ASP.NET Core 2.0 or higher.  SQL commands executed within the query logger are handled by the [Dapper](https://github.com/StackExchange/Dapper/) micro-ORM for consistency with our other libraries.
+Gaois.QueryLogger is a [.NET Standard 1.4](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) library and it supports applications built with ASP.NET Framework 4.6.1 or ASP.NET Core 2.0 or higher.  SQL commands executed within the query logger are handled by the [Dapper](https://github.com/StackExchange/Dapper/) micro-ORM for consistency with our other libraries.
 
 **Note:** This is a **prerelease version** for testing purposes. Expect some breaking changes and renamed API methods before we reach a 1.0 release.
 
@@ -53,7 +53,7 @@ var queryData = new Query()
     ApplicationName = "My Application",
     QueryCategory = "birth_records",
     QueryText = "John Doe Jr.",
-    Host = HttpContext.Request.Host.ToString();,
+    Host = HttpContext.Request.Host.ToString(),
     IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
     ResultCount = 27
 };
@@ -74,7 +74,7 @@ var births = new Query()
     ApplicationName = "My Application",
     QueryCategory = "birth_records",
     QueryText = "John Doe Jr.",
-    Host = HttpContext.Request.Host.ToString();,
+    Host = HttpContext.Request.Host.ToString(),
     IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
 };
 
@@ -84,7 +84,7 @@ var deaths = new Query()
     ApplicationName = "My Application",
     QueryCategory = "death_records",
     QueryText = "John Doe Jr.",
-    Host = HttpContext.Request.Host.ToString();,
+    Host = HttpContext.Request.Host.ToString(),
     IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
 };
 
@@ -108,7 +108,7 @@ var queryData = new Query()
     ApplicationName = "My Application",
     QueryCategory = "birth_records",
     QueryText = "John Doe Jr.",
-    Host = HttpContext.Request.Host.ToString();,
+    Host = HttpContext.Request.Host.ToString(),
     IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
 };
 
