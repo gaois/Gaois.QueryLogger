@@ -26,7 +26,7 @@ Gaois.QueryLogger is a [.NET Standard 1.4](https://docs.microsoft.com/en-us/dotn
 ### Database
 
 1. Give the application permissions to a database.
-2. Run the SQL script to create the `QueryLogs` table in the same database.
+2. Run the [SQL script to create the `QueryLogs` table](https://github.com/dcufsg/Gaois.QueryLogger/tree/master/DBScripts) in the same database.
 
 ### Application
 
@@ -84,25 +84,29 @@ If you wish to group related queries together — for example different search q
 
 ```csharp
 Guid queryID = Guid.NewGuid();
+string application = "My Application";
+string searchText = "John Doe Jr.";
+string host = HttpContext.Request.Host.ToString();
+string ipAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
 
 var births = new Query()
 {
     QueryID = queryID,
-    ApplicationName = "My Application",
+    ApplicationName = application,
     QueryCategory = "birth_records",
-    QueryText = "John Doe Jr.",
-    Host = HttpContext.Request.Host.ToString(),
-    IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
+    QueryText = searchText,
+    Host = host,
+    IPAddress = ipAddress
 };
 
 var deaths = new Query()
 {
     QueryID = queryID,
-    ApplicationName = "My Application",
+    ApplicationName = application,
     QueryCategory = "death_records",
-    QueryText = "John Doe Jr.",
-    Host = HttpContext.Request.Host.ToString(),
-    IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
+    QueryText = searchText,
+    Host = host,
+    IPAddress = ipAddress
 };
 
 QueryLogger.Log(connectionString, births, deaths);
