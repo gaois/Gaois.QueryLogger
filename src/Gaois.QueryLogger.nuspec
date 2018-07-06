@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>Gaois.QueryLogger</id>
-    <version>0.5.3-alpha</version>
+    <version>0.5.4-alpha</version>
     <title>Gaois.QueryLogger</title>
     <authors>Ronan Doherty</authors>
-    <owners>Fiontar & Scoil na Gaeilge, Dublin City University</owners>
+    <owners>Fiontar agus Scoil na Gaeilge, Dublin City University</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A simple, configurable query logger for ASP.NET and ASP.NET Core applications.</description>
     <releaseNotes>Initial prerelease trial</releaseNotes>
