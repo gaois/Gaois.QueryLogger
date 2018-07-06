@@ -10,7 +10,12 @@ Gaois.QueryLogger is a [.NET Standard 1.4](https://docs.microsoft.com/en-us/dotn
 
 - [Features](#features)
 - [Installation and setup](#installation-and-setup)
+  - [Database](#database)
+  - [Application](#application)
 - [Usage](#usage)
+  - [Log a query](#log-a-query)
+  - [Associate related queries](#associate-related-queries)
+  - [Configure IP anonymisation](#configure-ip-anonymisation)
 - [Who is using this?](#who-is-using-this)
 - [Roadmap](#roadmap)
 
