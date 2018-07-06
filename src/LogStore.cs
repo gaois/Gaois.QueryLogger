@@ -29,7 +29,7 @@ namespace Gaois.QueryLogger.Data
 
                 try
                 {
-                    db.Execute(@"INSERT INTO QueryLog (QueryID, ApplicationName, QueryCategory, QueryText, Host, IPAddress, 
+                    db.Execute(@"INSERT INTO QueryLogs (QueryID, ApplicationName, QueryCategory, QueryText, Host, IPAddress, 
                             ExecutedSuccessfully, ExecutionTime, ResultCount, LogDate, JsonData) 
                         VALUES (@QueryID, @ApplicationName, @QueryCategory, @QueryText, @Host, @IPAddress, 
                             @ExecutedSuccessfully, @ExecutionTime, @ResultCount, @LogDate, @JsonData)", queries);

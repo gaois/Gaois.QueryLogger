@@ -53,7 +53,7 @@ var queryData = new Query()
     ApplicationName = "My Application",
     QueryCategory = "birth_records",
     QueryText = "John Doe Jr.",
-    Host = HttpContext.Request.Host.ToString();,
+    Host = HttpContext.Request.Host.ToString(),
     IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
     ResultCount = 27
 };
@@ -91,7 +91,7 @@ var births = new Query()
     ApplicationName = "My Application",
     QueryCategory = "birth_records",
     QueryText = "John Doe Jr.",
-    Host = HttpContext.Request.Host.ToString();,
+    Host = HttpContext.Request.Host.ToString(),
     IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
 };
 
@@ -101,7 +101,7 @@ var deaths = new Query()
     ApplicationName = "My Application",
     QueryCategory = "death_records",
     QueryText = "John Doe Jr.",
-    Host = HttpContext.Request.Host.ToString();,
+    Host = HttpContext.Request.Host.ToString(),
     IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
 };
 
@@ -125,7 +125,7 @@ var queryData = new Query()
     ApplicationName = "My Application",
     QueryCategory = "birth_records",
     QueryText = "John Doe Jr.",
-    Host = HttpContext.Request.Host.ToString();,
+    Host = HttpContext.Request.Host.ToString(),
     IPAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()
 };
 
