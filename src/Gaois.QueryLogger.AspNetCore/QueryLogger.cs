@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Gaois.QueryLogger.Data;
 
 namespace Gaois.QueryLogger.AspNetCore
@@ -7,58 +8,42 @@ namespace Gaois.QueryLogger.AspNetCore
     /// <summary>
     /// Logs query data to a data store
     /// </summary>
-    public static partial class QueryLogger
+    public partial class QueryLogger : IQueryLogger
     {
-        /*public static void Log(params Query[] queries)
-        {
-            string connectionString = ConfigurationAccess.GetConnectionString();
-            QueryLoggerSettings settings = new QueryLoggerSettings();
-            Log(connectionString, settings, queries);
-        }
-
-        public static void Log(QueryLoggerSettings settings, params Query[] queries)
-        {
-            string connectionString = ConfigurationAccess.GetConnectionString();
-            Log(connectionString, settings, queries);
-        }*/
+        private readonly IHttpContextAccessor Accessor;
+        private readonly IOptions<QueryLoggerSettings> Settings;
 
         /// <summary>
         /// Logs query data to a data store
         /// </summary>
-        /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
-        /// <param name="connectionString">The connection string for a SQL Server database</param>
-        public static void Log(string connectionString, params Query[] queries)
+        public QueryLogger(IHttpContextAccessor accessor, IOptions<QueryLoggerSettings> settings)
         {
-            QueryLoggerSettings settings = new QueryLoggerSettings();
-            Log(connectionString, settings, queries);
+            Accessor = accessor;
+            Settings = settings;
         }
 
         /// <summary>
         /// Logs query data to a data store
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
-        /// <param name="settings">The <see cref="QueryLoggerSettings"/> to configure the logger with</param>
-        /// <param name="connectionString">The connection string for a SQL Server database</param>
-        public static void Log(string connectionString, QueryLoggerSettings settings, params Query[] queries)
+        public void Log(params Query[] queries)
         {
-            var request = HttpContext.Current.Request;
+            var context = Accessor.HttpContext;
 
             foreach (Query query in queries)
             {
-                string host = Request.Url.Host;
-                string ipAddress = String.Empty;
+                string host = context.Request.Host.ToString();
+                string ipAddress = (String.IsNullOrEmpty(query.IPAddress)) ? context.Connection.RemoteIpAddress.ToString() : query.IPAddress;
 
-                host = request.Url.Host;
-                ipAddress = (String.IsNullOrEmpty(query.IPAddress)) ? request.UserHostAddress : query.IPAddress;
-
+                query.QueryID = (query.QueryID == null) ? Guid.NewGuid() : query.QueryID;
                 query.Host = (String.IsNullOrEmpty(query.Host)) ? host : query.Host;
-                query.IPAddress = IPAddressProcessor.Process(ipAddress, settings);
+                query.IPAddress = IPAddressProcessor.Process(ipAddress, Settings.Value);
                 query.LogDate = (query.LogDate == null) ? DateTime.UtcNow : query.LogDate;
             }
 
             try
             {
-                LogStore.LogQuery(connectionString, queries);
+                LogStore.LogQuery(Settings.Value.ConnectionString, queries);
             }
             catch (Exception exception)
             {

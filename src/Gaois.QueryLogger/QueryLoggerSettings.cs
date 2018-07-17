@@ -6,6 +6,11 @@ namespace Gaois.QueryLogger
     public class QueryLoggerSettings
     {
         /// <summary>
+        /// 
+        /// </summary>
+        public string ConnectionString { get; set; }
+
+        /// <summary>
         /// Specifies whether the client IP address should be logged. The default value is true.
         /// </summary>
         public bool StoreClientIPAddress = true;
