@@ -1,32 +1,20 @@
 ﻿using System;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 using Gaois.QueryLogger.Data;
 
 namespace Gaois.QueryLogger.AspNetCore
 {
     /// <summary>
-    /// Logs query data to a data store
+    /// Logs query data to a data store asynchronously
     /// </summary>
     public partial class QueryLogger : IQueryLogger
     {
-        private readonly IHttpContextAccessor Accessor;
-        private readonly IOptions<QueryLoggerSettings> Settings;
-
         /// <summary>
-        /// Logs query data to a data store
-        /// </summary>
-        public QueryLogger(IHttpContextAccessor accessor, IOptions<QueryLoggerSettings> settings)
-        {
-            Accessor = accessor;
-            Settings = settings;
-        }
-
-        /// <summary>
-        /// Logs query data to a data store
+        /// Logs query data to a data store asynchronously
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
-        public void Log(params Query[] queries)
+        /// <returns>The number of queries successfully logged</returns>
+        public async Task<int> LogAsync(params Query[] queries)
         {
             var context = Accessor.HttpContext;
 
@@ -43,7 +31,7 @@ namespace Gaois.QueryLogger.AspNetCore
 
             try
             {
-                LogStore.LogQuery(Settings.Value.Store.ConnectionString, queries);
+                return await LogStore.LogQueryAsync(Settings.Value.Store.ConnectionString, queries);
             }
             catch (Exception exception)
             {

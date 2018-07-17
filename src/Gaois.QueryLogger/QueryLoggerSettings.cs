@@ -6,9 +6,9 @@ namespace Gaois.QueryLogger
     public class QueryLoggerSettings
     {
         /// <summary>
-        /// 
+        /// Specifies settings that configure the query logger store
         /// </summary>
-        public string ConnectionString { get; set; }
+        public QueryLoggerStoreSettings Store { get; set; }
 
         /// <summary>
         /// Specifies whether the client IP address should be logged. The default value is true.
@@ -19,5 +19,13 @@ namespace Gaois.QueryLogger
         /// Sets the level of client IP address anonymization. Defaults to partial anonymization.
         /// </summary>
         public IPAddressAnonymizationLevel AnonymizeIPAddress = IPAddressAnonymizationLevel.Partial;
+
+        /// <summary>
+        /// Specifies settings that configure the query logger
+        /// </summary>
+        public QueryLoggerSettings()
+        {
+            Store = new QueryLoggerStoreSettings();
+        }
     }
 }
