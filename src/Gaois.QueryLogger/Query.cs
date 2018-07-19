@@ -10,7 +10,7 @@ namespace Gaois.QueryLogger
         /// <summary>
         /// A unique ID that represents a specific query or group of queries
         /// </summary>
-        public Guid QueryID { get; set; }
+        public Guid? QueryID { get; set; }
 
         /// <summary>
         /// The name of the application that executes the query
@@ -55,7 +55,7 @@ namespace Gaois.QueryLogger
         /// <summary>
         /// The date and time of query logging. Gaois.QueryLogger logs this information automatically.
         /// </summary>
-        public DateTime LogDate { get; set; }
+        public DateTime? LogDate { get; set; }
 
         /// <summary>
         /// Record additional data in JSON format
