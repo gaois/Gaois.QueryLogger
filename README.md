@@ -25,8 +25,8 @@ Gaois.QueryLogger is a [.NET Standard 1.4](https://docs.microsoft.com/en-us/dotn
 
 Installation and usage vary slightly according to the target framework. Follow the links below to see the relevant documentation.
 
-- Read the documentation for .NET Framework 4.6.1+ here.
-- Read the documentation for ASP.NET Core 2.0+ here.
+- Read the documentation for .NET Framework 4.6.1+ [here](src/Gaois.QueryLogger/).
+- Read the documentation for ASP.NET Core 2.0+ [here](src/Gaois.QueryLogger.AspNetCore/).
 
 ## Who is using this?
 

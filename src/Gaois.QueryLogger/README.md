@@ -1,6 +1,6 @@
 # Gaois.QueryLogger (ASP.NET Framework)
 
-A simple, configurable query logger for ASP.NET Framework 4.6.1+ applications. Find a general introduction to the library here.
+A simple, configurable query logger for ASP.NET Framework 4.6.1+ applications. Find a general introduction to the library [here](../../).
 
 - [Installation and setup](#installation-and-setup)
   - [Database](#database)
