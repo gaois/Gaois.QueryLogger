@@ -4,9 +4,16 @@
     <TargetFrameworks>netstandard1.4;net461</TargetFrameworks>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <PackageId>Gaois.QueryLogger</PackageId>
-    <version>0.5.5-alpha</version>
+    <version>0.5.6-alpha</version>
     <Authors>Ronan Doherty</Authors>
     <Company>Fiontar agus Scoil na Gaeilge, Dublin City University</Company>
+    <Description>A simple, configurable query logger for ASP.NET Framework applications.</Description>
+    <Copyright>Copyright 2018</Copyright>
+    <PackageProjectUrl>https://github.com/dcufsg/Gaois.QueryLogger/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dcufsg/Gaois.QueryLogger/</RepositoryUrl>
+    <PackageTags>search query logging web</PackageTags>
+    <PackageReleaseNotes>Initial prerelease trial</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -4,7 +4,7 @@
 
 A simple, configurable query logger for ASP.NET and ASP.NET Core applications. It is the query logger used internally by [Fiontar & Scoil na Gaeilge](https://www.gaois.ie), Dublin City University, Ireland to log search statistics to SQL Server. In the future, the library will support additional backend data stores.
 
-Gaois.QueryLogger is a [.NET Standard 1.4](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) library and it supports applications built with ASP.NET Framework 4.6.1 or ASP.NET Core 2.0 or higher.  SQL commands executed within the query logger are handled by the [Dapper](https://github.com/StackExchange/Dapper/) micro-ORM for consistency with our other libraries.
+Gaois.QueryLogger is a [.NET Standard 1.4](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) library and it supports applications built with ASP.NET Framework 4.6.1 or ASP.NET Core 2.1 or higher.  SQL commands executed within the query logger are handled by the [Dapper](https://github.com/StackExchange/Dapper/) micro-ORM for consistency with our other libraries.
 
 **Note:** This is a **prerelease version** for testing purposes. Expect some breaking changes and renamed API methods before we reach a 1.0 release.
 
@@ -26,7 +26,7 @@ Gaois.QueryLogger is a [.NET Standard 1.4](https://docs.microsoft.com/en-us/dotn
 Installation and usage vary slightly according to the target framework. Follow the links below to see the relevant documentation.
 
 - Read the documentation for .NET Framework 4.6.1+ [here](src/Gaois.QueryLogger/).
-- Read the documentation for ASP.NET Core 2.0+ [here](src/Gaois.QueryLogger.AspNetCore/).
+- Read the documentation for ASP.NET Core 2.1+ [here](src/Gaois.QueryLogger.AspNetCore/).
 
 ## Who is using this?
 
@@ -36,6 +36,8 @@ Gaois.QueryLogger has been implemented on several of Fiontar & Scoil na Gaeilge'
 
 Planned developments for this library:
 
-- Add options to access the data store settings from a configuration file
+- Add unit tests.
+- Add sample project.
+- Add options to access the data store settings from a configuration file.
 - Provide Sqlite implementation.
 - Provide additional IP anonymisation options (e.g. Hashed).

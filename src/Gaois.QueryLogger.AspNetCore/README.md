@@ -1,6 +1,6 @@
 # Gaois.QueryLogger (ASP.NET Core)
 
-A simple, configurable query logger for ASP.NET Core 2.0+ applications. Find a general introduction to the library [here](../../).
+A simple, configurable query logger for ASP.NET Core 2.1+ applications. Find a general introduction to the library [here](../../).
 
 - [Installation and setup](#installation-and-setup)
   - [Database](#database)
@@ -20,7 +20,7 @@ A simple, configurable query logger for ASP.NET Core 2.0+ applications. Find a g
 
 ### Application
 
-Add the NuGet package [Gaois.QueryLogger.AspNetCore](https://www.nuget.org/packages/Gaois.QueryLogger.AspNetCore/) to any ASP.NET Core 2.0+ project.
+Add the NuGet package [Gaois.QueryLogger.AspNetCore](https://www.nuget.org/packages/Gaois.QueryLogger.AspNetCore/) to any ASP.NET Core 2.1+ project.
 
 ```cmd
 dotnet add package Gaois.QueryLogger.AspNetCore

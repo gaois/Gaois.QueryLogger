@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace Gaois.QueryLogger
 {
@@ -44,8 +47,28 @@ namespace Gaois.QueryLogger
 
         private static string PartiallyAnonymizeIP(string ip)
         {
-            int lastPosition = ip.LastIndexOf(".");
-            return (lastPosition > 0) ? ip.Substring(0, lastPosition) : ip;
+            string anonymizedIP = String.Empty;
+
+            if (IPAddress.TryParse(ip, out IPAddress address))
+            {
+                switch (address.AddressFamily)
+                {
+                    // IPv4
+                    case AddressFamily.InterNetwork:
+                        int lastPosition = ip.LastIndexOf(".");
+                        anonymizedIP = (lastPosition > 0) ? ip.Substring(0, lastPosition) + ".0" : String.Empty;
+                        break;
+                    // IPv6
+                    case AddressFamily.InterNetworkV6:
+                        byte[] fullIP = address.GetAddressBytes();
+                        byte[] abbreviatedIP = new byte[fullIP.Length - 10];
+                        Array.Copy(fullIP, abbreviatedIP, 6);
+                        anonymizedIP = Encoding.UTF8.GetString(abbreviatedIP) + "0000:0000:0000:0000:0000";
+                        break;
+                }
+            }
+
+            return anonymizedIP;
         }
     }
 }
