@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Gaois.QueryLogger.AspNetCore
+namespace Gaois.QueryLogger
 {
     /// <summary>
     /// Extension methods for configuring Gaois.QueryLogger
@@ -23,7 +23,7 @@ namespace Gaois.QueryLogger.AspNetCore
             }
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IQueryLogger, QueryLogger>();
+            services.AddTransient<IQueryLogger, QueryLoggerCore>();
 
             return services;
         }

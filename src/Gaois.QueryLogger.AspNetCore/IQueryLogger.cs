@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Gaois.QueryLogger.AspNetCore
+namespace Gaois.QueryLogger
 {
     public interface IQueryLogger
     {

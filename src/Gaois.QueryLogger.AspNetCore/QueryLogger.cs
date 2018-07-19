@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Gaois.QueryLogger.Data;
 
-namespace Gaois.QueryLogger.AspNetCore
+namespace Gaois.QueryLogger
 {
     /// <summary>
     /// Logs query data to a data store
     /// </summary>
-    public partial class QueryLogger : IQueryLogger
+    public partial class QueryLoggerCore : IQueryLogger
     {
         private readonly IHttpContextAccessor Accessor;
         private readonly IOptions<QueryLoggerSettings> Settings;
@@ -16,7 +16,7 @@ namespace Gaois.QueryLogger.AspNetCore
         /// <summary>
         /// Logs query data to a data store
         /// </summary>
-        public QueryLogger(IHttpContextAccessor accessor, IOptions<QueryLoggerSettings> settings)
+        public QueryLoggerCore(IHttpContextAccessor accessor, IOptions<QueryLoggerSettings> settings)
         {
             Accessor = accessor;
             Settings = settings;

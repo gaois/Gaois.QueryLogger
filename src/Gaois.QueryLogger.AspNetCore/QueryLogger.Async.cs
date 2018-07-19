@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Gaois.QueryLogger.Data;
 
-namespace Gaois.QueryLogger.AspNetCore
+namespace Gaois.QueryLogger
 {
     /// <summary>
     /// Logs query data to a data store asynchronously
     /// </summary>
-    public partial class QueryLogger : IQueryLogger
+    public partial class QueryLoggerCore : IQueryLogger
     {
         /// <summary>
         /// Logs query data to a data store asynchronously
