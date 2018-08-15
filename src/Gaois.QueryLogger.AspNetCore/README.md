@@ -81,7 +81,7 @@ The `LogAsync()` method is provided if you wish to log query data in an asynchro
 
 ### Associate related queries
 
-If you wish to group related queries together � for example different search queries executed on a single page � pass the associated queries the same `QueryID` parameter:
+If you wish to group related queries together — for example different search queries executed on a single page — pass the associated queries the same `QueryID` parameter:
 
 ```csharp
 Guid queryID = Guid.NewGuid();
