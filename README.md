@@ -24,14 +24,13 @@ Gaois.QueryLogger is a [.NET Standard 1.4](https://docs.microsoft.com/en-us/dotn
 - Log query terms and associated metadata to SQL Server.
 - Metadata include a unique query ID, application name, query category, host server, client IP address, query execution success, query execution duration, result count, and date information.
 - Queries can share a GUID, meaning you can group multiple associated queries.
-- By default, the library partially anonymises user IP addresses by removing the last octet of IPv4 client IP addresses. This setting can be turned off.
-
+- By default, the library partially anonymises user IP addresses by removing the last octet of IPv4 client IP addresses or the last 80 bits of an IPv6 address. This setting can be turned off.
 
 ## Documentation
 
 Installation and usage vary slightly according to the target framework. Follow the links below to see the relevant documentation.
 
-- Read the documentation for .NET Framework 4.6.1+ [here](src/Gaois.QueryLogger/).
+- Read the documentation for ASP.NET Framework 4.6.1+ [here](src/Gaois.QueryLogger/).
 - Read the documentation for ASP.NET Core 2.1+ [here](src/Gaois.QueryLogger.AspNetCore/).
 
 ## Who is using this?

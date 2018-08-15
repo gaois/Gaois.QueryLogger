@@ -60,7 +60,7 @@ The `LogAsync()` method is provided if you wish to log query data in an asynchro
 
 ### Associate related queries
 
-If you wish to group related queries together — for example different search queries executed on a single page — pass the associated queries the same `QueryID` parameter:
+If you wish to group related queries together ï¿½ for example different search queries executed on a single page ï¿½ pass the associated queries the same `QueryID` parameter:
 
 ```csharp
 Guid queryID = Guid.NewGuid();
@@ -108,7 +108,7 @@ var queryData = new Query()
 QueryLogger.Log(connectionString, settings, queryData);
 ```
 
-At present the available anonymisation levels are **None** (no anonymisation is applied) and **Partial** (the last octet of an IPv4 client IP address is removed).
+At present the available anonymisation levels are **None** (no anonymisation is applied) and **Partial** (the last octet of an IPv4 client IP address or the last 80 bits of an IPv6 address are removed).
 
 You can also prevent the logger from collecting IP addresses in the first place by configuring the `StoreClientIPAddress` setting:
 
