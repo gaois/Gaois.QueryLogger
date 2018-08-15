@@ -3,7 +3,7 @@
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/Gaois.QueryLogger.svg)](https://www.nuget.org/packages/Gaois.QueryLogger/)
 [![NuGet](https://img.shields.io/nuget/dt/Gaois.QueryLogger.svg)](https://www.nuget.org/packages/Gaois.QueryLogger/)
 
-A simple, configurable query logger for ASP.NET Framework 4.6.1+ applications. Find a general introduction to the library [here](../../).
+A simple, configurable query logger for ASP.NET Framework 4.6.1+ applications. Find a general introduction to the library [here](https://github.com/dcufsg/Gaois.QueryLogger).
 
 - [Installation and setup](#installation-and-setup)
   - [Database](#database)
