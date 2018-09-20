@@ -33,10 +33,6 @@ Installation and usage vary slightly according to the target framework. Follow t
 - Read the documentation for ASP.NET Framework 4.6.1+ [here](src/Gaois.QueryLogger/).
 - Read the documentation for ASP.NET Core 2.1+ [here](src/Gaois.QueryLogger.AspNetCore/).
 
-## Who is using this?
-
-Gaois.QueryLogger has been implemented on several of Fiontar & Scoil na Gaeilge's project websites, including [www.dúchas.ie](https://www.duchas.ie/), [www.gaois.ie](https://www.gaois.ie), [www.logainm.ie](https://www.logainm.ie), and [meitheal.logainm.ie](https://meitheal.logainm.ie).
-
 ## Roadmap
 
 Planned developments for this library:
