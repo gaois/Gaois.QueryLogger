@@ -4,11 +4,11 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>A simple, configurable query logger for ASP.NET Core applications.</Description>
-    <Version>0.5.6.1-alpha</Version>
+    <Version>0.5.6.2-alpha</Version>
     <PackageTags>search query logging web</PackageTags>
     <RepositoryType>Git</RepositoryType>
-    <RepositoryUrl>https://github.com/dcufsg/Gaois.QueryLogger/</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/dcufsg/Gaois.QueryLogger/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/gaois/Gaois.QueryLogger/</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/gaois/Gaois.QueryLogger/</PackageProjectUrl>
     <PackageReleaseNotes>Initial prerelease trial</PackageReleaseNotes>
     <Copyright>Copyright 2018</Copyright>
     <Authors>Ronan Doherty</Authors>
