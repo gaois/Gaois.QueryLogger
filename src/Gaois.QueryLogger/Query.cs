@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 
 namespace Gaois.QueryLogger
 {
@@ -61,5 +62,17 @@ namespace Gaois.QueryLogger
         /// Record additional data in JSON format
         /// </summary>
         public string JsonData { get; set; }
+
+        /// <summary>
+        /// Get a JSON representation for this query
+        /// </summary>
+        public string ToJson() => JsonConvert.SerializeObject(this);
+
+        /// <summary>
+        /// Deserializes provided JSON into a Query object
+        /// </summary>
+        /// <param name="json">JSON representing a Query</param>
+        /// <returns>The Query object</returns>
+        public static Query FromJson(string json) => JsonConvert.DeserializeObject<Query>(json);
     }
 }
