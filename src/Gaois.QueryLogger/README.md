@@ -44,7 +44,8 @@ var query = new Query()
 {
     ApplicationName = "My Application",
     QueryCategory = "land_records",
-    QueryText = this.search,
+    QueryTerms = this.search,
+    QueryText = Request.Url.Query,
     ResultCount = this.records.Count
 };
 
@@ -72,7 +73,7 @@ var births = new Query()
     QueryID = queryID,
     ApplicationName = application,
     QueryCategory = "birth_records",
-    QueryText = searchText
+    QueryTerms = searchText
 };
 
 var deaths = new Query()
@@ -80,7 +81,7 @@ var deaths = new Query()
     QueryID = queryID,
     ApplicationName = application,
     QueryCategory = "death_records",
-    QueryText = searchText
+    QueryTerms = searchText
 };
 
 QueryLogger.Log(connectionString, births, deaths);
@@ -102,7 +103,8 @@ var queryData = new Query()
     QueryID = Guid.NewGuid(),
     ApplicationName = "My Application",
     QueryCategory = "birth_records",
-    QueryText = "John Doe Jr."
+    QueryTerms = "John Doe Jr.",
+    QueryText = Request.Url.Query
 };
 
 QueryLogger.Log(connectionString, settings, queryData);
