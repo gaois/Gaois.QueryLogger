@@ -1,6 +1,5 @@
 using System;
 using System.Data.SqlClient;
-using System.Threading.Tasks;
 using Dapper;
 
 namespace Gaois.QueryLogger.Data
@@ -20,8 +19,8 @@ namespace Gaois.QueryLogger.Data
             using (SqlConnection db = new SqlConnection(connectionString))
             {
                 const string sql = @"INSERT INTO QueryLogs (QueryID, ApplicationName, QueryCategory, 
-                    QueryText, Host, IPAddress, ExecutedSuccessfully, ExecutionTime, ResultCount, LogDate, JsonData) 
-                VALUES (@QueryID, @ApplicationName, @QueryCategory, @QueryText, @Host, @IPAddress, @ExecutedSuccessfully, 
+                    QueryTerms, QueryText, Host, IPAddress, ExecutedSuccessfully, ExecutionTime, ResultCount, LogDate, JsonData) 
+                VALUES (@QueryID, @ApplicationName, @QueryCategory, @QueryTerms, @QueryText, @Host, @IPAddress, @ExecutedSuccessfully, 
                     @ExecutionTime, @ResultCount, @LogDate, @JsonData);";
 
                 try
