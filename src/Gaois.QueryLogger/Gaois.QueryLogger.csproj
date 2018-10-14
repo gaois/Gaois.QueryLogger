@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard1.4;net461</TargetFrameworks>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <PackageId>Gaois.QueryLogger</PackageId>
-    <version>0.5.8-alpha</version>
+    <version>0.5.9-alpha</version>
     <Authors>Ronan Doherty</Authors>
     <Company>Fiontar &amp; Scoil na Gaeilge, Dublin City University</Company>
     <Description>A simple, configurable query logger for ASP.NET Framework applications.</Description>
