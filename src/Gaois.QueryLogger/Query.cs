@@ -26,6 +26,11 @@ namespace Gaois.QueryLogger
         /// <summary>
         /// The query term(s) or text content
         /// </summary>
+        public string QueryTerms { get; set; }
+
+        /// <summary>
+        /// The raw query text, such a query string or POSTed form field
+        /// </summary>
         public string QueryText { get; set; }
 
         /// <summary>

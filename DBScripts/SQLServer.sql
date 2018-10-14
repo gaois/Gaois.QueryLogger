@@ -8,6 +8,7 @@ BEGIN
 		[QueryID] [uniqueidentifier] NOT NULL,
 		[ApplicationName] [nvarchar](50) NOT NULL,
 		[QueryCategory] [nvarchar](100) NULL,
+		[QueryTerms] [nvarchar](max) NULL,
 		[QueryText] [nvarchar](max) NULL,
 		[Host] [nvarchar](100) NULL,
 		[IPAddress] [varchar](40) NULL,
