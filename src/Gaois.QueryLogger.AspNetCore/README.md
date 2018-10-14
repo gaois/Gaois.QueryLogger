@@ -52,7 +52,7 @@ public RecordsController(IQueryLogger queryLogger)
     QueryLogger = queryLogger;
 }
 
-QueryLogger.Log(new Query { ApplicationName = "RecordsApp", QueryCategory = "birth_records", QueryText = "test" });
+QueryLogger.Log(new Query { ApplicationName = "RecordsApp", QueryCategory = "birth_records", QueryTerms = "test", QueryText = Request.Url.Query });
 ```
 
 ### Log a query
@@ -66,7 +66,8 @@ var query = new Query()
 {
     ApplicationName = "My Application",
     QueryCategory = "birth_records",
-    QueryText = "John Doe Jr.",
+    QueryTerms = "John Doe Jr.",
+    QueryText = Request.Url.Query,
     ResultCount = 27
 };
 
@@ -93,7 +94,7 @@ var births = new Query()
     QueryID = queryID,
     ApplicationName = application,
     QueryCategory = "birth_records",
-    QueryText = searchText
+    QueryTerms = searchText
 };
 
 var deaths = new Query()
@@ -101,7 +102,7 @@ var deaths = new Query()
     QueryID = queryID,
     ApplicationName = application,
     QueryCategory = "death_records",
-    QueryText = searchText
+    QueryTerms = searchText
 };
 
 QueryLogger.Log(births, deaths);
