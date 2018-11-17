@@ -44,5 +44,3 @@ Planned developments for this library:
 - Add unit tests.
 - Add sample project.
 - Add options to access the data store settings from a configuration file.
-- Provide Sqlite implementation.
-- Provide additional IP anonymisation options (e.g. Hashed).
