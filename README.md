@@ -1,6 +1,6 @@
 # Gaois.QueryLogger
 
-A simple, configurable query logger for ASP.NET and ASP.NET Core applications. It is the query logger used internally by [Fiontar & Scoil na Gaeilge](https://www.gaois.ie), Dublin City University, Ireland to log search statistics to SQL Server. In the future, the library will support additional backend data stores.
+A simple, configurable query logger for ASP.NET and ASP.NET Core applications. It is the query logger used internally by [Fiontar & Scoil na Gaeilge](https://www.gaois.ie), Dublin City University, Ireland to log search statistics to SQL Server.
 
 Gaois.QueryLogger is a [.NET Standard 1.4](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) library and it supports applications built with ASP.NET Framework 4.6.1 or ASP.NET Core 2.1 or higher.  SQL commands executed within the query logger are handled by the [Dapper](https://github.com/StackExchange/Dapper/) micro-ORM for consistency with our other libraries.
 
