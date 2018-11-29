@@ -16,22 +16,24 @@ namespace Gaois.QueryLogger
         /// <returns>The number of queries successfully logged</returns>
         public async Task<int> LogAsync(params Query[] queries)
         {
-            var context = Accessor.HttpContext;
+            var context = _contextAccessor.HttpContext;
 
             foreach (Query query in queries)
             {
                 string host = context.Request.Host.ToString();
-                string ipAddress = (String.IsNullOrEmpty(query.IPAddress)) ? context.Connection.RemoteIpAddress.ToString() : query.IPAddress;
+                string ipAddress = (String.IsNullOrEmpty(query.IPAddress)) 
+                    ? context.Connection.RemoteIpAddress.ToString() 
+                    : query.IPAddress;
 
                 query.QueryID = (query.QueryID == null) ? Guid.NewGuid() : query.QueryID;
                 query.Host = (String.IsNullOrEmpty(query.Host)) ? host : query.Host;
-                query.IPAddress = IPAddressProcessor.Process(ipAddress, Settings.Value);
+                query.IPAddress = IPAddressProcessor.Process(ipAddress, _settings.Value);
                 query.LogDate = (query.LogDate == null) ? DateTime.UtcNow : query.LogDate;
             }
 
             try
             {
-                return await LogStore.LogQueryAsync(Settings.Value.Store.ConnectionString, queries);
+                return await LogStore.LogQueryAsync(_settings.Value.Store.ConnectionString, queries);
             }
             catch (Exception exception)
             {
