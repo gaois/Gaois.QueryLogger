@@ -56,17 +56,16 @@ The library automatically obtains the website `Host` and client `IPAddress` prop
 
 ### Asynchronous logging
 
-The `LogAsync()` method is provided if you wish to log query data in an asynchronous manner. `LogAsync()` returns the number of queries successfully logged as an integer. It can be used the same as the synchronous `Log()` method in all other respects.
-
+The `LogAsync()` method is provided if you wish to log query data in an asynchronous manner.
 
 ### Associate related queries
 
 If you wish to group related queries together — for example different search queries executed on a single page — pass the associated queries the same `QueryID` parameter:
 
 ```csharp
-Guid queryID = Guid.NewGuid();
-string application = "My Application";
-string searchText = "John Doe Jr.";
+var queryID = Guid.NewGuid();
+var application = "My Application";
+var searchText = "John Doe Jr.";
 
 var births = new Query()
 {
@@ -92,7 +91,6 @@ QueryLogger.Log(connectionString, births, deaths);
 The `Log()` method has an overload that accepts a `QueryLoggerSettings` object. Use the settings object to configure user IP address anonymisation.
 
 ```csharp
-
 var settings = new QueryLoggerSettings()
 {
     AnonymizeIPAddress = IPAddressAnonymizationLevel.None
@@ -115,7 +113,6 @@ At present the available anonymisation levels are **None** (no anonymisation is 
 You can also prevent the logger from collecting IP addresses in the first place by configuring the `StoreClientIPAddress` setting:
 
 ```csharp
-
 var settings = new QueryLoggerSettings()
 {
     StoreClientIPAddress = false

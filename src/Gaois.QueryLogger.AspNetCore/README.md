@@ -12,7 +12,7 @@ A simple, configurable query logger for ASP.NET Core 2.1+ applications. Find a g
   - [Log a query](#log-a-query)
   - [Asynchronous logging](#asynchronous-logging)
   - [Associate related queries](#associate-related-queries)
-  - [Configure IP anonymisation](#configure-ip-anonymisation)
+  - [Configure the query logger settings](#configure-the-query-logger-settings)
 
 ## Installation and setup
 
@@ -78,16 +78,16 @@ The library automatically obtains the website `Host` and client `IPAddress` prop
 
 ### Asynchronous logging
 
-The `LogAsync()` method is provided if you wish to log query data in an asynchronous manner. `LogAsync()` returns the number of queries successfully logged as an integer. It can be used the same as the synchronous `Log()` method in all other respects.
+The `LogAsync()` method is provided if you wish to log query data in an asynchronous manner.
 
 ### Associate related queries
 
 If you wish to group related queries together — for example different search queries executed on a single page — pass the associated queries the same `QueryID` parameter:
 
 ```csharp
-Guid queryID = Guid.NewGuid();
-string application = "My Application";
-string searchText = "John Doe Jr.";
+var queryID = Guid.NewGuid();
+var application = "My Application";
+var searchText = "John Doe Jr.";
 
 var births = new Query()
 {
@@ -111,6 +111,30 @@ QueryLogger.Log(births, deaths);
 ### Configure the query logger settings
 
 Use the `services.AddQueryLogger()` method in **Startup.cs** to configure the query logger settings.
+
+#### Globally enable/disable the query logger
+
+The query logger is enabled by default. However, there may be occasions or particular environments where, for testing or other purposes, you would prefer to disable the query logger without having to wrap each query command in its own conditional logic. To accomodate this, disable the query logger globally within your application by setting `IsEnabled` to `false`.
+
+```csharp
+services.AddQueryLogger(settings =>
+{
+	settings.IsEnabled = false;
+    settings.Store.ConnectionString = Configuration.GetConnectionString("query_logger");
+});
+```
+
+#### Configure application name
+
+Configure your application name globally and avoid having to specify it for each individual `Query` object you create.
+
+```csharp
+services.AddQueryLogger(settings =>
+{
+	settings.ApplicationName = "My Application";
+    settings.Store.ConnectionString = Configuration.GetConnectionString("query_logger");
+});
+```
 
 #### Configure IP anonymisation
 

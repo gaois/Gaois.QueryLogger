@@ -14,13 +14,11 @@ namespace Gaois.QueryLogger
         /// </summary>
         /// <param name="services">The services collection to configure.</param>
         /// <param name="configureSettings">An <see cref="Action{QueryLoggerSettings}"/> to configure options for Gaois.QueryLogger.</param>
-        /// <returns></returns>
+        /// <returns>An <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddQueryLogger(this IServiceCollection services, Action<QueryLoggerSettings> configureSettings = null)
         {
             if (configureSettings != null)
-            {
                 services.Configure(configureSettings);
-            }
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IQueryLogger, QueryLoggerCore>();

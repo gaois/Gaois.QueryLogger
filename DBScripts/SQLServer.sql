@@ -21,3 +21,5 @@ BEGIN
 	 WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
+
+-- NOTE: Consider changing the ID type to bigint type if you expect to log an extremely high volume of queries
