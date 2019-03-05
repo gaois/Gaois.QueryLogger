@@ -5,7 +5,7 @@ using Gaois.QueryLogger.Data;
 namespace Gaois.QueryLogger
 {
     /// <summary>
-    /// Logs query data to a data store asynchronously
+    /// Logs query data to a data store
     /// </summary>
     public partial class QueryLoggerCore : IQueryLogger
     {
