@@ -3,10 +3,13 @@ using System;
 
 namespace Gaois.QueryLogger
 {
+    /// <summary>
+    /// Data describing an aggregated set of query logs
+    /// </summary>
     public class AggregatedQueryLog
     {
         /// <summary>
-        /// The name of the application that executes the query
+        /// The name of the application
         /// </summary>
         public string ApplicationName { get; set; }
 
@@ -16,7 +19,7 @@ namespace Gaois.QueryLogger
         public string Host { get; set; }
 
         /// <summary>
-        /// The date and time of query logging. Gaois.QueryLogger logs this information automatically.
+        /// The date and time to which the aggregated log relates
         /// </summary>
         public DateTime? LogDate { get; set; }
 
@@ -26,12 +29,18 @@ namespace Gaois.QueryLogger
         public int TotalQueries { get; set; }
 
         /// <summary>
-        /// The total number of aggregated unique queries. Useful in cases where mul
+        /// The total number of aggregated unique queries. Useful in cases where you want to count groups of related queries.
         /// </summary>
         public int TotalUniqueQueries { get; set; }
 
+        /// <summary>
+        /// The total number of queries executed successfully
+        /// </summary>
         public int ExecutedSuccessfully { get; set; }
 
+        /// <summary>
+        /// The average query execution time in milliseconds
+        /// </summary>
         public int AverageExecutionTime { get; set; }
 
         /// <summary>

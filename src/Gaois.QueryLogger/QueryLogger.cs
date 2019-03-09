@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Gaois.QueryLogger.Data;
 
 #if NET461
