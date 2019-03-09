@@ -36,12 +36,12 @@ namespace Gaois.QueryLogger
         /// <summary>
         /// The total number of queries executed successfully
         /// </summary>
-        public int ExecutedSuccessfully { get; set; }
+        public int? ExecutedSuccessfully { get; set; }
 
         /// <summary>
         /// The average query execution time in milliseconds
         /// </summary>
-        public int AverageExecutionTime { get; set; }
+        public int? AverageExecutionTime { get; set; }
 
         /// <summary>
         /// Record additional data in JSON format
