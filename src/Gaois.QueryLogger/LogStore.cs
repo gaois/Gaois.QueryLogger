@@ -14,9 +14,10 @@ namespace Gaois.QueryLogger.Data
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         /// <param name="connectionString">The connection string for a SQL Server database</param>
-        public static void LogQuery(string connectionString, params Query[] queries)
+        /// <returns>The number of rows affected</returns>
+        public static int LogQuery(string connectionString, params Query[] queries)
         {
-            using (SqlConnection db = new SqlConnection(connectionString))
+            using (var db = new SqlConnection(connectionString))
             {
                 const string sql = @"INSERT INTO QueryLogs (QueryID, ApplicationName, QueryCategory, 
                     QueryTerms, QueryText, Host, IPAddress, ExecutedSuccessfully, ExecutionTime, ResultCount, LogDate, JsonData) 
@@ -34,7 +35,7 @@ namespace Gaois.QueryLogger.Data
 
                 try
                 {
-                    db.Execute(sql, queries);
+                    return db.Execute(sql, queries);
                 }
                 catch (Exception exception)
                 {

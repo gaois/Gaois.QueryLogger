@@ -1,22 +1,26 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.5.7-alpha</Version>
+    <Authors>Ronan Doherty</Authors>
+    <Company>Fiontar &amp; Scoil na Gaeilge, Dublin City University</Company>
+    <Copyright>Copyright 2018</Copyright>
     <Description>A simple, configurable query logger for ASP.NET Core applications.</Description>
-    <Version>0.5.6.2-alpha</Version>
-    <PackageTags>search query logging web</PackageTags>
     <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/gaois/Gaois.QueryLogger/</RepositoryUrl>
+    <PackageId>Gaois.QueryLogger.AspNetCore</PackageId>
+    <PackageTags>search;query logging;web</PackageTags>
+    <PackageIconUrl></PackageIconUrl>
     <PackageProjectUrl>https://github.com/gaois/Gaois.QueryLogger/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/gaois/Gaois.QueryLogger/blob/master/LICENSE</PackageLicenseUrl>
     <PackageReleaseNotes>Initial prerelease trial</PackageReleaseNotes>
-    <Copyright>Copyright 2018</Copyright>
-    <Authors>Ronan Doherty</Authors>
-    <Company>Fiontar agus Scoil na Gaeilge, Dublin City University</Company>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Gaois.QueryLogger" Version="0.5.6-alpha" />
+    <PackageReference Include="Gaois.QueryLogger" Version="0.5.11-alpha" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
   </ItemGroup>
 

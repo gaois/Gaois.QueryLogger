@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Gaois.QueryLogger.Data;
 
 #if NET461
@@ -18,10 +17,11 @@ namespace Gaois.QueryLogger
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         /// <param name="connectionString">The connection string for a SQL Server database</param>
-        public static void Log(string connectionString, params Query[] queries)
+        /// <returns>The number of queries successfully logged</returns>
+        public static int Log(string connectionString, params Query[] queries)
         {
-            QueryLoggerSettings settings = new QueryLoggerSettings();
-            Log(connectionString, settings, queries);
+            var settings = new QueryLoggerSettings();
+            return Log(connectionString, settings, queries);
         }
 
         /// <summary>
@@ -30,28 +30,35 @@ namespace Gaois.QueryLogger
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         /// <param name="settings">The <see cref="QueryLoggerSettings"/> to configure the logger with</param>
         /// <param name="connectionString">The connection string for a SQL Server database</param>
-        public static void Log(string connectionString, QueryLoggerSettings settings, params Query[] queries)
+        /// <returns>The number of queries successfully logged</returns>
+        public static int Log(string connectionString, QueryLoggerSettings settings, params Query[] queries)
         {
-            foreach (Query query in queries)
+            if (!settings.IsEnabled)
+                return 0;
+
+            foreach (var query in queries)
             {
-                string host = String.Empty;
-                string ipAddress = String.Empty;
+                var host = default(string);
+                var ipAddress = default(string);
 
                 #if NET461
                     var request = HttpContext.Current.Request;
                     host = request.Url.Host;
-                    ipAddress = (String.IsNullOrEmpty(query.IPAddress)) ? request.UserHostAddress : query.IPAddress;
+                    ipAddress = (string.IsNullOrWhiteSpace(query.IPAddress))
+                        ? request.UserHostAddress : query.IPAddress;
                 #endif
 
-                query.QueryID = (query.QueryID == null) ? Guid.NewGuid() : query.QueryID;
-                query.Host = (String.IsNullOrEmpty(query.Host)) ? host : query.Host;
+                query.ApplicationName = (string.IsNullOrWhiteSpace(query.ApplicationName)) 
+                    ? settings.ApplicationName : query.ApplicationName;
+                query.QueryID = (query.QueryID is null) ? Guid.NewGuid() : query.QueryID;
+                query.Host = (string.IsNullOrWhiteSpace(query.Host)) ? host : query.Host;
                 query.IPAddress = IPAddressProcessor.Process(ipAddress, settings);
-                query.LogDate = (query.LogDate == null) ? DateTime.UtcNow : query.LogDate;
+                query.LogDate = (query.LogDate is null) ? DateTime.UtcNow : query.LogDate;
             }
 
             try
             {
-                LogStore.LogQuery(connectionString, queries);
+                return LogStore.LogQuery(connectionString, queries);
             }
             catch (Exception exception)
             {

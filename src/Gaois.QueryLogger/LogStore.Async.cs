@@ -18,7 +18,7 @@ namespace Gaois.QueryLogger.Data
         /// <returns>The number of queries successfully logged</returns>
         public static async Task<int> LogQueryAsync(string connectionString, params Query[] queries)
         {
-            using (SqlConnection db = new SqlConnection(connectionString))
+            using (var db = new SqlConnection(connectionString))
             {
                 const string sql = @"INSERT INTO QueryLogs (QueryID, ApplicationName, QueryCategory, 
                     QueryTerms, QueryText, Host, IPAddress, ExecutedSuccessfully, ExecutionTime, ResultCount, LogDate, JsonData) 
@@ -36,8 +36,7 @@ namespace Gaois.QueryLogger.Data
 
                 try
                 {
-                    var count = await db.ExecuteAsync(sql, queries);
-                    return count;
+                    return await db.ExecuteAsync(sql, queries);
                 }
                 catch (Exception exception)
                 {

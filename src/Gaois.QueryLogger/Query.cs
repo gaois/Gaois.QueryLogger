@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Gaois.QueryLogger
 {
     /// <summary>
-    /// Data that describe the query to be logged
+    /// Data describing the query to be logged
     /// </summary>
     public class Query
     {

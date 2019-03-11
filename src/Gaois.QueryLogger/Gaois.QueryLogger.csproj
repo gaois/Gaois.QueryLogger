@@ -1,19 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.4;net461</TargetFrameworks>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <PackageId>Gaois.QueryLogger</PackageId>
-    <version>0.5.10-alpha</version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.5.13-alpha</Version>
     <Authors>Ronan Doherty</Authors>
     <Company>Fiontar &amp; Scoil na Gaeilge, Dublin City University</Company>
-    <Description>A simple, configurable query logger for ASP.NET Framework applications.</Description>
     <Copyright>Copyright 2018</Copyright>
-    <PackageProjectUrl>https://github.com/gaois/Gaois.QueryLogger/</PackageProjectUrl>
+    <Description>A simple, configurable query logger for ASP.NET Framework applications.</Description>
+    <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/gaois/Gaois.QueryLogger/</RepositoryUrl>
-    <PackageTags>search query logging web</PackageTags>
+    <PackageId>Gaois.QueryLogger</PackageId>
+    <PackageTags>search;query;logging;web</PackageTags>
+    <PackageIconUrl></PackageIconUrl>
+    <PackageProjectUrl>https://github.com/gaois/Gaois.QueryLogger/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/gaois/Gaois.QueryLogger/blob/master/LICENSE</PackageLicenseUrl>
     <PackageReleaseNotes>Initial prerelease trial</PackageReleaseNotes>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

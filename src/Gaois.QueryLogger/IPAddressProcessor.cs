@@ -17,12 +17,12 @@ namespace Gaois.QueryLogger
         /// <param name="settings">The <see cref="QueryLoggerSettings"/> to configure the processor with</param>
         public static string Process(string ip, QueryLoggerSettings settings)
         {
-            if (settings.StoreClientIPAddress == false)
+            if (!settings.StoreClientIPAddress)
             {
                 return "PRIVATE";
             }
 
-            if (String.IsNullOrEmpty(ip))
+            if (string.IsNullOrWhiteSpace(ip))
             {
                 return "UNKNOWN";
             }
@@ -47,7 +47,7 @@ namespace Gaois.QueryLogger
 
         private static string PartiallyAnonymizeIP(string ip)
         {
-            string anonymizedIP = String.Empty;
+            var anonymizedIP = default(string);
 
             if (IPAddress.TryParse(ip, out IPAddress address))
             {
@@ -55,13 +55,13 @@ namespace Gaois.QueryLogger
                 {
                     // IPv4
                     case AddressFamily.InterNetwork:
-                        int lastPosition = ip.LastIndexOf(".");
-                        anonymizedIP = (lastPosition > 0) ? ip.Substring(0, lastPosition) + ".0" : String.Empty;
+                        var lastPosition = ip.LastIndexOf(".");
+                        anonymizedIP = (lastPosition > 0) ? ip.Substring(0, lastPosition) + ".0" : string.Empty;
                         break;
                     // IPv6
                     case AddressFamily.InterNetworkV6:
-                        byte[] fullIP = address.GetAddressBytes();
-                        byte[] abbreviatedIP = new byte[fullIP.Length - 10];
+                        var fullIP = address.GetAddressBytes();
+                        var abbreviatedIP = new byte[fullIP.Length - 10];
                         Array.Copy(fullIP, abbreviatedIP, 6);
                         anonymizedIP = Encoding.UTF8.GetString(abbreviatedIP) + "0000:0000:0000:0000:0000";
                         break;
