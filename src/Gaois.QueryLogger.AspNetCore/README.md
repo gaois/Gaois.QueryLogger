@@ -119,7 +119,7 @@ The query logger is enabled by default. However, there may be occasions or parti
 ```csharp
 services.AddQueryLogger(settings =>
 {
-	settings.IsEnabled = false;
+    settings.IsEnabled = false;
     settings.Store.ConnectionString = Configuration.GetConnectionString("query_logger");
 });
 ```
@@ -131,7 +131,7 @@ Configure your application name globally and avoid having to specify it for each
 ```csharp
 services.AddQueryLogger(settings =>
 {
-	settings.ApplicationName = "My Application";
+    settings.ApplicationName = "My Application";
     settings.Store.ConnectionString = Configuration.GetConnectionString("query_logger");
 });
 ```
