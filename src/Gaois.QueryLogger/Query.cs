@@ -9,6 +9,12 @@ namespace Gaois.QueryLogger
     public class Query
     {
         /// <summary>
+        /// The persistent store ID for this query
+        /// </summary>
+        [JsonIgnore]
+        public int ID { get; set; }
+
+        /// <summary>
         /// A unique ID that represents a specific query or group of queries
         /// </summary>
         public Guid? QueryID { get; set; }

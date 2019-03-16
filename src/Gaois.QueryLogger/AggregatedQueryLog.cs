@@ -9,6 +9,12 @@ namespace Gaois.QueryLogger
     public class AggregatedQueryLog
     {
         /// <summary>
+        /// The persistent store ID for this aggregated log
+        /// </summary>
+        [JsonIgnore]
+        public int ID { get; set; }
+
+        /// <summary>
         /// The name of the application
         /// </summary>
         public string ApplicationName { get; set; }
