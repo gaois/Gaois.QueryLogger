@@ -1,18 +1,10 @@
-namespace Gaois.QueryLogger
+﻿namespace Gaois.QueryLogger
 {
     /// <summary>
     /// Specifies settings that configure the query logger
     /// </summary>
     public class QueryLoggerSettings
     {
-        /// <summary>
-        /// Specifies settings that configure the query logger
-        /// </summary>
-        public QueryLoggerSettings()
-        {
-            Store = new QueryLoggerStoreSettings();
-        }
-
         /// <summary>
         /// Specifies a global name for your application that can used in all queries logged
         /// </summary>
@@ -26,7 +18,7 @@ namespace Gaois.QueryLogger
         /// <summary>
         /// Specifies settings that configure the query logger store
         /// </summary>
-        public QueryLoggerStoreSettings Store { get; set; }
+        public QueryLoggerStoreSettings Store { get; set; } = new QueryLoggerStoreSettings();
 
         /// <summary>
         /// Specifies whether the client IP address should be logged. The default value is true.

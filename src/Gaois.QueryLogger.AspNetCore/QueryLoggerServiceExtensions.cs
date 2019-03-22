@@ -1,4 +1,5 @@
 ﻿using System;
+using Gaois.QueryLogger.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,8 +21,9 @@ namespace Gaois.QueryLogger
             if (configureSettings != null)
                 services.Configure(configureSettings);
 
+            services.AddSingleton<SqlLogStore>();
+            services.AddTransient<IQueryLogger, QueryLogger>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IQueryLogger, QueryLoggerCore>();
 
             return services;
         }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Newtonsoft.Json;
 
 namespace Gaois.QueryLogger
@@ -53,7 +53,7 @@ namespace Gaois.QueryLogger
         /// Records whether the query executed successfully. The default value is true.
         /// </summary>
         public bool ExecutedSuccessfully { get; set; } = true;
-        
+
         /// <summary>
         /// The query execution time in milliseconds
         /// </summary>

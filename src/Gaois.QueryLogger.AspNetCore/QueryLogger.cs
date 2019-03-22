@@ -1,31 +1,32 @@
 ﻿using System;
+using Gaois.QueryLogger.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Gaois.QueryLogger.Data;
 
 namespace Gaois.QueryLogger
 {
     /// <summary>
     /// Logs query data to a data store
     /// </summary>
-    public partial class QueryLoggerCore : IQueryLogger
+    public partial class QueryLogger : IQueryLogger
     {
         private readonly IOptionsMonitor<QueryLoggerSettings> _settings;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly string _connectionString;
         private readonly HttpContext _context;
+        private readonly SqlLogStore _store;
 
         /// <summary>
         /// Logs query data to a data store
         /// </summary>
-        public QueryLoggerCore(
+        public QueryLogger(
             IOptionsMonitor<QueryLoggerSettings> settings,
-            IHttpContextAccessor contextAccessor)
+            IHttpContextAccessor contextAccessor,
+            SqlLogStore store)
         {
             _settings = settings;
             _contextAccessor = contextAccessor;
-            _connectionString = _settings.CurrentValue.Store.ConnectionString;
             _context = _contextAccessor.HttpContext;
+            _store = store;
         }
 
         /// <summary>
@@ -33,16 +34,16 @@ namespace Gaois.QueryLogger
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         /// <returns>The number of queries successfully logged</returns>
-        public int Log(params Query[] queries)
+        public void Log(params Query[] queries)
         {
             if (!_settings.CurrentValue.IsEnabled)
-                return 0;
+                return;
 
             foreach (var query in queries)
             {
                 var host = _context.Request.Host.ToString();
-                var ipAddress = (string.IsNullOrWhiteSpace(query.IPAddress)) 
-                    ? _context.Connection.RemoteIpAddress.ToString() 
+                var ipAddress = (string.IsNullOrWhiteSpace(query.IPAddress))
+                    ? _context.Connection.RemoteIpAddress.ToString()
                     : query.IPAddress;
 
                 query.ApplicationName = (string.IsNullOrWhiteSpace(query.ApplicationName))
@@ -53,14 +54,7 @@ namespace Gaois.QueryLogger
                 query.LogDate = (query.LogDate is null) ? DateTime.UtcNow : query.LogDate;
             }
 
-            try
-            {
-                return LogStore.LogQuery(_connectionString, queries);
-            }
-            catch (Exception exception)
-            {
-                throw exception;
-            }
+            _store.Enqueue(queries);
         }
     }
 }

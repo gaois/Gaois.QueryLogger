@@ -1,69 +1,43 @@
 ﻿using System;
-using Gaois.QueryLogger.Data;
-
-#if NET461
-    using System.Web;
-#endif
+using System.Web;
 
 namespace Gaois.QueryLogger
 {
     /// <summary>
     /// Logs query data to a data store
     /// </summary>
-    public static partial class QueryLogger
+    public static class QueryLogger
     {
-        /// <summary>
-        /// Logs query data to a data store
-        /// </summary>
-        /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
-        /// <param name="connectionString">The connection string for a SQL Server database</param>
-        /// <returns>The number of queries successfully logged</returns>
-        public static int Log(string connectionString, params Query[] queries)
-        {
-            var settings = new QueryLoggerSettings();
-            return Log(connectionString, settings, queries);
-        }
+        private static QueryLoggerSettings _settings = ConfigurationSettings.Settings;
 
         /// <summary>
         /// Logs query data to a data store
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
-        /// <param name="settings">The <see cref="QueryLoggerSettings"/> to configure the logger with</param>
-        /// <param name="connectionString">The connection string for a SQL Server database</param>
-        /// <returns>The number of queries successfully logged</returns>
-        public static int Log(string connectionString, QueryLoggerSettings settings, params Query[] queries)
+        private static void Log(params Query[] queries)
         {
-            if (!settings.IsEnabled)
-                return 0;
+            if (!_settings.IsEnabled)
+                return;
 
             foreach (var query in queries)
             {
                 var host = default(string);
                 var ipAddress = default(string);
+                var request = HttpContext.Current.Request;
 
-                #if NET461
-                    var request = HttpContext.Current.Request;
-                    host = request.Url.Host;
-                    ipAddress = (string.IsNullOrWhiteSpace(query.IPAddress))
-                        ? request.UserHostAddress : query.IPAddress;
-                #endif
+                host = request.Url.Host;
+                ipAddress = (string.IsNullOrWhiteSpace(query.IPAddress))
+                    ? request.UserHostAddress : query.IPAddress;
 
-                query.ApplicationName = (string.IsNullOrWhiteSpace(query.ApplicationName)) 
-                    ? settings.ApplicationName : query.ApplicationName;
+                query.ApplicationName = (string.IsNullOrWhiteSpace(query.ApplicationName))
+                    ? _settings.ApplicationName : query.ApplicationName;
                 query.QueryID = (query.QueryID is null) ? Guid.NewGuid() : query.QueryID;
                 query.Host = (string.IsNullOrWhiteSpace(query.Host)) ? host : query.Host;
-                query.IPAddress = IPAddressProcessor.Process(ipAddress, settings);
+                query.IPAddress = IPAddressProcessor.Process(ipAddress, _settings);
                 query.LogDate = (query.LogDate is null) ? DateTime.UtcNow : query.LogDate;
             }
 
-            try
-            {
-                return LogStore.LogQuery(connectionString, queries);
-            }
-            catch (Exception exception)
-            {
-                throw exception;
-            }
+            SqlLogStore.Instance.Enqueue(queries);
         }
     }
 }

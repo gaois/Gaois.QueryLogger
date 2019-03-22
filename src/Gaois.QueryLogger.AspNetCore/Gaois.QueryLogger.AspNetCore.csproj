@@ -20,8 +20,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Gaois.QueryLogger" Version="0.5.14-alpha" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gaois.QueryLogger.Common\Gaois.QueryLogger.Common.csproj" />
   </ItemGroup>
 
 </Project>
