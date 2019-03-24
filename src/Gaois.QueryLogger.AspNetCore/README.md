@@ -39,7 +39,7 @@ services.AddQueryLogger(settings =>
 });
 ```
 
-Now you can add the `using Gaois.QueryLogger` directive to any C# file to access the library's methods.
+Now you can add the `using Gaois.QueryLogger` directive to any C# file to access the library's methods and services.
 
 ## Usage
 
