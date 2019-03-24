@@ -50,7 +50,7 @@ private readonly IQueryLogger _queryLogger;
 
 public RecordsController(IQueryLogger queryLogger)
 {
-    QueryLogger = queryLogger;
+    _queryLogger = queryLogger;
 }
 
 var query = new Query { QueryCategory = "birth_records", QueryTerms = "test", QueryText = Request.Url.Query }
