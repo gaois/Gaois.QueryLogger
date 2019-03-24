@@ -2,7 +2,7 @@
 
 A simple, configurable query logger for ASP.NET and ASP.NET Core applications. It is the query logger used internally by [Fiontar & Scoil na Gaeilge](https://www.gaois.ie), Dublin City University, Ireland to log search statistics to SQL Server.
 
-Gaois.QueryLogger is a [.NET Standard 1.4](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) library and it supports applications built with ASP.NET Framework 4.6.1 or ASP.NET Core 2.1 or higher.  SQL commands executed within the query logger are handled by the [Dapper](https://github.com/StackExchange/Dapper/) micro-ORM for consistency with our other libraries.
+Gaois.QueryLogger is a [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) library and it supports applications built with ASP.NET Framework 4.6.1 or ASP.NET Core 2.1 or higher.  SQL commands executed within the query logger are handled by the [Dapper](https://github.com/StackExchange/Dapper/) micro-ORM for consistency with our other libraries.
 
 **Note:** This is a **prerelease version** for testing purposes. Expect some breaking changes and renamed API methods before we reach a 1.0 release.
 
@@ -10,6 +10,7 @@ Gaois.QueryLogger is a [.NET Standard 1.4](https://docs.microsoft.com/en-us/dotn
 - [Features](#features)
 - [Documentation](#documentation)
 - [Who is using this?](#who-is-using-this)
+- [Additional credits](#additional-credits)
 - [Roadmap](#roadmap)
 
 ## Package status
@@ -36,6 +37,13 @@ Installation and usage vary slightly according to the target framework. Follow t
 ## Who is using this?
 
 Gaois.QueryLogger is in production use at [www.tearma.ie](https://www.tearma.ie), [www.ainm.ie](https://www.ainm.ie), [www.duchas.ie](https://www.duchas.ie), [www.gaois.ie](https://www.gaois.ie), [www.logainm.ie](https://www.logainm.ie), and [meitheal.logainm.ie](https://meitheal.logainm.ie).
+
+## Additional credits
+
+Gaois.QueryLogger makes use of two other third-party open-source libraries internally:
+
+- [Dapper](https://github.com/StackExchange/Dapper/)
+- [AutoMapper](https://automapper.org/)
 
 ## Roadmap
 
