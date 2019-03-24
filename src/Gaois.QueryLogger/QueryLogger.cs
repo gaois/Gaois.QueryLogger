@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ansa.Extensions;
+using System;
 using System.Web;
 
 namespace Gaois.QueryLogger
@@ -26,13 +27,13 @@ namespace Gaois.QueryLogger
                 var request = HttpContext.Current.Request;
 
                 host = request.Url.Host;
-                ipAddress = (string.IsNullOrWhiteSpace(query.IPAddress))
+                ipAddress = (query.IPAddress.IsNullOrWhiteSpace())
                     ? request.UserHostAddress : query.IPAddress;
 
-                query.ApplicationName = (string.IsNullOrWhiteSpace(query.ApplicationName))
+                query.ApplicationName = (query.ApplicationName.IsNullOrWhiteSpace())
                     ? _settings.ApplicationName : query.ApplicationName;
                 query.QueryID = (query.QueryID is null) ? Guid.NewGuid() : query.QueryID;
-                query.Host = (string.IsNullOrWhiteSpace(query.Host)) ? host : query.Host;
+                query.Host = (query.Host.IsNullOrWhiteSpace()) ? host : query.Host;
                 query.IPAddress = IPAddressProcessor.Process(ipAddress, _settings);
                 query.LogDate = (query.LogDate is null) ? DateTime.UtcNow : query.LogDate;
             }

@@ -1,5 +1,6 @@
 ﻿using Ansa.Extensions;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace Gaois.QueryLogger
 {
@@ -26,6 +27,8 @@ namespace Gaois.QueryLogger
         /// <param name="alert">The alert to be sent</param>
         public void Alert(Alert alert)
         {
+            _ = alert ?? throw new ArgumentNullException(nameof(alert));
+
             var address = _emailSettings.ToAddress;
             var subject = "QueryLogger Alert";
 

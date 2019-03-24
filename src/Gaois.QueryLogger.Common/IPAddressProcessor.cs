@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ansa.Extensions;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Gaois.QueryLogger
             if (!settings.StoreClientIPAddress)
                 return "PRIVATE";
 
-            if (string.IsNullOrWhiteSpace(ip))
+            if (ip.IsNullOrWhiteSpace())
                 return "UNKNOWN";
 
             string result = default(string);

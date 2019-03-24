@@ -1,8 +1,8 @@
-﻿using System;
-using System.Diagnostics;
+﻿using Ansa.Extensions;
 using Gaois.QueryLogger.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace Gaois.QueryLogger
 {
@@ -43,14 +43,14 @@ namespace Gaois.QueryLogger
             foreach (var query in queries)
             {
                 var host = _context.Request.Host.ToString();
-                var ipAddress = (string.IsNullOrWhiteSpace(query.IPAddress))
+                var ipAddress = (query.IPAddress.IsNullOrWhiteSpace())
                     ? _context.Connection.RemoteIpAddress.ToString()
                     : query.IPAddress;
 
-                query.ApplicationName = (string.IsNullOrWhiteSpace(query.ApplicationName))
+                query.ApplicationName = (query.ApplicationName.IsNullOrWhiteSpace())
                     ? _settings.CurrentValue.ApplicationName : query.ApplicationName;
                 query.QueryID = (query.QueryID is null) ? Guid.NewGuid() : query.QueryID;
-                query.Host = (string.IsNullOrWhiteSpace(query.Host)) ? host : query.Host;
+                query.Host = (query.Host.IsNullOrWhiteSpace()) ? host : query.Host;
                 query.IPAddress = IPAddressProcessor.Process(ipAddress, _settings.CurrentValue);
                 query.LogDate = (query.LogDate is null) ? DateTime.UtcNow : query.LogDate;
             }
