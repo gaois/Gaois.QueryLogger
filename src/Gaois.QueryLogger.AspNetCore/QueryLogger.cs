@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Gaois.QueryLogger.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;

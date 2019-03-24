@@ -24,6 +24,17 @@ namespace Gaois.QueryLogger
         }
 
         /// <summary>
+        /// Alerts designated users in case of possible issues with the query logger service
+        /// </summary>
+        /// <param name="alert">The <see cref="Alert"/> to be sent</param>
+        public override void Alert(Alert alert)
+        {
+            _ = alert ?? throw new ArgumentNullException(nameof(alert));
+            var emailAlertService = new EmailAlertService();
+            emailAlertService.Alert(alert);
+        }
+
+        /// <summary>
         /// Logs query data to a data store
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>

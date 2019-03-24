@@ -14,7 +14,7 @@ namespace Gaois.QueryLogger
         /// Logs query data to a data store
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
-        private static void Log(params Query[] queries)
+        public static void Log(params Query[] queries)
         {
             if (!_settings.IsEnabled)
                 return;

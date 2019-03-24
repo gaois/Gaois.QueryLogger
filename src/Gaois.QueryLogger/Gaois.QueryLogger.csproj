@@ -20,6 +20,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Gaois.QueryLogger.Common\Gaois.QueryLogger.Common.csproj" />
   </ItemGroup>
 

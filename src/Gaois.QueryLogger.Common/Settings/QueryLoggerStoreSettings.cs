@@ -16,9 +16,9 @@
         public string ConnectionStringName { get; set; }
 
         /// <summary>
-        /// The maximum amount of time queries will await enqueuing before being discarded
+        /// The maximum amount of time (in milliseconds) queries will await enqueuing before being discarded
         /// </summary>
-        public int MaxQueueRetryTime { get; set; } = 30;
+        public int MaxQueueRetryTime { get; set; } = 30000;
 
         /// <summary>
         /// The maximum possible size of the query log queue before new entries will be blocked

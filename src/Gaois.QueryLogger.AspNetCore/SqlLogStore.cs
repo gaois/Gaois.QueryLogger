@@ -12,13 +12,27 @@ namespace Gaois.QueryLogger.AspNetCore
     public sealed class SqlLogStore : LogStore
     {
         private readonly IOptionsMonitor<QueryLoggerSettings> _settings;
+        private readonly IAlertService _alertService;
 
         /// <summary>
         /// Stores log data in a SQL Server database
         /// </summary>
-        public SqlLogStore(IOptionsMonitor<QueryLoggerSettings> settings) : base (settings.CurrentValue)
+        public SqlLogStore(
+            IOptionsMonitor<QueryLoggerSettings> settings,
+            IAlertService alertService) : base(settings.CurrentValue)
         {
             _settings = settings;
+            _alertService = alertService;
+        }
+
+        /// <summary>
+        /// Alerts designated users in case of possible issues with the query logger service
+        /// </summary>
+        /// <param name="alert">The <see cref="Alert"/> to be sent</param>
+        public override void Alert(Alert alert)
+        {
+            _ = alert ?? throw new ArgumentNullException(nameof(alert));
+            _alertService.Alert(alert);
         }
 
         /// <summary>

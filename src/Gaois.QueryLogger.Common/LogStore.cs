@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Gaois.QueryLogger
@@ -10,6 +11,7 @@ namespace Gaois.QueryLogger
     public abstract class LogStore
     {
         private readonly QueryLoggerSettings _settings;
+        private DateTime? _lastAlertTime;
         private BlockingCollection<Query> _logQueue;
         private bool _isConsumingQueue;
 
@@ -42,8 +44,15 @@ namespace Gaois.QueryLogger
                     }
                     catch (Exception exception)
                     {
-                        Console.WriteLine(exception);
+                        var alert = new Alert
+                        {
+                            Type = AlertTypes.LogWriteError,
+                            Query = query,
+                            Exception = exception
+                        };
+
                         RetryEnqueue(query);
+                        SendAlert(alert);
                     }
                 }
             });
@@ -52,6 +61,27 @@ namespace Gaois.QueryLogger
         private void RetryEnqueue(Query query)
         {
             Enqueue(new[] { query });
+        }
+
+        private void SendAlert(Alert alert)
+        {
+            if (_lastAlertTime is null)
+                _lastAlertTime = DateTime.UtcNow;
+
+            if (_lastAlertTime > DateTime.UtcNow - TimeSpan.FromMilliseconds(_settings.AlertInterval))
+                return;
+
+            try
+            {
+                Alert(alert);
+            }
+            catch (Exception exception)
+            {
+                // Last port of call if there is an error and we also can't send an alert.
+                // We catch the exception as we don't want the logger to tank its parent application by throwing exceptions continuously if alert service is not available.
+                // We write the exception to a trace to provide some degree of visibility for the error.
+                Trace.WriteLine(exception);
+            }
         }
         
         /// <summary>
@@ -64,7 +94,16 @@ namespace Gaois.QueryLogger
             {
                 try
                 {
-                    LogQueue.TryAdd(query, TimeSpan.FromSeconds(_settings.Store.MaxQueueRetryTime));
+                    if (!LogQueue.TryAdd(query, _settings.Store.MaxQueueRetryTime))
+                    {
+                        var alert = new Alert
+                        {
+                            Type = AlertTypes.QueueFull,
+                            Query = query
+                        };
+
+                        SendAlert(alert);
+                    }
                 }
                 catch (OperationCanceledException)
                 {
@@ -72,7 +111,14 @@ namespace Gaois.QueryLogger
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine(exception);
+                    var alert = new Alert
+                    {
+                        Type = AlertTypes.EnqueueError,
+                        Query = query,
+                        Exception = exception
+                    };
+
+                    SendAlert(alert);
                 }
             }
 
@@ -94,5 +140,11 @@ namespace Gaois.QueryLogger
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         public abstract Task WriteLogAsync(params Query[] queries);
+
+        /// <summary>
+        /// Alerts designated users in case of possible issues with the query logger service
+        /// </summary>
+        /// <param name="alert"></param>
+        public abstract void Alert(Alert alert);
     }
 }

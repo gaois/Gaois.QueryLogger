@@ -29,5 +29,15 @@
         /// Sets the level of client IP address anonymization. Defaults to partial anonymization.
         /// </summary>
         public IPAddressAnonymizationLevel AnonymizeIPAddress { get; set; } = IPAddressAnonymizationLevel.Partial;
+
+        /// <summary>
+        /// The interval of time (in milliseconds) will wait between sending alerts regarding an issue with the query logger service 
+        /// </summary>
+        public int AlertInterval { get; set; } = 300000;
+
+        /// <summary>
+        /// Specifies settings for sending e-mail notifications
+        /// </summary>
+        public EmailSettings Email { get; set; }
     }
 }

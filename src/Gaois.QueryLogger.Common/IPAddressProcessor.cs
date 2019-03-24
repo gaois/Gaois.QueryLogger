@@ -18,16 +18,12 @@ namespace Gaois.QueryLogger
         public static string Process(string ip, QueryLoggerSettings settings)
         {
             if (!settings.StoreClientIPAddress)
-            {
                 return "PRIVATE";
-            }
 
             if (string.IsNullOrWhiteSpace(ip))
-            {
                 return "UNKNOWN";
-            }
 
-            string result;
+            string result = default(string);
 
             switch (settings.AnonymizeIPAddress)
             {
@@ -38,7 +34,7 @@ namespace Gaois.QueryLogger
                     result = PartiallyAnonymizeIP(ip);
                     break;
                 default:
-                    result = String.Empty;
+                    result = string.Empty;
                     break;
             }
 
