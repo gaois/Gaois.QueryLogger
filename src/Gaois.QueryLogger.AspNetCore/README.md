@@ -81,7 +81,7 @@ The `Log()` method is 'fire-and-forget': queries are added synchronously to a th
 
 ### Associate related queries
 
-If you wish to group related queries together — for example different search queries executed on a single page — pass the associated queries the same `QueryID` parameter:
+If you wish to group related queries together — for example different search queries executed on a single page — assign the same `QueryID` property to each of the associated queries:
 
 ```csharp
 var queryID = Guid.NewGuid();
