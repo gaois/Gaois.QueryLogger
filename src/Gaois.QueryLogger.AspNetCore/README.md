@@ -29,11 +29,12 @@ Add the NuGet package [Gaois.QueryLogger.AspNetCore](https://www.nuget.org/packa
 dotnet add package Gaois.QueryLogger.AspNetCore
 ```
 
-Then, in **Startup.cs**, modify the *ConfigureServices* method by adding a call to `services.AddQueryLogger()`. You will need to add a connection string for your chosen SQL Server data store also:
+Then, in **Startup.cs**, modify the *ConfigureServices* method by adding a call to `services.AddQueryLogger()`. You will need to add an application name and a connection string for your chosen SQL Server data store also:
 
 ```csharp
 services.AddQueryLogger(settings =>
 {
+    settings.ApplicationName = "RecordsApp"
     settings.Store.ConnectionString = Configuration.GetConnectionString("query_logger");
 });
 ```
