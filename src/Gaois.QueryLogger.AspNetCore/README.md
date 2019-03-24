@@ -46,14 +46,15 @@ Now you can add the `using Gaois.QueryLogger` directive to any C# file to access
 Gaois.QueryLogger is implemented in ASP.NET Core using the framework's recommended conventions for [dependency injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection). Pass the query logger dependency to a class constructor via the `IQueryLogger` interface:
 
 ```csharp
-private readonly IQueryLogger QueryLogger;
+private readonly IQueryLogger _queryLogger;
 
 public RecordsController(IQueryLogger queryLogger)
 {
     QueryLogger = queryLogger;
 }
 
-QueryLogger.Log(new Query { ApplicationName = "RecordsApp", QueryCategory = "birth_records", QueryTerms = "test", QueryText = Request.Url.Query });
+var query = new Query { QueryCategory = "birth_records", QueryTerms = "test", QueryText = Request.Url.Query }
+_queryLogger.Log(query);
 ```
 
 ### Log a query
@@ -65,21 +66,18 @@ Example usage:
 ```csharp
 var query = new Query()
 {
-    ApplicationName = "My Application",
     QueryCategory = "birth_records",
     QueryTerms = "John Doe Jr.",
     QueryText = Request.Url.Query,
     ResultCount = 27
 };
 
-QueryLogger.Log(query);
+_queryLogger.Log(query);
 ```
 
 The library automatically obtains the website `Host` and client `IPAddress` properties from the HTTP context. Likewise, if you do not specify a `QueryID` property (in the form of a GUID) one will be created for you. You can, however, overwrite any of these automatically-created values by specifying the relevant property in the `Query` object.
 
-### Asynchronous logging
-
-The `LogAsync()` method is provided if you wish to log query data in an asynchronous manner.
+The `Log()` method is 'fire-and-forget': queries are added synchronously to a thread-safe log queue which is in turn processed asynchronously by a separate thread in an implementation of the Producer-Consumer pattern. This means that logging adds effectively zero overhead to request response time.
 
 ### Associate related queries
 
@@ -87,13 +85,11 @@ If you wish to group related queries together — for example different search q
 
 ```csharp
 var queryID = Guid.NewGuid();
-var application = "My Application";
 var searchText = "John Doe Jr.";
 
 var births = new Query()
 {
     QueryID = queryID,
-    ApplicationName = application,
     QueryCategory = "birth_records",
     QueryTerms = searchText
 };
@@ -101,12 +97,11 @@ var births = new Query()
 var deaths = new Query()
 {
     QueryID = queryID,
-    ApplicationName = application,
     QueryCategory = "death_records",
     QueryTerms = searchText
 };
 
-QueryLogger.Log(births, deaths);
+_queryLogger.Log(births, deaths);
 ```
 
 ### Configure the query logger settings
