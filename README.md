@@ -42,5 +42,4 @@ Gaois.QueryLogger is in production use at [www.tearma.ie](https://www.tearma.ie)
 Planned developments for this library:
 
 - Add unit tests.
-- Add sample project.
-- Add options to access the data store settings from a configuration file.
+- Add sample projects.
