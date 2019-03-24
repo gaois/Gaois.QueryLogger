@@ -11,7 +11,7 @@ namespace Gaois.QueryLogger
     /// </summary>
     public partial class QueryLogger : IQueryLogger
     {
-        private readonly IOptionsMonitor<QueryLoggerSettings> _settings;
+        private readonly IOptionsSnapshot<QueryLoggerSettings> _settings;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly HttpContext _context;
         private readonly SqlLogStore _store;
@@ -20,7 +20,7 @@ namespace Gaois.QueryLogger
         /// Logs query data to a data store
         /// </summary>
         public QueryLogger(
-            IOptionsMonitor<QueryLoggerSettings> settings,
+            IOptionsSnapshot<QueryLoggerSettings> settings,
             IHttpContextAccessor contextAccessor,
             SqlLogStore store)
         {
@@ -37,7 +37,7 @@ namespace Gaois.QueryLogger
         /// <returns>The number of queries successfully logged</returns>
         public void Log(params Query[] queries)
         {
-            if (!_settings.CurrentValue.IsEnabled)
+            if (!_settings.Value.IsEnabled)
                 return;
 
             foreach (var query in queries)
@@ -48,10 +48,10 @@ namespace Gaois.QueryLogger
                     : query.IPAddress;
 
                 query.ApplicationName = (query.ApplicationName.IsNullOrWhiteSpace())
-                    ? _settings.CurrentValue.ApplicationName : query.ApplicationName;
+                    ? _settings.Value.ApplicationName : query.ApplicationName;
                 query.QueryID = (query.QueryID is null) ? Guid.NewGuid() : query.QueryID;
                 query.Host = (query.Host.IsNullOrWhiteSpace()) ? host : query.Host;
-                query.IPAddress = IPAddressProcessor.Process(ipAddress, _settings.CurrentValue);
+                query.IPAddress = IPAddressProcessor.Process(ipAddress, _settings.Value);
                 query.LogDate = (query.LogDate is null) ? DateTime.UtcNow : query.LogDate;
             }
 

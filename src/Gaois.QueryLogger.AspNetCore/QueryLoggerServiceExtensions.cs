@@ -20,7 +20,7 @@ namespace Gaois.QueryLogger
         /// <returns>An <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddQueryLogger(this IServiceCollection services, IConfiguration configuration, Action<QueryLoggerSettings> configureSettings = null)
         {
-            services.Configure<QueryLoggerSettings>(configuration.Bind);
+            services.Configure<QueryLoggerSettings>(configuration);
             return AddQueryLogger(services, configureSettings);
         }
 

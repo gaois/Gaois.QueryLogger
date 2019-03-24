@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Gaois.QueryLogger
@@ -10,27 +9,21 @@ namespace Gaois.QueryLogger
     /// </summary>
     public abstract class LogStore
     {
-        private readonly QueryLoggerSettings _settings;
-        private DateTime? _lastAlertTime;
-        private BlockingCollection<Query> _logQueue;
-        private bool _isConsumingQueue;
-
-        /// <summary>
-        /// Log data to persistent storage
-        /// </summary>
-        public LogStore(QueryLoggerSettings settings)
-        {
-            _settings = settings;
-        }
-
         /// <summary>
         /// Gets the queue of logs waiting to be written
         /// </summary>
-        public BlockingCollection<Query> LogQueue => _logQueue ?? (_logQueue = new BlockingCollection<Query>(_settings.Store.MaxQueueSize));
+        public abstract BlockingCollection<Query> LogQueue { get; }
 
-        private void ConsumeQueue()
+        private void RetryEnqueue(Query query)
         {
-            // Consume the log queue, and write to data store, in a separate thread
+            Enqueue(new[] { query });
+        }
+
+        /// <summary>
+        /// Consumes the log queue and writes logs to the data store in a separate thread
+        /// </summary>
+        protected void ConsumeQueue()
+        {
             Task.Run(async () =>
             {
                 foreach (var query in LogQueue.GetConsumingEnumerable())
@@ -59,85 +52,26 @@ namespace Gaois.QueryLogger
             });
         }
 
-        private void RetryEnqueue(Query query)
-        {
-            Enqueue(new[] { query });
-        }
-
-        private void SendAlert(Alert alert)
-        {
-            if (_lastAlertTime is null)
-                _lastAlertTime = DateTime.UtcNow;
-
-            if (_lastAlertTime > DateTime.UtcNow - TimeSpan.FromMilliseconds(_settings.AlertInterval))
-                return;
-
-            try
-            {
-                Alert(alert);
-            }
-            catch (Exception exception)
-            {
-                // Last port of call if there is an error and we also can't send an alert.
-                // We catch the exception as we don't want the logger to tank its parent application by throwing exceptions continuously if alert service is not available.
-                // We write the exception to a trace to provide some degree of visibility for the error.
-                Trace.WriteLine(exception);
-            }
-        }
-        
         /// <summary>
-        /// Logs query data to a data store
+        /// Sends an alert to designated users using the configured alert services
+        /// </summary>
+        /// <param name="alert"></param>
+        protected abstract void SendAlert(Alert alert);
+
+        /// <summary>
+        /// Queues query data for logging to a data store
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
-        public void Enqueue(Query[] queries)
-        {
-            foreach (var query in queries)
-            {
-                try
-                {
-                    if (!LogQueue.TryAdd(query, _settings.Store.MaxQueueRetryTime))
-                    {
-                        var alert = new Alert
-                        {
-                            Type = AlertTypes.QueueFull,
-                            Query = query
-                        };
-
-                        SendAlert(alert);
-                    }
-                }
-                catch (OperationCanceledException)
-                {
-                    break;
-                }
-                catch (Exception exception)
-                {
-                    var alert = new Alert
-                    {
-                        Type = AlertTypes.EnqueueError,
-                        Query = query,
-                        Exception = exception
-                    };
-
-                    SendAlert(alert);
-                }
-            }
-
-            if (_isConsumingQueue)
-                return;
-
-            ConsumeQueue();
-            _isConsumingQueue = true;
-        }
+        public abstract void Enqueue(Query[] queries);
 
         /// <summary>
-        /// Logs query data in a data store
+        /// Writes query log to a data store
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         public abstract void WriteLog(params Query[] queries);
 
         /// <summary>
-        /// Logs query data in a data store asynchronously
+        /// Writes query log to a data store asynchronously
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         public abstract Task WriteLogAsync(params Query[] queries);

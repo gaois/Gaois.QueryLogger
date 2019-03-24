@@ -9,16 +9,14 @@ namespace Gaois.QueryLogger
     /// </summary>
     public class EmailAlertService : EmailAlertServiceBase, IAlertService
     {
-        private readonly QueryLoggerSettings _settings;
-        private readonly EmailSettings _emailSettings;
+        private readonly IOptionsMonitor<QueryLoggerSettings> _settings;
 
         /// <summary>
         /// Alerts designated users via e-mail in case of possible issues with the query logger service
         /// </summary>
         public EmailAlertService(IOptionsMonitor<QueryLoggerSettings> settings)
         {
-            _settings = settings.CurrentValue;
-            _emailSettings = settings.CurrentValue.Email;
+            _settings = settings;
         }
 
         /// <summary>
@@ -29,15 +27,15 @@ namespace Gaois.QueryLogger
         {
             _ = alert ?? throw new ArgumentNullException(nameof(alert));
 
-            var address = _emailSettings.ToAddress;
+            var address = _settings.CurrentValue.Email.ToAddress;
             var subject = "QueryLogger Alert";
 
-            if (_settings.ApplicationName.HasValue())
-                subject += $": {_settings.ApplicationName}";
+            if (_settings.CurrentValue.ApplicationName.HasValue())
+                subject += $": {_settings.CurrentValue.ApplicationName}";
 
             var body = GetAlertBody(subject, alert);
 
-            SendEmail(_emailSettings, address, subject, body);
+            SendEmail(_settings.CurrentValue.Email, address, subject, body);
         }
     }
 }
