@@ -1,4 +1,6 @@
 ﻿using Ansa.Extensions;
+using AutoMapper;
+using System;
 using System.Configuration;
 using System.Net;
 using System.Net.Mail;
@@ -7,9 +9,20 @@ namespace Gaois.QueryLogger
 {
     internal class ConfigurationSettings : ConfigurationSection
     {
+        private static readonly Lazy<IMapper> _lazyMapper = new Lazy<IMapper>(() =>
+        {
+            var configuration = new MapperConfiguration(config => {
+                config.ShouldMapProperty = p => p.GetMethod.IsPublic || p.GetMethod.IsAssembly;
+                config.CreateMap<ConfigurationSettings, QueryLoggerSettings>();
+            });
+
+            return configuration.CreateMapper();
+        });
+
+        private static IMapper _mapper => _lazyMapper.Value;
         private static ConfigurationSettings _settings => ConfigurationManager.GetSection("QueryLogger") as ConfigurationSettings;
 
-        public static QueryLoggerSettings Settings => Mapping.Mapper.Map<QueryLoggerSettings>(_settings);
+        public static QueryLoggerSettings Settings => _mapper.Map<QueryLoggerSettings>(_settings);
 
         [ConfigurationProperty("applicationName")]
         public string ApplicationName => this["applicationName"] as string;
