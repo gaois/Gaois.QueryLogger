@@ -11,11 +11,6 @@
         public string ConnectionString { get; set; }
 
         /// <summary>
-        /// The name of a connection string specified in the ConnectionStrings configuration
-        /// </summary>
-        public string ConnectionStringName { get; set; }
-
-        /// <summary>
         /// The maximum amount of time (in milliseconds) queries will await enqueuing before being discarded
         /// </summary>
         public int MaxQueueRetryTime { get; set; } = 30000;
