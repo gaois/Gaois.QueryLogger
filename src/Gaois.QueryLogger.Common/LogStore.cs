@@ -30,12 +30,13 @@ namespace Gaois.QueryLogger
 
         private void ConsumeQueue()
         {
+            // Consume the log queue, and write to data store, in a separate thread
             Task.Run(async () =>
             {
                 foreach (var query in LogQueue.GetConsumingEnumerable())
                 {
                     try
-                    {
+                    {   
                         await WriteLogAsync(query).ConfigureAwait(false);
                     }
                     catch (OperationCanceledException)
