@@ -10,7 +10,6 @@ A simple, configurable query logger for ASP.NET Core 2.1+ applications. Find a g
   - [Application](#application)
 - [Usage](#usage)
   - [Log a query](#log-a-query)
-  - [Asynchronous logging](#asynchronous-logging)
   - [Associate related queries](#associate-related-queries)
   - [Configure the query logger settings](#configure-the-query-logger-settings)
 
