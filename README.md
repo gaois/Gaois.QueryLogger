@@ -37,7 +37,7 @@ Installation and usage vary slightly according to the target framework. Follow t
 
 ## Who is using this?
 
-Gaois.QueryLogger is in production use at [www.tearma.ie](https://www.tearma.ie), [www.ainm.ie](https://www.ainm.ie), [www.duchas.ie](https://www.duchas.ie), [www.gaois.ie](https://www.gaois.ie), [www.logainm.ie](https://www.logainm.ie), and [meitheal.logainm.ie](https://meitheal.logainm.ie).
+Gaois.QueryLogger is in production use at [www.tearma.ie](https://www.tearma.ie), [www.duchas.ie](https://www.duchas.ie), [www.gaois.ie](https://www.gaois.ie), [www.ainm.ie](https://www.ainm.ie), [www.logainm.ie](https://www.logainm.ie), and [meitheal.logainm.ie](https://meitheal.logainm.ie).
 
 ## Roadmap
 
