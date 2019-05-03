@@ -8,7 +8,7 @@ namespace Gaois.QueryLogger
     public class QueryLoggerSettings
     {
         /// <summary>
-        /// Specifies a global name for your application that can used in all queries logged
+        /// Specifies a global name for your application that can be used in all queries logged
         /// </summary>
         public string ApplicationName { get; set; }
 
