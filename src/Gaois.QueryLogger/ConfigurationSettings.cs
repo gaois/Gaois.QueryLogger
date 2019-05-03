@@ -14,6 +14,7 @@ namespace Gaois.QueryLogger
             var configuration = new MapperConfiguration(config => {
                 config.ShouldMapProperty = p => p.GetMethod.IsPublic || p.GetMethod.IsAssembly;
                 config.CreateMap<ConfigurationSettings, QueryLoggerSettings>();
+                config.CreateMap<ExcludedIPAddressSettings, ExcludedIPAddress>();
             });
 
             return configuration.CreateMapper();
@@ -114,6 +115,46 @@ namespace Gaois.QueryLogger
                 SMTPUserName.HasValue() && SMTPPassword.HasValue()
                     ? new NetworkCredential(SMTPUserName, SMTPPassword)
                     : null;
+        }
+        
+        [ConfigurationProperty("ExcludedIPAddresses", IsDefaultCollection = true)]
+        [ConfigurationCollection(typeof(ExcludedIPAddressCollection), AddItemName = "add", ClearItemsName = "clear", RemoveItemName = "remove")]
+        public ExcludedIPAddressCollection ExcludedIPAddresses => this["ExcludedIPAddresses"] as ExcludedIPAddressCollection;
+        public class ExcludedIPAddressSettings : ConfigurationElement
+        {
+            [ConfigurationProperty("name")]
+            public string Name => this["name"] as string;
+
+            [ConfigurationProperty("ipAddress", IsRequired = true, IsKey = true)]
+            public string IPAddress => this["ipAddress"] as string;
+        }
+
+        public class ExcludedIPAddressCollection : ConfigurationElementCollection
+        {
+            public ExcludedIPAddressSettings this[int index]
+            {
+                get => (ExcludedIPAddressSettings)BaseGet(index);
+                set
+                {
+                    if (BaseGet(index) != null)
+                        BaseRemoveAt(index);
+                    BaseAdd(index, value);
+                }
+            }
+
+            public void Add(ExcludedIPAddressSettings settings) => BaseAdd(settings);
+
+            public void Clear() => BaseClear();
+
+            protected override ConfigurationElement CreateNewElement() => new ExcludedIPAddressSettings();
+
+            protected override object GetElementKey(ConfigurationElement element) => ((ExcludedIPAddressSettings)element).IPAddress;
+
+            public void Remove(ExcludedIPAddressSettings settings) => BaseRemove(settings.IPAddress);
+
+            public void RemoveAt(int index) => BaseRemoveAt(index);
+
+            public void Remove(string name) => BaseRemove(name);
         }
     }
 }

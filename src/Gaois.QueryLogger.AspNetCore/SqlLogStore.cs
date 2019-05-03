@@ -69,6 +69,10 @@ namespace Gaois.QueryLogger.AspNetCore
         {
             foreach (var query in queries)
             {
+                if (_settings.CurrentValue.ExcludedIPAddresses != null
+                    && _settings.CurrentValue.ExcludedIPAddresses.Find(x => x.IPAddress == query.IPAddress) != null)
+                    continue;
+
                 try
                 {
                     if (!LogQueue.TryAdd(query, _settings.CurrentValue.Store.MaxQueueRetryTime))

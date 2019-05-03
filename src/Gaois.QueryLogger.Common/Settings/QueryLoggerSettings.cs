@@ -1,4 +1,6 @@
-﻿namespace Gaois.QueryLogger
+﻿using System.Collections.Generic;
+
+namespace Gaois.QueryLogger
 {
     /// <summary>
     /// Specifies settings that configure the query logger
@@ -39,5 +41,10 @@
         /// Specifies settings for sending e-mail notifications
         /// </summary>
         public EmailSettings Email { get; set; }
+
+        /// <summary>
+        /// Queries associated with these IP address will not be logged
+        /// </summary>
+        public List<ExcludedIPAddress> ExcludedIPAddresses { get; set; }
     }
 }

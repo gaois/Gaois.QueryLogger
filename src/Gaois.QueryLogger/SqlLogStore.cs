@@ -66,6 +66,10 @@ namespace Gaois.QueryLogger
         {
             foreach (var query in queries)
             {
+                if (_settings.ExcludedIPAddresses != null
+                    && _settings.ExcludedIPAddresses.Find(x => x.IPAddress == query.IPAddress) != null)
+                    continue;
+
                 try
                 {
                     if (!LogQueue.TryAdd(query, _settings.Store.MaxQueueRetryTime))
