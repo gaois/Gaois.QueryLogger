@@ -120,6 +120,16 @@ _queryLogger.Log(births, deaths);
 
 ### Configure the query logger settings
 
+See below for a list of available settings and their descriptions.
+
+#### Top level
+
+**ApplicationName** (`string`): Specifies a global name for your application that can be used in all queries logged. For example, 20 apps can all have different application names and share the same SQL database.
+
+**IsEnabled** (`bool`, default: **true**): Specifies whether the application is configured to log queries. Can be useful if you need to temporarily disable logging for any reason or if you wish to enable/disable logging based on environment variables.
+
+**StoreClientIPAddress** (`bool`, default: **true**): Specifies whether the client IP address should be logged. The logged IP address may or may not be subsequently anonymised, in full or in part, according to the selected `AnonymizeIPAddress` setting.
+
 Use the `services.AddQueryLogger()` method in **Startup.cs** to configure the query logger settings.
 
 #### Globally enable/disable the query logger
