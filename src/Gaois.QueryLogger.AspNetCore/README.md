@@ -67,7 +67,7 @@ public RecordsController(IQueryLogger queryLogger)
     _queryLogger = queryLogger;
 }
 
-var query = new Query { QueryCategory = "birth_records", QueryTerms = "test", QueryText = Request.Url.Query }
+var query = new Query { QueryCategory = "birth_records", QueryTerms = "test", QueryText = Request.Url.Query };
 _queryLogger.Log(query);
 ```
 
