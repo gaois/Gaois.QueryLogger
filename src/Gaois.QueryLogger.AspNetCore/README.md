@@ -35,7 +35,7 @@ Then, in **Startup.cs**, modify the *ConfigureServices* method by adding a call 
 services.AddQueryLogger(settings =>
 {
     settings.ApplicationName = "RecordsApp"
-    settings.Store.ConnectionString = Configuration.GetConnectionString("query_logger");
+    settings.Store.ConnectionString = configuration.GetConnectionString("query_logger");
 });
 ```
 Alternatively, load the configuration from your `appsettings.json` file:
