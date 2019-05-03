@@ -146,9 +146,31 @@ See below for a list of available settings and their descriptions.
 
 #### Email
 
-These settings, if configured, will be used to send you alert e-mails if necessary.
+These settings, if configured, will be used to send you alert e-mails when necessary.
+
+**ToAddress** (`string`): The address to which e-mail messages will be sent (required for alert service).
+
+**FromAddress** (`string`): The address from which e-mail messages will be sent.
+
+**FromDisplayName** (`string`): The display name with which e-mail messages will be sent.
+
+**SMTPHost** (`string`): The SMTP server through which mail will be sent.
+
+**SMTPPort** (`int?`): The port via which mail will be sent (if SMTP server is specified via `SMTPHost` above).
+
+**SMTPUserName** (`string`): The SMTP user name to use, if authenticating.
+
+**SMTPPassword** (`string`): The SMTP password to use, if authenticating.
+
+**SMTPEnableSSL** (`bool`, default: **false**): Whether to use SSL when sending via SMTP.
 
 #### ExcludedIPAddresses
+
+Queries associated with the IP addresses in this list will not be logged. Useful if, for instance, you want to prevent queries from an aggressive web crawler or scraper being logged.
+
+**IPAddress** (`string`): The IP address to be excluded (must be a unique value).
+
+**Name** (`string`): The IP address is the entry key, so feel free to set the same name for multiple entries if you want to group multiple IP sources together.
 
 Use the `services.AddQueryLogger()` method in **Startup.cs** to configure the query logger settings.
 
