@@ -33,7 +33,7 @@ namespace Gaois.QueryLogger
         public IPAddressAnonymizationLevel AnonymizeIPAddress { get; set; } = IPAddressAnonymizationLevel.Partial;
 
         /// <summary>
-        /// The interval of time (in milliseconds) will wait between sending alerts regarding an issue with the query logger service 
+        /// The interval of time (in milliseconds) to wait between sending alerts regarding an issue with the query logger service 
         /// </summary>
         public int AlertInterval { get; set; } = 300000;
 
