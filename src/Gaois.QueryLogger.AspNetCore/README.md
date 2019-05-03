@@ -128,7 +128,11 @@ See below for a list of available settings and their descriptions.
 
 **IsEnabled** (`bool`, default: **true**): Specifies whether the application is configured to log queries. Can be useful if you need to temporarily disable logging for any reason or if you wish to enable/disable logging based on environment variables.
 
-**StoreClientIPAddress** (`bool`, default: **true**): Specifies whether the client IP address should be logged. The logged IP address may or may not be subsequently anonymised, in full or in part, according to the selected `AnonymizeIPAddress` setting.
+**StoreClientIPAddress** (`bool`, default: **true**): Specifies whether the client IP address should be logged. The logged IP address may or may not be subsequently anonymised in part, according to the selected `AnonymizeIPAddress` setting.
+
+**AnonymizeIPAddress** (`IPAddressAnonymizationLevel` enum, default: **IPAddressAnonymizationLevel.Partial**): Sets the level of client IP address anonymization. The possible values are **None** (no anonymization is applied) or **Partial** (removes the last octet of IPv4 addresses or the last 80 bits of an IPv6 address). We came to the conclusion that ‘full’ anonymization — by means of hashing or otherwise — is not something that can be guaranteed and recommend switching the `StoreClientIPAddress` setting to false if you want to ensure that no IP data will be logged.
+
+**AlertInterval** (`integer`, default: **300000**): The interval of time (in milliseconds) the Gaois.QueryLogger will wait between sending alerts regarding an issue with the query logger service. Alerts get sent if the log queue exceeds maximum capacity or if there is an issue writing to the data store — which hopefully will never happen, but we don't want to break your inbox if it does.
 
 Use the `services.AddQueryLogger()` method in **Startup.cs** to configure the query logger settings.
 
