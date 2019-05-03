@@ -38,6 +38,20 @@ services.AddQueryLogger(settings =>
     settings.Store.ConnectionString = Configuration.GetConnectionString("query_logger");
 });
 ```
+Alternatively, load the configuration from your `appsettings.json` file:
+
+```csharp
+services.AddQueryLogger(configuration.GetSection("QueryLogger"));
+```
+
+…Or you can mix the two approaches:
+
+```csharp
+services.AddQueryLogger(configuration.GetSection("QueryLogger"), settings =>
+{
+    settings.IsEnabled = !environment.IsDevelopment();
+});
+```
 
 Now you can add the `using Gaois.QueryLogger` directive to any C# file to access the library's methods and services.
 
