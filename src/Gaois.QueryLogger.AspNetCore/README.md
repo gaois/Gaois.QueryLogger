@@ -89,7 +89,7 @@ var query = new Query()
 _queryLogger.Log(query);
 ```
 
-The library automatically obtains the website `Host` and client `IPAddress` properties from the HTTP context. Likewise, if you do not specify a `QueryID` property (in the form of a GUID) one will be created for you. You can, however, overwrite any of these automatically-created values by specifying the relevant property in the `Query` object.
+The library automatically obtains the website `Host` and client `IPAddress` properties from the HTTP context. Likewise, if you do not specify a `QueryID` property (in the form of a GUID) one will be created for you. You can, however, overwrite any of these auto-populated values by specifying the relevant property in the `Query` object.
 
 The `Log()` method is 'fire-and-forget': queries are added synchronously to a thread-safe log queue which is in turn processed asynchronously by a separate thread in an implementation of the Producer-Consumer pattern. This means that logging adds effectively zero overhead to request response time.
 
