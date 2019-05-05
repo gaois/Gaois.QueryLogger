@@ -34,14 +34,21 @@ GO
 
 USE [YOUR_DATABASE_NAME]
 GO
-CREATE NONCLUSTERED INDEX IX_QueryLogs_ResultCount
-ON [dbo].[QueryLogs] ([ResultCount])
-INCLUDE ([ApplicationName])
+CREATE NONCLUSTERED INDEX IX_QueryLogs_ApplicationName_QueryCategory
+ON [dbo].[QueryLogs] ([ApplicationName],[QueryCategory])
+INCLUDE ([QueryTerms])
 GO
 
 USE [YOUR_DATABASE_NAME]
 GO
-CREATE NONCLUSTERED INDEX IX_QueryLogs_ApplicationName_QueryCategory
-ON [dbo].[QueryLogs] ([ApplicationName],[QueryCategory])
-INCLUDE ([QueryTerms])
+CREATE NONCLUSTERED INDEX IX_QueryLogs_LogDate
+ON [dbo].[QueryLogs] ([LogDate])
+INCLUDE ([QueryID],[ApplicationName],[Host],[QueryCategory])
+GO
+
+USE [YOUR_DATABASE_NAME]
+GO
+CREATE NONCLUSTERED INDEX IX_QueryLogs_ResultCount
+ON [dbo].[QueryLogs] ([ResultCount])
+INCLUDE ([ApplicationName])
 GO
