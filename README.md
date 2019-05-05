@@ -48,7 +48,4 @@ Planned developments for this library:
 
 ## Additional credits
 
-Gaois.QueryLogger makes use of two other third-party open-source libraries:
-
-- [Dapper](https://github.com/StackExchange/Dapper/)
-- [AutoMapper](https://automapper.org/)
+Gaois.QueryLogger makes use of two other third-party open-source libraries: [Dapper](https://github.com/StackExchange/Dapper/) and [AutoMapper](https://automapper.org/).
