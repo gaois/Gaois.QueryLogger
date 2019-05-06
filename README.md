@@ -35,13 +35,15 @@ Installation and usage vary slightly according to the target framework. Follow t
 - Read the documentation for ASP.NET Framework 4.6.1+ [here](src/Gaois.QueryLogger/).
 - Read the documentation for ASP.NET Core 2.1+ [here](src/Gaois.QueryLogger.AspNetCore/).
 
+Further documentation regarding [configuration options](./CONFIGURATION.md) and [custom log data](./LOGDATA.md) is also available.
+
 ## Who is using this?
 
 Gaois.QueryLogger is in production use at [www.tearma.ie](https://www.tearma.ie), [www.duchas.ie](https://www.duchas.ie), [www.gaois.ie](https://www.gaois.ie), [www.ainm.ie](https://www.ainm.ie), [www.logainm.ie](https://www.logainm.ie), and [meitheal.logainm.ie](https://meitheal.logainm.ie).
 
 ## Additional credits
 
-Gaois.QueryLogger makes use of two other third-party open-source libraries: [Dapper](https://github.com/StackExchange/Dapper/) and [AutoMapper](https://automapper.org/).
+The architecture of Gaois.QueryLogger is heavily inspired by the [StackExchange.Exceptional](https://github.com/NickCraver/StackExchange.Exceptional) library. It makes use of two other third-party open-source libraries: [Dapper](https://github.com/StackExchange/Dapper/) and [AutoMapper](https://automapper.org/).
 
 ## Roadmap
 
