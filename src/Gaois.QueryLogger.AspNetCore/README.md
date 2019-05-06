@@ -125,6 +125,8 @@ _queryLogger.Log(births, deaths);
 
 Use the `services.AddQueryLogger()` method in **Startup.cs** to configure the query logger settings.
 
+See the full list of configurable settings [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/CONFIGURATION.md).
+
 The rest of this section describes some useful ways you make use of the configuration settings.
 
 ### Globally enable/disable the query logger
