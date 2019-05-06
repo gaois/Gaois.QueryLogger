@@ -60,7 +60,7 @@ namespace Gaois.QueryLogger
                         var fullIP = address.GetAddressBytes();
                         var abbreviatedIP = new byte[fullIP.Length - 10];
                         Array.Copy(fullIP, abbreviatedIP, 6);
-                        anonymizedIP = Encoding.UTF8.GetString(abbreviatedIP) + "0000:0000:0000:0000:0000";
+                        anonymizedIP = Encoding.UTF8.GetString(abbreviatedIP) + ":0000:0000:0000:0000:0000";
                         break;
                 }
             }
