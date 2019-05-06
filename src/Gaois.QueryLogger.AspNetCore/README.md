@@ -12,6 +12,9 @@ A simple, configurable query logger for ASP.NET Core 2.1+ applications. Find a g
   - [Log a query](#log-a-query)
   - [Associate related queries](#associate-related-queries)
 - [Configuration](#configuration)
+  - [Globally enable/disable the query logger](#globally-enable-disable-the-query-logger)
+  - [Configure application name](#configure-application-name)
+  - [Configure IP anonymisation](#configure-ip-anonymisation)
 - [Aggregated query logs and log analysis](#aggregated-query-logs-and-log-analysis)
 
 ## Installation and setup
@@ -176,4 +179,4 @@ When `StoreClientIPAddress` is set to **false** the value **PRIVATE** will be re
 
 ## Aggregated query logs and log analysis
 
-In [Fiontar & Scoil na Gaeilge](https://www.gaois.ie), DCU we aggregate summary data from our query log table on monthly basis and store it in a separate database table. We have made the table structure and stored procedures that manage this process available in the [DBScripts](https://github.com/gaois/Gaois.QueryLogger/tree/master/DBScripts) folder in this repository in case they are of use to anyone else. Gaois.QueryLogger also has an `AggregratedQueryLog` entity that corresponds to entries in the aggregated log table. The DBScripts folder also contains some of the more general SQL queries we use to summarize and analyze log data.
+In [Fiontar & Scoil na Gaeilge](https://www.gaois.ie), DCU we aggregate summary data from our query log table on monthly basis and store it in a separate database table. We have made the table structure and stored procedures that manage this process available in the [DBScripts](https://github.com/gaois/Gaois.QueryLogger/tree/master/DBScripts) folder in this repository in case they are of use to anyone else. Gaois.QueryLogger also has an `AggregratedQueryLog` entity that corresponds to entries in the aggregated log table. The DBScripts folder also contains some of the more general SQL queries we use to summarise and analyse log data.
