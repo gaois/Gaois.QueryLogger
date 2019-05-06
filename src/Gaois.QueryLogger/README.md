@@ -96,7 +96,23 @@ QueryLogger.Log(births, deaths);
 
 As described above, you can configure the query logger settings in your **Web.config** file:
 
+<QueryLogger applicationName="RecordsApp" isEnabled="true">
+  <Store connectionString="Server=localhost;Database=recordsappdb;Trusted_Connection=True;" />
+  <Email toAddress="me@test.ie"
+         fromAddress="test@test.ie"
+         fromDisplayName="RecordsApp — QueryLogger"
+         smtpHost="smtp.myhost.net"
+         smtpPort="587"
+         smtpUserName="MY_USERNAME"
+         smtpPassword="MY_PASSWORD"
+         smtpEnableSSL="true" />
+  <ExcludedIPAddresses>
+    <add name="Bingbot" ipAddress="40.77.167.0" />
+    <add name="Bingbot" ipAddress="207.46.13.0" />
+  </ExcludedIPAddresses>
+</QueryLogger>
 
+See the full list of configurable settings [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/CONFIGURATION.md). The rest of this section describes some useful ways you can make use of the configuration settings.
 
 ### Configure IP anonymisation
 
