@@ -116,38 +116,51 @@ As described above, you can configure the query logger settings in your **Web.co
 
 See the full list of configurable settings [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/CONFIGURATION.md). The rest of this section describes some useful ways you can make use of the configuration settings.
 
-### Configure IP anonymisation
+### Globally enable/disable the query logger
 
-The `Log()` method has an overload that accepts a `QueryLoggerSettings` object. Use the settings object to configure user IP address anonymisation.
+The query logger is enabled by default. However, there may be occasions or particular environments where, for testing or other purposes, you would prefer to disable the query logger without having to wrap each query command in its own conditional logic. To accomodate this, disable the query logger globally within your application by setting `IsEnabled` to `false`.
 
 ```csharp
-var settings = new QueryLoggerSettings()
-{
-    AnonymizeIPAddress = IPAddressAnonymizationLevel.None
-};
+<QueryLogger applicationName="RecordsApp" isEnabled="false">
+  <Store connectionString="Server=localhost;Database=recordsappdb;Trusted_Connection=True;" />
+  <Email toAddress="me@test.ie" />
+</QueryLogger>
+```
 
-var queryData = new Query()
-{
-    QueryID = Guid.NewGuid(),
-    ApplicationName = "My Application",
-    QueryCategory = "birth_records",
-    QueryTerms = "John Doe Jr.",
-    QueryText = Request.Url.Query
-};
+### Configure application name
 
-QueryLogger.Log(connectionString, settings, queryData);
+Configure your application name globally and avoid having to specify it for each individual `Query` object you create.
+
+```csharp
+<QueryLogger applicationName="RecordsApp">
+  <Store connectionString="Server=localhost;Database=recordsappdb;Trusted_Connection=True;" />
+  <Email toAddress="me@test.ie" />
+</QueryLogger>
+```
+
+### Configure IP anonymisation
+
+Configure settings regarding user IP address anonymisation.
+
+```xml
+<QueryLogger applicationName="RecordsApp" isEnabled="true" anonymizeIPAddress="none">
+  <Store connectionString="Server=localhost;Database=recordsappdb;Trusted_Connection=True;" />
+  <Email toAddress="me@test.ie" />
+</QueryLogger>
 ```
 
 At present the available anonymisation levels are **None** (no anonymisation is applied) and **Partial** (the last octet of an IPv4 client IP address or the last 80 bits of an IPv6 address are removed).
 
 You can also prevent the logger from collecting IP addresses in the first place by configuring the `StoreClientIPAddress` setting:
 
-```csharp
-var settings = new QueryLoggerSettings()
-{
-    StoreClientIPAddress = false
-};
+```xml
+<QueryLogger applicationName="RecordsApp" isEnabled="true" storeClientIPAddress="false">
+  <Store connectionString="Server=localhost;Database=recordsappdb;Trusted_Connection=True;" />
+  <Email toAddress="me@test.ie" />
+</QueryLogger>
 ```
+
+When `StoreClientIPAddress` is set to **false** the value **PRIVATE** will be recorded in the `IPAddress` column of your database's query log table. If `StoreClientIPAddress` is set to **true** but a client IP address cannot be obtained from the HTTP context for any reason a value of **UNKNOWN** will be recorded.
 
 ## Aggregated query logs and log analysis
 
