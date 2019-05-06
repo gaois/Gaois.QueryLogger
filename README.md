@@ -43,7 +43,7 @@ Gaois.QueryLogger is in production use at [www.tearma.ie](https://www.tearma.ie)
 
 ## Additional credits
 
-The architecture of Gaois.QueryLogger is heavily inspired by the [StackExchange.Exceptional](https://github.com/NickCraver/StackExchange.Exceptional) library. It makes use of two other third-party open-source libraries: [Dapper](https://github.com/StackExchange/Dapper/) and [AutoMapper](https://automapper.org/).
+The architecture of Gaois.QueryLogger is heavily inspired by the [StackExchange.Exceptional](https://github.com/NickCraver/StackExchange.Exceptional) library. Gaois.QueryLogger makes use of two other third-party open-source libraries: [Dapper](https://github.com/StackExchange/Dapper/) and [AutoMapper](https://automapper.org/).
 
 ## Roadmap
 
