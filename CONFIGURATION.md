@@ -52,4 +52,4 @@ Queries associated with the IP addresses in this list will not be logged. Useful
 
 **IPAddress** (`string`): The IP address to be excluded (must be a unique value).
 
-**Name** (`string`): The IP address is the entry key, so feel free to set the same name for multiple entries if you want to group multiple IP sources together.
+**Name** (`string`): Labels the IP address to be excluded. The IP address is the entry key, so feel free to set the same name for multiple entries if you want to group multiple IP sources together.
