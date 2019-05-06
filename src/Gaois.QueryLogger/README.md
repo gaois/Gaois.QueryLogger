@@ -94,6 +94,10 @@ QueryLogger.Log(births, deaths);
 
 ## Configuration
 
+As described above, you can configure the query logger settings in your **Web.config** file:
+
+
+
 ### Configure IP anonymisation
 
 The `Log()` method has an overload that accepts a `QueryLoggerSettings` object. Use the settings object to configure user IP address anonymisation.
@@ -126,3 +130,7 @@ var settings = new QueryLoggerSettings()
     StoreClientIPAddress = false
 };
 ```
+
+## Aggregated query logs and log analysis
+
+In [Fiontar & Scoil na Gaeilge](https://www.gaois.ie), DCU we aggregate summary data from our query log table on monthly basis and store it in a separate database table. We have made the table structure and stored procedures that manage this process available in the [DBScripts](https://github.com/gaois/Gaois.QueryLogger/tree/master/DBScripts) folder in this repository in case they are of use to anyone else. Gaois.QueryLogger also has an `AggregratedQueryLog` entity that corresponds to entries in the aggregated log table. The DBScripts folder also contains some of the more general SQL queries we use to summarise and analyse log data.
