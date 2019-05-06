@@ -143,7 +143,7 @@ Configure your application name globally and avoid having to specify it for each
 Configure settings regarding user IP address anonymisation.
 
 ```xml
-<QueryLogger applicationName="RecordsApp" isEnabled="true" anonymizeIPAddress="None">
+<QueryLogger applicationName="RecordsApp" anonymizeIPAddress="None">
   <Store connectionString="Server=localhost;Database=recordsappdb;Trusted_Connection=True;" />
   <Email toAddress="me@test.ie" />
 </QueryLogger>
@@ -154,7 +154,7 @@ At present the available anonymisation levels are **None** (no anonymisation is 
 You can also prevent the logger from collecting IP addresses in the first place by configuring the `StoreClientIPAddress` setting:
 
 ```xml
-<QueryLogger applicationName="RecordsApp" isEnabled="true" storeClientIPAddress="false">
+<QueryLogger applicationName="RecordsApp" storeClientIPAddress="false">
   <Store connectionString="Server=localhost;Database=recordsappdb;Trusted_Connection=True;" />
   <Email toAddress="me@test.ie" />
 </QueryLogger>
