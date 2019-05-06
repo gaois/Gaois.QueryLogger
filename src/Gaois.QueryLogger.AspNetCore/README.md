@@ -11,7 +11,8 @@ A simple, configurable query logger for ASP.NET Core 2.1+ applications. Find a g
 - [Usage](#usage)
   - [Log a query](#log-a-query)
   - [Associate related queries](#associate-related-queries)
-  - [Configure the query logger settings](#configure-the-query-logger-settings)
+- [Configuration](#configuration)
+- [Aggregated query logs and log analysis](#aggregated-query-logs-and-log-analysis)
 
 ## Installation and setup
 
@@ -117,11 +118,13 @@ var deaths = new Query()
 _queryLogger.Log(births, deaths);
 ```
 
-### Configure the query logger settings
+## Configuration
 
 Use the `services.AddQueryLogger()` method in **Startup.cs** to configure the query logger settings.
 
-#### Globally enable/disable the query logger
+The rest of this section describes some useful ways you make use of the configuration settings.
+
+### Globally enable/disable the query logger
 
 The query logger is enabled by default. However, there may be occasions or particular environments where, for testing or other purposes, you would prefer to disable the query logger without having to wrap each query command in its own conditional logic. To accomodate this, disable the query logger globally within your application by setting `IsEnabled` to `false`.
 
@@ -133,7 +136,7 @@ services.AddQueryLogger(settings =>
 });
 ```
 
-#### Configure application name
+### Configure application name
 
 Configure your application name globally and avoid having to specify it for each individual `Query` object you create.
 
@@ -145,7 +148,7 @@ services.AddQueryLogger(settings =>
 });
 ```
 
-#### Configure IP anonymisation
+### Configure IP anonymisation
 
 Use the settings object to configure user IP address anonymisation.
 
@@ -168,3 +171,9 @@ services.AddQueryLogger(settings =>
     settings.StoreClientIPAddress = false;
 });
 ```
+
+When `StoreClientIPAddress` is set to **false** the value **PRIVATE** will be recorded in the `IPAddress` column of your database's query log table. If `StoreClientIPAddress` is set to **true** but a client IP address cannot be obtained from the HTTP context for any reason a value of **UNKNOWN** will be recorded.
+
+## Aggregated query logs and log analysis
+
+In [Fiontar & Scoil na Gaeilge](https://www.gaois.ie), DCU we aggregate summary data from our query log table on monthly basis and store it in a separate database table. We have made the table structure and stored procedures that manage this process available in the [DBScripts](https://github.com/gaois/Gaois.QueryLogger/tree/master/DBScripts) folder in this repository in case they are of use to anyone else. Gaois.QueryLogger also has an `AggregratedQueryLog` entity that corresponds to entries in the aggregated log table. The DBScripts folder also contains some of the more general SQL queries we use to summarize and analyze log data.
