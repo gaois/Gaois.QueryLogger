@@ -148,7 +148,7 @@ You can also load the configuration from your JSON configuration file:
       "ToAddress": "me@test.ie",
       "FromAddress": "test@test.ie",
       "FromDisplayName": "RecordsApp — QueryLogger",
-      "SMTPHost": "smtp.sendgrid.net",
+      "SMTPHost": "smtp.myhost.net",
       "SMTPPort": 587,
       "SMTPUserName": "MY_USERNAME",
       "SMTPPassword": "MY_PASSWORD",
