@@ -25,7 +25,7 @@ A simple, configurable query logger for ASP.NET and ASP.NET Core applications. I
 - Queries can share a GUID, meaning you can group multiple associated queries.
 - Add custom metadata to your logs. We use this to store application-specific data in a multi-application log.
 - By default, the library partially anonymises user IP addresses by removing the last octet of IPv4 client IP addresses or the last 80 bits of an IPv6 address. This setting can be turned off.
-- Performance: logging adds no additional overhead to server response times. Gaois.QueryLogger logs over 100,000 queries per day for us in production with ease.
+- Performance: logging adds no additional overhead to server response times. We log over 100,000 queries per day in production with ease.
 - Includes its own e-mail notification service that will alert you in the event of any logging errors.
 
 ## Documentation
