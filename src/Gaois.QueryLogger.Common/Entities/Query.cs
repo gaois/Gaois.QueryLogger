@@ -35,7 +35,7 @@ namespace Gaois.QueryLogger
         public string QueryTerms { get; set; }
 
         /// <summary>
-        /// The raw query text, such a query string or POSTed form field
+        /// The raw query text, such as a query string or POSTed form field
         /// </summary>
         public string QueryText { get; set; }
 
