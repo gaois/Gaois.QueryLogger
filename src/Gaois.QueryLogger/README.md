@@ -10,9 +10,12 @@ A simple, configurable query logger for ASP.NET Framework 4.6.1+ applications. F
   - [Application](#application)
 - [Usage](#usage)
   - [Log a query](#log-a-query)
-  - [Asynchronous logging](#asynchronous-logging)
   - [Associate related queries](#associate-related-queries)
+- [Configuration](#configuration)
+  - [Globally enable/disable the query logger](#globally-enabledisable-the-query-logger)
+  - [Configure application name](#configure-application-name)
   - [Configure IP anonymisation](#configure-ip-anonymisation)
+- [Aggregated query logs and log analysis](#aggregated-query-logs-and-log-analysis)
 
 ## Installation and setup
 
@@ -29,7 +32,9 @@ Add the NuGet package [Gaois.QueryLogger](https://www.nuget.org/packages/Gaois.Q
 Install-Package Gaois.QueryLogger
 ```
 
-Add the `using Gaois.QueryLogger` directive to any C# file to access the library's static methods.
+Then, **Web.config**
+
+Now you can add the `using Gaois.QueryLogger` directive to any C# file to access the library's methods and services.
 
 ## Usage
 
