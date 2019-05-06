@@ -123,11 +123,46 @@ _queryLogger.Log(births, deaths);
 
 ## Configuration
 
-Use the `services.AddQueryLogger()` method in **Startup.cs** to configure the query logger settings.
+As described above, you can use the `services.AddQueryLogger()` method in **Startup.cs** to configure the query logger settings:
 
-See the full list of configurable settings [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/CONFIGURATION.md).
+```csharp
+services.AddQueryLogger(settings =>
+{
+    settings.IsEnabled = !environment.IsDevelopment();
+    settings.StoreClientIPAddress = false;
+    settings.Store.ConnectionString = Configuration.GetConnectionString("query_logger");
+});
+```
 
-The rest of this section describes some useful ways you make use of the configuration settings.
+You can also load the configuration from your JSON configuration file:
+
+```json
+{
+  "QueryLogger": {
+    "ApplicationName": "RecordsApp",
+    "IsEnabled": true,
+    "Store": {
+      "ConnectionString": "Server=localhost;Database=recordsappdb;Trusted_Connection=True;"
+    },
+    "Email": {
+      "ToAddress": "me@test.ie",
+      "FromAddress": "test@test.ie",
+      "FromDisplayName": "RecordsApp — QueryLogger",
+      "SMTPHost": "smtp.sendgrid.net",
+      "SMTPPort": 587,
+      "SMTPUserName": "MY_USERNAME",
+      "SMTPPassword": "MY_PASSWORD",
+      "SMTPEnableSSL": true
+    }
+    "ExcludedIPAddresses": [
+      { "name": "Bingbot", "ipAddress": "40.77.167.0" },
+      { "name": "Bingbot", "ipAddress": "207.46.13.0" }
+    ]
+  }
+}
+```
+
+See the full list of configurable settings [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/CONFIGURATION.md). The rest of this section describes some useful ways you make use of the configuration settings.
 
 ### Globally enable/disable the query logger
 
