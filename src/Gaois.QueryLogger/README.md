@@ -110,7 +110,7 @@ As described above, you can configure the query logger settings in your **Web.co
     <add name="Bingbot" ipAddress="40.77.167.0" />
     <add name="Bingbot" ipAddress="207.46.13.0" />
   </ExcludedIPAddresses>
-</QueryLogger>
+</QueryLogger> 
 
 See the full list of configurable settings [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/CONFIGURATION.md). The rest of this section describes some useful ways you can make use of the configuration settings.
 
