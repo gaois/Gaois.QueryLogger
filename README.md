@@ -21,7 +21,7 @@ A simple, configurable query logger for ASP.NET and ASP.NET Core applications. I
 ## Features
 
 - Log query terms and associated metadata to SQL Server.
-- Metadata include a unique query ID, application name, query category, host server, client IP address, query execution success, query execution duration, result count, and date information.
+- Metadata include a unique query ID, application name, query category, host server, client IP address, query execution success, query execution duration, result count, and datetime information.
 - Queries can share a GUID, meaning you can group multiple associated queries.
 - Add custom metadata to your logs. We use this to store application-specific data in a multi-application log.
 - By default, the library partially anonymises user IP addresses by removing the last octet of IPv4 client IP addresses or the last 80 bits of an IPv6 address. This setting can be turned off.
