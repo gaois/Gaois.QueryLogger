@@ -153,7 +153,7 @@ You can also load the configuration from your JSON configuration file:
       "SMTPUserName": "MY_USERNAME",
       "SMTPPassword": "MY_PASSWORD",
       "SMTPEnableSSL": true
-    }
+    },
     "ExcludedIPAddresses": [
       { "name": "Bingbot", "ipAddress": "40.77.167.0" },
       { "name": "Bingbot", "ipAddress": "207.46.13.0" }
