@@ -21,3 +21,34 @@ BEGIN
 	 WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
+
+
+--OPTIONAL: Add indexes to the QueryLogs table
+USE [YOUR_DATABASE_NAME]
+GO
+CREATE CLUSTERED INDEX [IX_QueryLogs_LogDate_ID]
+ON [dbo].[QueryLogs] ([LogDate] ASC, [ID] ASC)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+ON [PRIMARY]
+GO
+
+USE [YOUR_DATABASE_NAME]
+GO
+CREATE NONCLUSTERED INDEX IX_QueryLogs_ApplicationName_QueryCategory
+ON [dbo].[QueryLogs] ([ApplicationName],[QueryCategory])
+INCLUDE ([QueryTerms])
+GO
+
+USE [YOUR_DATABASE_NAME]
+GO
+CREATE NONCLUSTERED INDEX IX_QueryLogs_LogDate
+ON [dbo].[QueryLogs] ([LogDate])
+INCLUDE ([QueryID],[ApplicationName],[Host],[QueryCategory])
+GO
+
+USE [YOUR_DATABASE_NAME]
+GO
+CREATE NONCLUSTERED INDEX IX_QueryLogs_ResultCount
+ON [dbo].[QueryLogs] ([ResultCount])
+INCLUDE ([ApplicationName])
+GO

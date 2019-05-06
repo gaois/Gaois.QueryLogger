@@ -1,3 +1,5 @@
+﻿using System.Collections.Generic;
+
 namespace Gaois.QueryLogger
 {
     /// <summary>
@@ -6,15 +8,7 @@ namespace Gaois.QueryLogger
     public class QueryLoggerSettings
     {
         /// <summary>
-        /// Specifies settings that configure the query logger
-        /// </summary>
-        public QueryLoggerSettings()
-        {
-            Store = new QueryLoggerStoreSettings();
-        }
-
-        /// <summary>
-        /// Specifies a global name for your application that can used in all queries logged
+        /// Specifies a global name for your application that can be used in all queries logged
         /// </summary>
         public string ApplicationName { get; set; }
 
@@ -26,7 +20,7 @@ namespace Gaois.QueryLogger
         /// <summary>
         /// Specifies settings that configure the query logger store
         /// </summary>
-        public QueryLoggerStoreSettings Store { get; set; }
+        public QueryLoggerStoreSettings Store { get; set; } = new QueryLoggerStoreSettings();
 
         /// <summary>
         /// Specifies whether the client IP address should be logged. The default value is true.
@@ -37,5 +31,20 @@ namespace Gaois.QueryLogger
         /// Sets the level of client IP address anonymization. Defaults to partial anonymization.
         /// </summary>
         public IPAddressAnonymizationLevel AnonymizeIPAddress { get; set; } = IPAddressAnonymizationLevel.Partial;
+
+        /// <summary>
+        /// The interval of time (in milliseconds) to wait between sending alerts regarding an issue with the query logger service 
+        /// </summary>
+        public int AlertInterval { get; set; } = 300000;
+
+        /// <summary>
+        /// Specifies settings for sending e-mail notifications
+        /// </summary>
+        public EmailSettings Email { get; set; }
+
+        /// <summary>
+        /// Queries associated with these IP address will not be logged
+        /// </summary>
+        public List<ExcludedIPAddress> ExcludedIPAddresses { get; set; }
     }
 }

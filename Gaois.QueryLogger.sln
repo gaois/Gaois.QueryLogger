@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gaois.QueryLogger", "src\Gaois.QueryLogger\Gaois.QueryLogger.csproj", "{FBF9467C-4102-467C-9A16-9055086456D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gaois.QueryLogger.Common", "src\Gaois.QueryLogger.Common\Gaois.QueryLogger.Common.csproj", "{269D2318-3B49-48BE-82AF-C9C859CE33FB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gaois.QueryLogger.AspNetCore", "src\Gaois.QueryLogger.AspNetCore\Gaois.QueryLogger.AspNetCore.csproj", "{210C7ECC-6953-4BFF-8106-D239EDF46767}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gaois.QueryLogger", "src\Gaois.QueryLogger\Gaois.QueryLogger.csproj", "{BAF64333-8BF4-4420-BDCA-BF6CC5245B89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gaois.QueryLogger.AspNetCore", "src\Gaois.QueryLogger.AspNetCore\Gaois.QueryLogger.AspNetCore.csproj", "{3043B872-6B81-46AA-9401-932CFFDAFAAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FBF9467C-4102-467C-9A16-9055086456D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBF9467C-4102-467C-9A16-9055086456D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FBF9467C-4102-467C-9A16-9055086456D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FBF9467C-4102-467C-9A16-9055086456D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{210C7ECC-6953-4BFF-8106-D239EDF46767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{210C7ECC-6953-4BFF-8106-D239EDF46767}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{210C7ECC-6953-4BFF-8106-D239EDF46767}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{210C7ECC-6953-4BFF-8106-D239EDF46767}.Release|Any CPU.Build.0 = Release|Any CPU
+		{269D2318-3B49-48BE-82AF-C9C859CE33FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{269D2318-3B49-48BE-82AF-C9C859CE33FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{269D2318-3B49-48BE-82AF-C9C859CE33FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{269D2318-3B49-48BE-82AF-C9C859CE33FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAF64333-8BF4-4420-BDCA-BF6CC5245B89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAF64333-8BF4-4420-BDCA-BF6CC5245B89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAF64333-8BF4-4420-BDCA-BF6CC5245B89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAF64333-8BF4-4420-BDCA-BF6CC5245B89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3043B872-6B81-46AA-9401-932CFFDAFAAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3043B872-6B81-46AA-9401-932CFFDAFAAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3043B872-6B81-46AA-9401-932CFFDAFAAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3043B872-6B81-46AA-9401-932CFFDAFAAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

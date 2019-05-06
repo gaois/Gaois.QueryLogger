@@ -1,4 +1,4 @@
-namespace Gaois.QueryLogger
+﻿namespace Gaois.QueryLogger
 {
     /// <summary>
     /// Represents different IP anonymization policies

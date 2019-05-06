@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.6.7-alpha</Version>
+    <Version>0.6.4-alpha</Version>
     <Authors>Ronan Doherty</Authors>
     <Company>Fiontar &amp; Scoil na Gaeilge, Dublin City University</Company>
     <Copyright>Copyright 2019</Copyright>
-    <Description>A simple, configurable query logger for ASP.NET Framework applications.</Description>
+    <Description>Shared library for ASP.NET Framework and ASP.NET Core versions of the Gaois QueryLogger</Description>
     <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/gaois/Gaois.QueryLogger/</RepositoryUrl>
-    <PackageId>Gaois.QueryLogger</PackageId>
+    <PackageId>Gaois.QueryLogger.Common</PackageId>
     <PackageTags>search;query;logging;web</PackageTags>
     <PackageIconUrl></PackageIconUrl>
     <PackageProjectUrl>https://github.com/gaois/Gaois.QueryLogger/</PackageProjectUrl>
@@ -20,16 +20,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.1.0" />
+    <PackageReference Include="Ansa.Extensions" Version="0.2.6" />
+    <PackageReference Include="Dapper" Version="1.60.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Gaois.QueryLogger.Common\Gaois.QueryLogger.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Web" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <Reference Include="System" />
   </ItemGroup>
 
 </Project>

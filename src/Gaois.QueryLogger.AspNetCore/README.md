@@ -10,9 +10,12 @@ A simple, configurable query logger for ASP.NET Core 2.1+ applications. Find a g
   - [Application](#application)
 - [Usage](#usage)
   - [Log a query](#log-a-query)
-  - [Asynchronous logging](#asynchronous-logging)
   - [Associate related queries](#associate-related-queries)
-  - [Configure the query logger settings](#configure-the-query-logger-settings)
+- [Configuration](#configuration)
+  - [Globally enable/disable the query logger](#globally-enabledisable-the-query-logger)
+  - [Configure application name](#configure-application-name)
+  - [Configure IP anonymisation](#configure-ip-anonymisation)
+- [Aggregated query logs and log analysis](#aggregated-query-logs-and-log-analysis)
 
 ## Installation and setup
 
@@ -29,30 +32,46 @@ Add the NuGet package [Gaois.QueryLogger.AspNetCore](https://www.nuget.org/packa
 dotnet add package Gaois.QueryLogger.AspNetCore
 ```
 
-Then, in **Startup.cs**, modify the *ConfigureServices* method by adding a call to `services.AddQueryLogger()`. You will need to add a connection string for your chosen SQL Server data store also:
+Then, in **Startup.cs**, modify the *ConfigureServices* method by adding a call to `services.AddQueryLogger()`. You will need to add an application name and a connection string for your chosen SQL Server data store also:
 
 ```csharp
 services.AddQueryLogger(settings =>
 {
-    settings.Store.ConnectionString = Configuration.GetConnectionString("query_logger");
+    settings.ApplicationName = "RecordsApp"
+    settings.Store.ConnectionString = configuration.GetConnectionString("query_logger");
+});
+```
+Alternatively, load the configuration from your `appsettings.json` file:
+
+```csharp
+services.AddQueryLogger(configuration.GetSection("QueryLogger"));
+```
+
+…Or you can mix the two approaches:
+
+```csharp
+services.AddQueryLogger(configuration.GetSection("QueryLogger"), settings =>
+{
+    settings.IsEnabled = !environment.IsDevelopment();
 });
 ```
 
-Now you can add the `using Gaois.QueryLogger` directive to any C# file to access the library's methods.
+Now you can add the `using Gaois.QueryLogger` directive to any C# file to access the library's methods and services.
 
 ## Usage
 
 Gaois.QueryLogger is implemented in ASP.NET Core using the framework's recommended conventions for [dependency injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection). Pass the query logger dependency to a class constructor via the `IQueryLogger` interface:
 
 ```csharp
-private readonly IQueryLogger QueryLogger;
+private readonly IQueryLogger _queryLogger;
 
 public RecordsController(IQueryLogger queryLogger)
 {
-    QueryLogger = queryLogger;
+    _queryLogger = queryLogger;
 }
 
-QueryLogger.Log(new Query { ApplicationName = "RecordsApp", QueryCategory = "birth_records", QueryTerms = "test", QueryText = Request.Url.Query });
+var query = new Query { QueryCategory = "birth_records", QueryTerms = "test", QueryText = Request.Url.Query };
+_queryLogger.Log(query);
 ```
 
 ### Log a query
@@ -64,35 +83,30 @@ Example usage:
 ```csharp
 var query = new Query()
 {
-    ApplicationName = "My Application",
     QueryCategory = "birth_records",
     QueryTerms = "John Doe Jr.",
     QueryText = Request.Url.Query,
     ResultCount = 27
 };
 
-QueryLogger.Log(query);
+_queryLogger.Log(query);
 ```
 
-The library automatically obtains the website `Host` and client `IPAddress` properties from the HTTP context. Likewise, if you do not specify a `QueryID` property (in the form of a GUID) one will be created for you. You can, however, overwrite any of these automatically-created values by specifying the relevant property in the `Query` object.
+The library automatically obtains the website `Host` and client `IPAddress` properties from the HTTP context. Likewise, if you do not specify a `QueryID` property (in the form of a GUID) one will be created for you. You can, however, overwrite any of these auto-populated values by specifying the relevant property in the `Query` object. See the full list of query data than can be specified [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/LOGDATA.md).
 
-### Asynchronous logging
-
-The `LogAsync()` method is provided if you wish to log query data in an asynchronous manner.
+The `Log()` method is ‘fire-and-forget’: queries are added synchronously to a thread-safe log queue which is in turn processed asynchronously by a separate thread in an implementation of the Producer-Consumer pattern. This means that logging adds effectively zero overhead to server response time.
 
 ### Associate related queries
 
-If you wish to group related queries together — for example different search queries executed on a single page — pass the associated queries the same `QueryID` parameter:
+If you wish to group related queries together — for example different search queries executed on a single page — assign the same `QueryID` property to each of the associated queries:
 
 ```csharp
 var queryID = Guid.NewGuid();
-var application = "My Application";
 var searchText = "John Doe Jr.";
 
 var births = new Query()
 {
     QueryID = queryID,
-    ApplicationName = application,
     QueryCategory = "birth_records",
     QueryTerms = searchText
 };
@@ -100,19 +114,56 @@ var births = new Query()
 var deaths = new Query()
 {
     QueryID = queryID,
-    ApplicationName = application,
     QueryCategory = "death_records",
     QueryTerms = searchText
 };
 
-QueryLogger.Log(births, deaths);
+_queryLogger.Log(births, deaths);
 ```
 
-### Configure the query logger settings
+## Configuration
 
-Use the `services.AddQueryLogger()` method in **Startup.cs** to configure the query logger settings.
+As described above, you can use the `services.AddQueryLogger()` method in **Startup.cs** to configure the query logger settings:
 
-#### Globally enable/disable the query logger
+```csharp
+services.AddQueryLogger(settings =>
+{
+    settings.IsEnabled = !environment.IsDevelopment();
+    settings.StoreClientIPAddress = false;
+    settings.Store.ConnectionString = Configuration.GetConnectionString("query_logger");
+});
+```
+
+You can also load the configuration from your JSON configuration file:
+
+```json
+{
+  "QueryLogger": {
+    "ApplicationName": "RecordsApp",
+    "IsEnabled": true,
+    "Store": {
+      "ConnectionString": "Server=localhost;Database=recordsappdb;Trusted_Connection=True;"
+    },
+    "Email": {
+      "ToAddress": "me@test.ie",
+      "FromAddress": "test@test.ie",
+      "FromDisplayName": "RecordsApp — QueryLogger",
+      "SMTPHost": "smtp.myhost.net",
+      "SMTPPort": 587,
+      "SMTPUserName": "MY_USERNAME",
+      "SMTPPassword": "MY_PASSWORD",
+      "SMTPEnableSSL": true
+    },
+    "ExcludedIPAddresses": [
+      { "name": "Bingbot", "ipAddress": "40.77.167.0" },
+      { "name": "Bingbot", "ipAddress": "207.46.13.0" }
+    ]
+}
+```
+
+See the full list of configurable settings [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/CONFIGURATION.md). The rest of this section describes some useful ways you can make use of the configuration settings.
+
+### Globally enable/disable the query logger
 
 The query logger is enabled by default. However, there may be occasions or particular environments where, for testing or other purposes, you would prefer to disable the query logger without having to wrap each query command in its own conditional logic. To accomodate this, disable the query logger globally within your application by setting `IsEnabled` to `false`.
 
@@ -124,7 +175,7 @@ services.AddQueryLogger(settings =>
 });
 ```
 
-#### Configure application name
+### Configure application name
 
 Configure your application name globally and avoid having to specify it for each individual `Query` object you create.
 
@@ -136,7 +187,7 @@ services.AddQueryLogger(settings =>
 });
 ```
 
-#### Configure IP anonymisation
+### Configure IP anonymisation
 
 Use the settings object to configure user IP address anonymisation.
 
@@ -159,3 +210,9 @@ services.AddQueryLogger(settings =>
     settings.StoreClientIPAddress = false;
 });
 ```
+
+When `StoreClientIPAddress` is set to **false** the value **PRIVATE** will be recorded in the `IPAddress` column of your database's query log table. If `StoreClientIPAddress` is set to **true** but a client IP address cannot be obtained from the HTTP context for any reason a value of **UNKNOWN** will be recorded.
+
+## Aggregated query logs and log analysis
+
+In [Fiontar & Scoil na Gaeilge](https://www.gaois.ie), DCU we aggregate summary data from our query log table on monthly basis and store it in a separate database table. We have made the table structure and stored procedures that manage this process available in the [DBScripts](https://github.com/gaois/Gaois.QueryLogger/tree/master/DBScripts) folder in this repository in case they are of use to anyone else. Gaois.QueryLogger also has an `AggregratedQueryLog` entity that corresponds to entries in the aggregated log table. The DBScripts folder also contains some of the more general SQL queries we use to summarise and analyse log data.
