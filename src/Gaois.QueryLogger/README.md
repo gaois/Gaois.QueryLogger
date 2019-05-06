@@ -32,7 +32,14 @@ Add the NuGet package [Gaois.QueryLogger](https://www.nuget.org/packages/Gaois.Q
 Install-Package Gaois.QueryLogger
 ```
 
-Then, **Web.config**
+Then, configure the query logger in your **Web.config** file. You will need to add an application name and a connection string for your chosen SQL Server data store:
+
+```xml
+<QueryLogger applicationName="RecordsApp" isEnabled="true">
+  <Store connectionString="Server=localhost;Database=recordsappdb;Trusted_Connection=True;" />
+  <Email toAddress="me@test.ie" />
+</QueryLogger>
+```
 
 Now you can add the `using Gaois.QueryLogger` directive to any C# file to access the library's methods and services.
 
@@ -40,28 +47,25 @@ Now you can add the `using Gaois.QueryLogger` directive to any C# file to access
 
 ### Log a query
 
-The `QueryLogger.Log()` method accepts a SQL Server database connection string and any number of `Query` objects as parameters.
+The `QueryLogger.Log()` method accepts any number of `Query` objects as parameters.
 
 Example usage:
 
 ```csharp
 var query = new Query()
 {
-    ApplicationName = "My Application",
-    QueryCategory = "land_records",
-    QueryTerms = this.search,
+    QueryCategory = "birth_records",
+    QueryTerms = "John Doe Jr.",
     QueryText = Request.Url.Query,
-    ResultCount = this.records.Count
+    ResultCount = 27
 };
 
-QueryLogger.Log(Config.ConnectionString, query);
+QueryLogger.Log(query);
 ```
 
-The library automatically obtains the website `Host` and client `IPAddress` properties from the HTTP context. Likewise, if you do not specify a `QueryID` (in the form of a GUID) in the `Query` object one will be created for you. You can, however, overwrite any of these automatically-created values by specifying the relevant property in the `Query` object.
+The library automatically obtains the website `Host` and client `IPAddress` properties from the HTTP context. Likewise, if you do not specify a `QueryID` (in the form of a GUID) in the `Query` object one will be created for you. You can, however, overwrite any of these automatically-created values by specifying the relevant property in the `Query` object. See the full list of query data than can be specified [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/LOGDATA.md).
 
-### Asynchronous logging
-
-The `LogAsync()` method is provided if you wish to log query data in an asynchronous manner.
+The `Log()` method is ‘fire-and-forget’: queries are added synchronously to a thread-safe log queue which is in turn processed asynchronously by a separate thread in an implementation of the Producer-Consumer pattern. This means that logging adds effectively zero overhead to server response time.
 
 ### Associate related queries
 
@@ -69,13 +73,11 @@ If you wish to group related queries together — for example different search q
 
 ```csharp
 var queryID = Guid.NewGuid();
-var application = "My Application";
 var searchText = "John Doe Jr.";
 
 var births = new Query()
 {
     QueryID = queryID,
-    ApplicationName = application,
     QueryCategory = "birth_records",
     QueryTerms = searchText
 };
@@ -83,13 +85,14 @@ var births = new Query()
 var deaths = new Query()
 {
     QueryID = queryID,
-    ApplicationName = application,
     QueryCategory = "death_records",
     QueryTerms = searchText
 };
 
-QueryLogger.Log(connectionString, births, deaths);
+QueryLogger.Log(births, deaths);
 ```
+
+## Configuration
 
 ### Configure IP anonymisation
 
