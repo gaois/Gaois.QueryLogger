@@ -1,5 +1,7 @@
 # Adding query data
 
+The `Query` object is at the heart of Gaois.QueryLogger. `Query` objects carry the query data that will be logged to your data store. Gaois.QueryLogger will auto-populate certain query data, such as the application host or client IP, prior to logging while other data need to be specified by your application. All default behaviours can be overridden, however. The rest of this document describes the various properties available for storing your query data as well as methods that can be called on the `Query` object.
+
 ## Data
 
 **QueryID** (`Guid`): A unique ID that represents a specific query or group of queries. A query ID will be created automatically if not specified in code.
@@ -30,4 +32,4 @@
 
 **`ToJson()`** (`string`): Returns a JSON representation of a `Query` object.
 
-**`FromJson(string json)`** (`string`): Deserializes the provided JSON into a `Query` object.
+**`FromJson(string json)`** (`Query`): Deserializes the provided JSON into a `Query` object.
