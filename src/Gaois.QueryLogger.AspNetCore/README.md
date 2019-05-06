@@ -161,7 +161,7 @@ You can also load the configuration from your JSON configuration file:
 }
 ```
 
-See the full list of configurable settings [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/CONFIGURATION.md). The rest of this section describes some useful ways you make use of the configuration settings.
+See the full list of configurable settings [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/CONFIGURATION.md). The rest of this section describes some useful ways you can make use of the configuration settings.
 
 ### Globally enable/disable the query logger
 
