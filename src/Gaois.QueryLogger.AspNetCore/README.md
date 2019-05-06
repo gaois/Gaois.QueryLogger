@@ -12,7 +12,7 @@ A simple, configurable query logger for ASP.NET Core 2.1+ applications. Find a g
   - [Log a query](#log-a-query)
   - [Associate related queries](#associate-related-queries)
 - [Configuration](#configuration)
-  - [Globally enable/disable the query logger](#globally-enable-disable-the-query-logger)
+  - [Globally enable/disable the query logger](#globally-enabledisable-the-query-logger)
   - [Configure application name](#configure-application-name)
   - [Configure IP anonymisation](#configure-ip-anonymisation)
 - [Aggregated query logs and log analysis](#aggregated-query-logs-and-log-analysis)
