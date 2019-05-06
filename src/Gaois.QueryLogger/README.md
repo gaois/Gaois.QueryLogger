@@ -120,7 +120,7 @@ See the full list of configurable settings [here](https://github.com/gaois/Gaois
 
 The query logger is enabled by default. However, there may be occasions or particular environments where, for testing or other purposes, you would prefer to disable the query logger without having to wrap each query command in its own conditional logic. To accomodate this, disable the query logger globally within your application by setting `IsEnabled` to `false`.
 
-```csharp
+```xml
 <QueryLogger applicationName="RecordsApp" isEnabled="false">
   <Store connectionString="Server=localhost;Database=recordsappdb;Trusted_Connection=True;" />
   <Email toAddress="me@test.ie" />
@@ -131,7 +131,7 @@ The query logger is enabled by default. However, there may be occasions or parti
 
 Configure your application name globally and avoid having to specify it for each individual `Query` object you create.
 
-```csharp
+```xml
 <QueryLogger applicationName="RecordsApp">
   <Store connectionString="Server=localhost;Database=recordsappdb;Trusted_Connection=True;" />
   <Email toAddress="me@test.ie" />
@@ -143,7 +143,7 @@ Configure your application name globally and avoid having to specify it for each
 Configure settings regarding user IP address anonymisation.
 
 ```xml
-<QueryLogger applicationName="RecordsApp" isEnabled="true" anonymizeIPAddress="none">
+<QueryLogger applicationName="RecordsApp" isEnabled="true" anonymizeIPAddress="None">
   <Store connectionString="Server=localhost;Database=recordsappdb;Trusted_Connection=True;" />
   <Email toAddress="me@test.ie" />
 </QueryLogger>
