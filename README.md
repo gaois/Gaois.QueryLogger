@@ -32,10 +32,10 @@ A simple, configurable query logger for ASP.NET and ASP.NET Core applications. I
 
 Installation and usage vary slightly according to the target framework. Follow the links below to see the relevant documentation.
 
-- Read the documentation for ASP.NET Framework 4.6.1+ [here](src/Gaois.QueryLogger/).
-- Read the documentation for ASP.NET Core 2.1+ [here](src/Gaois.QueryLogger.AspNetCore/).
+- Read the documentation for ASP.NET Framework 4.6.1+ [here](./src/Gaois.QueryLogger/).
+- Read the documentation for ASP.NET Core 2.1+ [here](./src/Gaois.QueryLogger.AspNetCore/).
 
-Further documentation regarding [configuration options](./CONFIGURATION.md) and [custom log data](./LOGDATA.md) is also available.
+Further documentation regarding [configuration options](./docs/CONFIGURATION.md) and [custom log data](./docs/LOGDATA.md) is also available.
 
 ## Who is using this?
 

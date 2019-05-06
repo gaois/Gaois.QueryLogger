@@ -92,7 +92,7 @@ var query = new Query()
 _queryLogger.Log(query);
 ```
 
-The library automatically obtains the website `Host` and client `IPAddress` properties from the HTTP context. Likewise, if you do not specify a `QueryID` property (in the form of a GUID) one will be created for you. You can, however, overwrite any of these auto-populated values by specifying the relevant property in the `Query` object. See the full list of query data than can be specified [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/LOGDATA.md).
+The library automatically obtains the website `Host` and client `IPAddress` properties from the HTTP context. Likewise, if you do not specify a `QueryID` property (in the form of a GUID) one will be created for you. You can, however, overwrite any of these auto-populated values by specifying the relevant property in the `Query` object. See the full list of query data than can be specified [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/docs/LOGDATA.md).
 
 The `Log()` method is ‘fire-and-forget’: queries are added synchronously to a thread-safe log queue which is in turn processed asynchronously by a separate thread in an implementation of the Producer-Consumer pattern. This means that logging adds effectively zero overhead to server response time.
 
@@ -161,7 +161,7 @@ You can also load the configuration from your JSON configuration file:
 }
 ```
 
-See the full list of configurable settings [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/CONFIGURATION.md). The rest of this section describes some useful ways you can make use of the configuration settings.
+See the full list of configurable settings [here](https://github.com/gaois/Gaois.QueryLogger/blob/master/docs/CONFIGURATION.md). The rest of this section describes some useful ways you can make use of the configuration settings.
 
 ### Globally enable/disable the query logger
 
