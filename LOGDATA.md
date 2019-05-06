@@ -30,6 +30,6 @@ The `Query` object is at the heart of Gaois.QueryLogger. `Query` objects carry t
 
 ## Methods
 
-**`ToJson()`** (`string`): Returns a JSON representation of a `Query` object.
+**ToJson()** (`string`): Returns a JSON representation of a `Query` object.
 
-**`FromJson(string json)`** (`Query`): Deserializes the provided JSON into a `Query` object.
+**FromJson(`string` json)** (`Query`): Deserializes the provided JSON into a `Query` object.
