@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gaois.QueryLogger", "src\Ga
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gaois.QueryLogger.AspNetCore", "src\Gaois.QueryLogger.AspNetCore\Gaois.QueryLogger.AspNetCore.csproj", "{3043B872-6B81-46AA-9401-932CFFDAFAAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gaois.QueryLogger.Tests", "tests\Gaois.QueryLogger.Tests\Gaois.QueryLogger.Tests.csproj", "{1CC30CEE-4F52-4251-AAED-DC1C575252B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gaois.QueryLogger.Tests", "tests\Gaois.QueryLogger.Tests\Gaois.QueryLogger.Tests.csproj", "{1CC30CEE-4F52-4251-AAED-DC1C575252B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gaois.QueryLogger.Tests.AspNetCore", "tests\Gaois.QueryLogger.Tests.AspNetCore\Gaois.QueryLogger.Tests.AspNetCore.csproj", "{EBF85991-8917-4056-9B40-1CBE8717ED6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gaois.QueryLogger.Tests.AspNetCore", "tests\Gaois.QueryLogger.Tests.AspNetCore\Gaois.QueryLogger.Tests.AspNetCore.csproj", "{EBF85991-8917-4056-9B40-1CBE8717ED6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.AspNetCore", "samples\Samples.AspNetCore\Samples.AspNetCore.csproj", "{D2F00FD3-FD42-48C2-887E-0DD406883C7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{EBF85991-8917-4056-9B40-1CBE8717ED6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBF85991-8917-4056-9B40-1CBE8717ED6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBF85991-8917-4056-9B40-1CBE8717ED6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2F00FD3-FD42-48C2-887E-0DD406883C7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2F00FD3-FD42-48C2-887E-0DD406883C7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2F00FD3-FD42-48C2-887E-0DD406883C7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2F00FD3-FD42-48C2-887E-0DD406883C7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
