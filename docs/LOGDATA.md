@@ -4,7 +4,7 @@ The `Query` object is at the heart of Gaois.QueryLogger. `Query` objects carry t
 
 ## Data
 
-**QueryID** (`Guid`): A unique ID that represents a specific query or group of queries. A query ID will be created automatically if not specified in code.
+**QueryID** (`Guid`): A unique ID that represents a specific query or group of queries. A query ID will be created automatically if not specified by your application.
 
 **ApplicationName** (`string`): The name of the application that executes the query. The application name will be retrieved from your configuration settings if not specified in code.
 
