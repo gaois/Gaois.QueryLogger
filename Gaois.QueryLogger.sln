@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gaois.QueryLogger.Tests.Asp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.AspNetCore", "samples\Samples.AspNetCore\Samples.AspNetCore.csproj", "{D2F00FD3-FD42-48C2-887E-0DD406883C7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.Mvc", "samples\Samples.Mvc\Samples.Mvc.csproj", "{300B75AC-F150-4AD2-B0AE-97C88E8490A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{D2F00FD3-FD42-48C2-887E-0DD406883C7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2F00FD3-FD42-48C2-887E-0DD406883C7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2F00FD3-FD42-48C2-887E-0DD406883C7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{300B75AC-F150-4AD2-B0AE-97C88E8490A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{300B75AC-F150-4AD2-B0AE-97C88E8490A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{300B75AC-F150-4AD2-B0AE-97C88E8490A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{300B75AC-F150-4AD2-B0AE-97C88E8490A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
