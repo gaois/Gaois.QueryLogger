@@ -15,10 +15,17 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             return new ConfigurationBuilder()
                 .SetBasePath(SettingsBasePath)
                 .AddJsonFile(jsonFileName, optional: true)
+                .AddEnvironmentVariables()
                 .Build();
         }
 
-        public static QueryLoggerSettings GetQueryLoggerConfiguration(string jsonFileName)
+        public static IConfigurationSection GetQueryLoggerConfiguration(string jsonFileName)
+        {
+            var configRoot = GetConfiguration(jsonFileName);
+            return configRoot.GetSection("QueryLogger");
+        }
+
+        public static QueryLoggerSettings GetQueryLoggerSettings(string jsonFileName)
         {
             var configuration = new QueryLoggerSettings();
             var configRoot = GetConfiguration(jsonFileName);
