@@ -53,6 +53,11 @@ namespace Gaois.QueryLogger
         }
 
         /// <summary>
+        /// Verifies that the log queue is being processed; if not, initializes queue consumption.
+        /// </summary>
+        public abstract void ProcessQueue();
+
+        /// <summary>
         /// Sends an alert to designated users using the configured alert services
         /// </summary>
         /// <param name="alert"></param>

@@ -39,6 +39,7 @@ namespace Gaois.QueryLogger
             }
 
             SqlLogStore.Instance.Enqueue(queries);
+            SqlLogStore.Instance.ProcessQueue();
         }
     }
 }

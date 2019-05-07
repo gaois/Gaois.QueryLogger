@@ -102,7 +102,13 @@ namespace Gaois.QueryLogger.AspNetCore
                     SendAlert(alert);
                 }
             }
+        }
 
+        /// <summary>
+        /// Verifies that the log queue is being processed; if not, initializes queue consumption.
+        /// </summary>
+        public override void ProcessQueue()
+        {
             if (_isConsumingQueue)
                 return;
 
