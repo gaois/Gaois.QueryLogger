@@ -7,7 +7,7 @@ namespace Gaois.QueryLogger
     /// <summary>
     /// Log data to persistent storage
     /// </summary>
-    public abstract class LogStore
+    public abstract class LogStore : ILogStore
     {
         /// <summary>
         /// Gets the queue of logs waiting to be written

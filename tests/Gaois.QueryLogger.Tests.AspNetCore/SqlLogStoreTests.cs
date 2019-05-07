@@ -6,7 +6,7 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
 {
     public class SqlLogStoreTests
     {
-        private readonly SqlLogStore _store;
+        private readonly ILogStore _store;
 
         public SqlLogStoreTests()
         {
@@ -14,9 +14,9 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             var serviceProvider = new ServiceCollection()
                 .Configure<QueryLoggerSettings>(configuration)
                 .AddTransient<IAlertService, EmailAlertService>()
-                .AddSingleton<SqlLogStore>()
+                .AddSingleton<ILogStore, SqlLogStore>()
                 .BuildServiceProvider();
-            _store = serviceProvider.GetService<SqlLogStore>();
+            _store = serviceProvider.GetService<ILogStore>();
         }
 
         [Fact]

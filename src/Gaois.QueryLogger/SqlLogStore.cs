@@ -10,7 +10,7 @@ namespace Gaois.QueryLogger
     /// <summary>
     /// Stores log data in a SQL Server database
     /// </summary>
-    public sealed class SqlLogStore : LogStore
+    public sealed class SqlLogStore : LogStore, ILogStore
     {
         private static readonly Lazy<SqlLogStore> _logStore = new Lazy<SqlLogStore>(() => new SqlLogStore(_settings));
         private static QueryLoggerSettings _settings = ConfigurationSettings.Settings;

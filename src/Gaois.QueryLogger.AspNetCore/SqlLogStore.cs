@@ -11,7 +11,7 @@ namespace Gaois.QueryLogger.AspNetCore
     /// <summary>
     /// Stores log data in a SQL Server database
     /// </summary>
-    public sealed class SqlLogStore : LogStore
+    public sealed class SqlLogStore : LogStore, ILogStore
     {
         private readonly IOptionsMonitor<QueryLoggerSettings> _settings;
         private readonly IAlertService _alertService;

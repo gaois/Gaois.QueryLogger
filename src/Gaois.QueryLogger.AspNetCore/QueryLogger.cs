@@ -1,5 +1,4 @@
 ﻿using Ansa.Extensions;
-using Gaois.QueryLogger.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
@@ -12,22 +11,22 @@ namespace Gaois.QueryLogger
     public partial class QueryLogger : IQueryLogger
     {
         private readonly IOptionsSnapshot<QueryLoggerSettings> _settings;
+        private readonly ILogStore _store;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly HttpContext _context;
-        private readonly SqlLogStore _store;
 
         /// <summary>
         /// Logs query data to a data store
         /// </summary>
         public QueryLogger(
             IOptionsSnapshot<QueryLoggerSettings> settings,
-            IHttpContextAccessor contextAccessor,
-            SqlLogStore store)
+            ILogStore store,
+            IHttpContextAccessor contextAccessor)
         {
             _settings = settings;
+            _store = store;
             _contextAccessor = contextAccessor;
             _context = _contextAccessor.HttpContext;
-            _store = store;
         }
 
         /// <summary>
