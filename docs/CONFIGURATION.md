@@ -28,7 +28,7 @@ The settings below can be configured to suit your particular needs. You can conf
 
 ## Email
 
-These settings, if configured, will be used to send you alert e-mails when necessary. For ASP.NET Framework applications, e-mail settings will be obtained automatically from your `mailSettings` configuration, if present.
+These settings, if configured, will be used to send you alert e-mails when necessary. For ASP.NET Framework applications, e-mail settings will be obtained automatically from your `mailSettings` configuration, if present, but you still need to specificy a **ToAddress** here.
 
 **ToAddress** (`string`): The address to which e-mail messages will be sent (required for alert service).
 
