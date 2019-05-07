@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using Xunit;
 
@@ -8,6 +9,13 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
 {
     public class QueryLoggerTests
     {
+        private readonly IHttpContextData _context;
+
+        public QueryLoggerTests()
+        {
+            _context = new MockHttpContextData();
+        }
+
         [Fact]
         public void LoggingDisabled()
         {
@@ -30,55 +38,71 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
         }
         
         [Fact]
-        public void LogWithConfigurationSettings()
+        public void LoggingEnabled()
         {
-            var configuration = TestHelper.GetQueryLoggerConfiguration("appsettings.json");
+            var configuration = TestHelper.GetQueryLoggerConfiguration("typicalsettings.json");
             var serviceProvider = GetServiceProvider(configuration);
             var store = serviceProvider.GetService<ILogStore>();
             var queryLogger = serviceProvider.GetService<IQueryLogger>();
+            var settings = serviceProvider.GetService<IOptionsMonitor<QueryLoggerSettings>>();
 
-            var query1 = new Query()
+            var category = "TestCategory";
+
+            var autoPopulatedQuery = new Query()
             {
-                QueryTerms = "test1"
+                QueryTerms = "test1",
+                QueryCategory = category
             };
 
-            var query2 = new Query()
+            var userSpecifiedQueryID = Guid.NewGuid();
+
+            var userSpecifiedQuery = new Query()
             {
-                QueryTerms = "test2"
+                QueryID = userSpecifiedQueryID,
+                ApplicationName = "MyTestApp",
+                QueryTerms = "test2",
+                Host = "www.example.com",
+                IPAddress = "987.65.43.0"
             };
             
-            // Need to mock HttpContextAccessor
+            queryLogger.Log(autoPopulatedQuery, userSpecifiedQuery);
 
-            /*
-            queryLogger.Log(query1, query2);
+            var queueCount = store.LogQueue.Count;
+            Assert.Equal(2, queueCount);
 
-            var queuedQuery = store.LogQueue.Count;
-            Assert.Equal(2, queuedQuery);
-            Assert.Equal("RecordsApp", queuedQuery.ApplicationName);
-            */
-        }
+            var queuedAutoPopulatedQuery = store.LogQueue.Take();
+            var processedContextIP = IPAddressProcessor.Process(_context.IPAddress, settings.CurrentValue);
+            Assert.NotNull(queuedAutoPopulatedQuery.QueryID);
+            Assert.Equal("RecordsApp", queuedAutoPopulatedQuery.ApplicationName);
+            Assert.Equal(category, queuedAutoPopulatedQuery.QueryCategory);
+            Assert.Equal(_context.Host, queuedAutoPopulatedQuery.Host);
+            Assert.Equal(processedContextIP, queuedAutoPopulatedQuery.IPAddress);
 
-        [Fact]
-        public void LogWithConfigurationSettingsOverridden()
-        {
-
+            var queuedUserSpecifiedQuery = store.LogQueue.Take();
+            Assert.Equal(userSpecifiedQueryID, queuedUserSpecifiedQuery.QueryID);
+            Assert.Equal("MyTestApp", queuedUserSpecifiedQuery.ApplicationName);
+            Assert.Null(queuedUserSpecifiedQuery.QueryCategory);
+            Assert.NotEqual(_context.Host, queuedUserSpecifiedQuery.Host);
+            Assert.NotEqual(processedContextIP, queuedUserSpecifiedQuery.IPAddress);
         }
 
         private ServiceProvider GetServiceProvider(IConfigurationSection configuration) =>
             new ServiceCollection()
                 .Configure<QueryLoggerSettings>(configuration)
-                .AddTransient<IAlertService, EmailAlertService>()
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
-                .AddSingleton<ILogStore, TestLogStore>()
+                .AddSingleton<ILogStore, MockLogStore>()
+                .AddTransient<IAlertService, EmailAlertService>()
+                .AddTransient<IHttpContextData, MockHttpContextData>()
                 .AddTransient<IQueryLogger, QueryLogger>()
                 .BuildServiceProvider();
 
         private ServiceProvider GetServiceProvider(Action<QueryLoggerSettings> settings) =>
             new ServiceCollection()
                 .Configure(settings)
-                .AddTransient<IAlertService, EmailAlertService>()
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
-                .AddSingleton<ILogStore, TestLogStore>()
+                .AddSingleton<ILogStore, MockLogStore>()
+                .AddTransient<IAlertService, EmailAlertService>()
+                .AddTransient<IHttpContextData, MockHttpContextData>()
                 .AddTransient<IQueryLogger, QueryLogger>()
                 .BuildServiceProvider();
     }

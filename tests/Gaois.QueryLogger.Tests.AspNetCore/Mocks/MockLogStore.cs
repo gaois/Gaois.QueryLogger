@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace Gaois.QueryLogger.Tests.AspNetCore
 {
-    internal class TestLogStore : ILogStore
+    internal class MockLogStore : ILogStore
     {
         private readonly IOptionsMonitor<QueryLoggerSettings> _settings;
         private readonly IAlertService _alertService;
         private BlockingCollection<Query> _logQueue;
 
-        public TestLogStore(
+        public MockLogStore(
             IOptionsMonitor<QueryLoggerSettings> settings,
             IAlertService alertService)
         {

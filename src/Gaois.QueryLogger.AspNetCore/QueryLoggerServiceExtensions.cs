@@ -35,10 +35,11 @@ namespace Gaois.QueryLogger
             if (configureSettings != null)
                 services.Configure(configureSettings);
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ILogStore, SqlLogStore>();
             services.AddTransient<IQueryLogger, QueryLogger>();
             services.AddTransient<IAlertService, EmailAlertService>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IHttpContextData, HttpContextData>();
 
             return services;
         }

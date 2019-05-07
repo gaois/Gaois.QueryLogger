@@ -10,7 +10,7 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
 
         public SqlLogStoreTests()
         {
-            var configuration = TestHelper.GetQueryLoggerConfiguration("appsettings.json");
+            var configuration = TestHelper.GetQueryLoggerConfiguration("typicalsettings.json");
             var serviceProvider = new ServiceCollection()
                 .Configure<QueryLoggerSettings>(configuration)
                 .AddTransient<IAlertService, EmailAlertService>()

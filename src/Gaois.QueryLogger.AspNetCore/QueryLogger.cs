@@ -1,5 +1,4 @@
 ﻿using Ansa.Extensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
 
@@ -8,32 +7,29 @@ namespace Gaois.QueryLogger
     /// <summary>
     /// Logs query data to a data store
     /// </summary>
-    public partial class QueryLogger : IQueryLogger
+    public class QueryLogger : IQueryLogger
     {
         private readonly IOptionsSnapshot<QueryLoggerSettings> _settings;
+        private readonly IHttpContextData _context;
         private readonly ILogStore _store;
-        private readonly IHttpContextAccessor _contextAccessor;
-        private readonly HttpContext _context;
 
         /// <summary>
         /// Logs query data to a data store
         /// </summary>
         public QueryLogger(
             IOptionsSnapshot<QueryLoggerSettings> settings,
-            ILogStore store,
-            IHttpContextAccessor contextAccessor)
+            IHttpContextData context,
+            ILogStore store)
         {
             _settings = settings;
+            _context = context;
             _store = store;
-            _contextAccessor = contextAccessor;
-            _context = _contextAccessor.HttpContext;
         }
 
         /// <summary>
         /// Logs query data to a data store
         /// </summary>
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
-        /// <returns>The number of queries successfully logged</returns>
         public void Log(params Query[] queries)
         {
             if (!_settings.Value.IsEnabled)
@@ -41,10 +37,9 @@ namespace Gaois.QueryLogger
 
             foreach (var query in queries)
             {
-                var host = _context.Request.Host.ToString();
+                var host = _context.Host;
                 var ipAddress = (query.IPAddress.IsNullOrWhiteSpace())
-                    ? _context.Connection.RemoteIpAddress.ToString()
-                    : query.IPAddress;
+                    ? _context.IPAddress : query.IPAddress;
 
                 query.ApplicationName = (query.ApplicationName.IsNullOrWhiteSpace())
                     ? _settings.Value.ApplicationName : query.ApplicationName;
