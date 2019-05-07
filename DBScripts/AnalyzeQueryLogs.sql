@@ -1,5 +1,10 @@
 USE [YOUR_DATABASE_NAME]
 
+-- total queries in query log table (more efficient thant COUNT() for a very large table)
+SELECT TotalQueries = SUM(st.row_count)
+FROM sys.dm_db_partition_stats st
+WHERE object_name(object_id) = 'QueryLogs' AND (index_id < 2)
+
 -- unique queries per application/host
 SELECT a.ApplicationName, a.Host, COUNT(1) AS UniqueQueryCount
 FROM (
