@@ -1,9 +1,14 @@
 ﻿{
   "QueryLogger": {
     "ApplicationName": "RecordsApp",
-    "IsEnabled": true,
+    "IsEnabled": false,
+    "AnonymizeIPAddress": "None",
+    "AlertInterval": 60000,
     "Store": {
-      "ConnectionString": "Server=localhost;Database=recordsappdb;Trusted_Connection=True;"
+      "ConnectionString": "Server=localhost;Database=recordsappdb;Trusted_Connection=True;",
+      "MaxQueueRetryTime": 30000,
+      "MaxQueueSize": 1000,
+      "TableName":  "SearchStats"
     },
     "Email": {
       "ToAddress": "me@test.ie",
