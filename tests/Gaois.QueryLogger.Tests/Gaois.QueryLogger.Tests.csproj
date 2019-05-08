@@ -1,8 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-
+    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -15,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Gaois.QueryLogger.Common\Gaois.QueryLogger.Common.csproj" />
+    <ProjectReference Include="..\..\src\Gaois.QueryLogger\Gaois.QueryLogger.csproj" />
   </ItemGroup>
 
 </Project>

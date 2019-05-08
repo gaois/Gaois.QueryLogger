@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gaois.QueryLogger.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gaois.QueryLogger.Tests.AspNetCore", "tests\Gaois.QueryLogger.Tests.AspNetCore\Gaois.QueryLogger.Tests.AspNetCore.csproj", "{EBF85991-8917-4056-9B40-1CBE8717ED6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.AspNetCore", "samples\Samples.AspNetCore\Samples.AspNetCore.csproj", "{D2F00FD3-FD42-48C2-887E-0DD406883C7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.AspNetCore", "samples\Samples.AspNetCore\Samples.AspNetCore.csproj", "{D2F00FD3-FD42-48C2-887E-0DD406883C7D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.Mvc", "samples\Samples.Mvc\Samples.Mvc.csproj", "{300B75AC-F150-4AD2-B0AE-97C88E8490A3}"
 EndProject

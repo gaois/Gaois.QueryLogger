@@ -1,8 +1,6 @@
 ﻿using Ansa.Extensions;
-using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace Gaois.QueryLogger
 {
@@ -44,28 +42,23 @@ namespace Gaois.QueryLogger
 
         private static string PartiallyAnonymizeIP(string ip)
         {
-            var anonymizedIP = default(string);
-
             if (IPAddress.TryParse(ip, out IPAddress address))
             {
-                switch (address.AddressFamily)
+                if (address.AddressFamily == AddressFamily.InterNetwork)
                 {
-                    // IPv4
-                    case AddressFamily.InterNetwork:
-                        var lastPosition = ip.LastIndexOf(".");
-                        anonymizedIP = (lastPosition > 0) ? ip.Substring(0, lastPosition) + ".0" : string.Empty;
-                        break;
-                    // IPv6
-                    case AddressFamily.InterNetworkV6:
-                        var fullIP = address.GetAddressBytes();
-                        var abbreviatedIP = new byte[fullIP.Length - 10];
-                        Array.Copy(fullIP, abbreviatedIP, 6);
-                        anonymizedIP = Encoding.UTF8.GetString(abbreviatedIP) + ":0000:0000:0000:0000:0000";
-                        break;
+                    var lastPosition = ip.LastIndexOf(".");
+                    return (lastPosition > 0) ? ip.Substring(0, lastPosition) + ".0" : string.Empty;
+                }
+
+                if (address.AddressFamily == AddressFamily.InterNetworkV6)
+                {
+                    var bytes = address.GetAddressBytes();
+                    return string.Format("{0:x2}{1:x2}:{2:x2}{3:x2}:{4:x2}{5:x2}:{6:x2}{7:x2}:0000:0000:0000:0000",
+                        bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], bytes[6], bytes[7]);
                 }
             }
 
-            return anonymizedIP;
+            return string.Empty;
         }
     }
 }
