@@ -20,6 +20,9 @@ namespace Gaois.QueryLogger
             _ = alert ?? throw new ArgumentNullException(nameof(alert));
 
             var address = _emailSettings.ToAddress;
+            if (address.IsNullOrWhiteSpace())
+                return;
+
             var subject = "QueryLogger Alert";
 
             if (_settings.ApplicationName.HasValue())

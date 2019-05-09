@@ -44,6 +44,9 @@ namespace Gaois.QueryLogger
         /// <param name="body">The e-mail body</param>
         protected void SendEmail(EmailSettings settings, string address, string subject, string body)
         {
+            if (address.IsNullOrWhiteSpace())
+                return;
+
             using (var message = new MailMessage())
             {
                 message.To.Add(address);
