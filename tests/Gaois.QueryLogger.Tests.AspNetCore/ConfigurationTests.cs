@@ -24,7 +24,7 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             // Store
             var storeSettings = settings.CurrentValue.Store;
             Assert.False(string.IsNullOrWhiteSpace(storeSettings.ConnectionString));
-            Assert.Equal(30000, storeSettings.MaxQueueRetryTime);
+            Assert.Equal(30000, storeSettings.MaxQueueRetryInterval);
             Assert.Equal(1000, storeSettings.MaxQueueSize);
             Assert.Equal("QueryLogs", storeSettings.TableName);
 
@@ -61,7 +61,7 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
 
             // Store
             var storeSettings = settings.CurrentValue.Store;
-            Assert.Equal(30000, storeSettings.MaxQueueRetryTime);
+            Assert.Equal(30000, storeSettings.MaxQueueRetryInterval);
             Assert.Equal(1000, storeSettings.MaxQueueSize);
             Assert.Equal("SearchStats", storeSettings.TableName);
         }

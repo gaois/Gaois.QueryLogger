@@ -11,14 +11,14 @@
         public string ConnectionString { get; set; }
 
         /// <summary>
-        /// The maximum amount of time (in milliseconds) queries will await enqueuing before being discarded
-        /// </summary>
-        public int MaxQueueRetryTime { get; set; } = 30000;
-
-        /// <summary>
-        /// The maximum possible size of the query log queue before new entries will be blocked
+        /// The maximum possible size of the query log queue
         /// </summary>
         public int MaxQueueSize { get; set; } = 1000;
+
+        /// <summary>
+        /// The amount of time (in milliseconds) to wait between attempts to write to the log store in the case that a connection with the store cannot be established
+        /// </summary>
+        public int MaxQueueRetryInterval { get; set; } = 30000;
 
         /// <summary>
         /// The table name (optionally including schema), e.g. "dbo.QueryLogs" to use when logging queries. The default value is "QueryLogs".

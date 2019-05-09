@@ -16,8 +16,8 @@ namespace Gaois.QueryLogger.AspNetCore
     {
         private readonly IOptionsMonitor<QueryLoggerSettings> _settings;
         private readonly IAlertService _alertService;
-        private DateTime? _lastAlertTime;
         private BlockingCollection<Query> _logQueue;
+        private DateTime? _lastAlertTime;
         private bool _isInRetryMode;
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Gaois.QueryLogger.AspNetCore
 
                 try
                 {
-                    if (!LogQueue.TryAdd(query, _settings.CurrentValue.Store.MaxQueueRetryTime))
+                    if (!LogQueue.TryAdd(query, _settings.CurrentValue.Store.MaxQueueRetryInterval))
                     {
                         var alert = new Alert(AlertTypes.QueueFull, query);
                         SendAlert(alert);
@@ -152,7 +152,7 @@ namespace Gaois.QueryLogger.AspNetCore
                 {
                     // if in retry mode pause before attemping write
                     if (_isInRetryMode)
-                        await Task.Delay(_settings.CurrentValue.Store.MaxQueueRetryTime);
+                        await Task.Delay(_settings.CurrentValue.Store.MaxQueueRetryInterval);
 
                     await WriteLogAsync(query).ConfigureAwait(false);
 

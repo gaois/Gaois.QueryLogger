@@ -15,8 +15,8 @@ namespace Gaois.QueryLogger
     {
         private static readonly Lazy<SqlLogStore> _logStore = new Lazy<SqlLogStore>(() => new SqlLogStore(_settings));
         private static QueryLoggerSettings _settings = ConfigurationSettings.Settings;
-        private DateTime? _lastAlertTime;
         private BlockingCollection<Query> _logQueue;
+        private DateTime? _lastAlertTime;
         private bool _isInRetryMode;
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Gaois.QueryLogger
 
                 try
                 {
-                    if (!LogQueue.TryAdd(query, _settings.Store.MaxQueueRetryTime))
+                    if (!LogQueue.TryAdd(query, _settings.Store.MaxQueueRetryInterval))
                     {
                         var alert = new Alert(AlertTypes.QueueFull, query);
                         SendAlert(alert);
@@ -150,7 +150,7 @@ namespace Gaois.QueryLogger
                 {
                     // if in retry mode pause before attemping write
                     if (_isInRetryMode)
-                        await Task.Delay(_settings.Store.MaxQueueRetryTime);
+                        await Task.Delay(_settings.Store.MaxQueueRetryInterval);
 
                     await WriteLogAsync(query).ConfigureAwait(false);
 

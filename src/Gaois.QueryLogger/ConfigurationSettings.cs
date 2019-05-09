@@ -46,8 +46,8 @@ namespace Gaois.QueryLogger
                         ?? throw new ConfigurationErrorsException($"A connection string was not found for the connection string name provided: {ConnectionStringName}")
                     : null;
 
-            [ConfigurationProperty("maxQueueRetryTime", DefaultValue = 30000)]
-            public int? MaxQueueRetryTime => (int?)this["maxQueueRetryTime"];
+            [ConfigurationProperty("maxQueueRetryInterval", DefaultValue = 30000)]
+            public int? MaxQueueRetryInterval => (int?)this["maxQueueRetryInterval"];
 
             [ConfigurationProperty("maxQueueSize", DefaultValue = 1000)]
             public int? MaxQueueSize => (int?)this["maxQueueSize"];

@@ -20,9 +20,9 @@ The settings below can be configured to suit your particular needs. You can conf
 
 **ConnectionStringName** (`string`, **ASP.NET Framework only**): The name of the connection string to use from the application’s configuration, e.g. the key of a given entry in the `ConnectionStrings` section of an application's Web.config file.
 
-**MaxQueueRetryTime** (`integer`, default: **300000**): The maximum amount of time (in milliseconds) queries will await enqueuing before being discarded. If you log queue becomes full because of some passing database I/O issue, for example, this reduces the chance that queries will be discarded. However, the higher the retry time the more chance of knock-on performance issues.
+**MaxQueueSize** (`integer`, default: **1000**): The maximum possible size of the query log queue. Once the max queue size has been reached entries in the queue will be discarded on a First In, First Out basis. You should set the queue size with regard to the resources available on your system. Storing logs in queue prior to data persistence reduces the chance that you will lose data due to a passing database IOPs issue, for example.
 
-**MaxQueueSize** (`integer`, default: **1000**): The maximum possible size of the query log queue before new entries will be blocked. You need to set this with regard to the resources available on your system.
+**MaxQueueRetryInterval** (`integer`, default: **300000**): The amount of time (in milliseconds) to wait between attempts to write to the log store in the case that a connection with the store cannot be established. There may be up to `MaxQueueSize` queries in the log queue waiting to be written.
 
 **TableName** (`string`, default: **QueryLogs**): The table name (optionally including schema), e.g. "dbo.QueryLogs" to use when logging queries. Configure this if you want to give your log table a more exotic name than "QueryLogs".
 
