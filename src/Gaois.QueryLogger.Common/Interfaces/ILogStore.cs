@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace Gaois.QueryLogger
@@ -14,14 +15,15 @@ namespace Gaois.QueryLogger
         BlockingCollection<Query> LogQueue { get; }
 
         /// <summary>
-        /// Verifies that the log queue is being processed; if not, initializes queue consumption.
+        /// Queues query data for logging to a data store
         /// </summary>
-        void ProcessQueue();
+        /// <param name="query">The <see cref="Query"/> object to be logged</param>
+        void Enqueue(Query query);
 
         /// <summary>
         /// Queues query data for logging to a data store
         /// </summary>
-        /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
+        /// <param name="queries">An array of <see cref="Query"/> objects to be logged</param>
         void Enqueue(Query[] queries);
 
         /// <summary>

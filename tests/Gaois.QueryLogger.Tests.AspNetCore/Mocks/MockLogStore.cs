@@ -24,6 +24,8 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
 
         public void Alert(Alert alert) => throw new NotImplementedException();
 
+        public void Enqueue(Query query) => Enqueue(query);
+
         public void Enqueue(Query[] queries)
         {
             foreach (var query in queries)
@@ -34,11 +36,6 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
 
                 LogQueue.Add(query);
             }
-        }
-
-        public void ProcessQueue()
-        {
-            return;
         }
 
         public void WriteLog(params Query[] queries) => throw new NotImplementedException();

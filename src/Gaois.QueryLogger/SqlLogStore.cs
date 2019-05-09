@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Gaois.QueryLogger
@@ -16,7 +17,7 @@ namespace Gaois.QueryLogger
         private static QueryLoggerSettings _settings = ConfigurationSettings.Settings;
         private DateTime? _lastAlertTime;
         private BlockingCollection<Query> _logQueue;
-        private bool _isConsumingQueue;
+        private bool _isInRetryMode;
 
         /// <summary>
         /// Stores log data in a SQL Server database
@@ -31,7 +32,8 @@ namespace Gaois.QueryLogger
         /// <summary>
         /// Gets the queue of logs waiting to be written
         /// </summary>
-        public override BlockingCollection<Query> LogQueue => _logQueue ?? (_logQueue = new BlockingCollection<Query>(_settings.Store.MaxQueueSize));
+        public override BlockingCollection<Query> LogQueue => _logQueue ??
+            (_logQueue = new BlockingCollection<Query>(_settings.Store.MaxQueueSize));
 
         /// <summary>
         /// Sends an alert to designated users using the configured alert services
@@ -39,10 +41,12 @@ namespace Gaois.QueryLogger
         /// <param name="alert"></param>
         protected override void SendAlert(Alert alert)
         {
-            if (_lastAlertTime is null)
+            var shouldAlert = ShouldAlert(_lastAlertTime, _settings.AlertInterval);
+
+            if (shouldAlert == AlertStatus.NotSet)
                 _lastAlertTime = DateTime.UtcNow;
 
-            if (_lastAlertTime > DateTime.UtcNow - TimeSpan.FromMilliseconds(_settings.AlertInterval))
+            if (shouldAlert == AlertStatus.Wait)
                 return;
 
             try
@@ -64,6 +68,15 @@ namespace Gaois.QueryLogger
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         public override void Enqueue(Query[] queries)
         {
+            if (_logQueue is null)
+            {
+                var thread = new Thread(new ThreadStart(ConsumeQueue))
+                {
+                    IsBackground = true
+                };
+                thread.Start();
+            }
+
             foreach (var query in queries)
             {
                 if (_settings.ExcludedIPAddresses != null
@@ -74,43 +87,16 @@ namespace Gaois.QueryLogger
                 {
                     if (!LogQueue.TryAdd(query, _settings.Store.MaxQueueRetryTime))
                     {
-                        var alert = new Alert
-                        {
-                            Type = AlertTypes.QueueFull,
-                            Query = query
-                        };
-
+                        var alert = new Alert(AlertTypes.QueueFull, query);
                         SendAlert(alert);
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    break;
-                }
                 catch (Exception exception)
                 {
-                    var alert = new Alert
-                    {
-                        Type = AlertTypes.EnqueueError,
-                        Query = query,
-                        Exception = exception
-                    };
-
+                    var alert = new Alert(AlertTypes.EnqueueError, query, exception);
                     SendAlert(alert);
                 }
             }
-        }
-
-        /// <summary>
-        /// Verifies that the log queue is being processed; if not, initializes queue consumption.
-        /// </summary>
-        public override void ProcessQueue()
-        {
-            if (_isConsumingQueue)
-                return;
-
-            ConsumeQueue();
-            _isConsumingQueue = true;
         }
 
         /// <summary>
@@ -146,6 +132,44 @@ namespace Gaois.QueryLogger
 
             using (var db = new SqlConnection(_settings.Store.ConnectionString))
                 await db.ExecuteAsync(SqlQueries.WriteLog(_settings.Store.TableName), queries).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Consumes the log queue and writes logs to the data store
+        /// </summary>
+        /// <remarks>
+        /// Async void methods are generally considered an antipattern, however (I believe) it makes sense here as:
+        /// 1. We are consuming a long-running (= application lifetime) queue in a separate thread
+        /// 2. Because the task effectively does not end/return there is no point awaiting it
+        /// </remarks>
+        private async void ConsumeQueue()
+        {
+            foreach (var query in LogQueue.GetConsumingEnumerable())
+            {
+                try
+                {
+                    // if in retry mode pause before attemping write
+                    if (_isInRetryMode)
+                        await Task.Delay(_settings.Store.MaxQueueRetryTime);
+
+                    await WriteLogAsync(query).ConfigureAwait(false);
+
+                    // if we got here without exception logs are being written successfully
+                    if (_isInRetryMode)
+                        _isInRetryMode = false;
+                }
+                catch (Exception exception)
+                {
+                    _isInRetryMode = true;
+
+                    // Return query to queue, if possible.
+                    // If queue is full query will be discarded, but we have maintained First-In First-Out consistency.
+                    _ = LogQueue.TryAdd(query);
+
+                    var alert = new Alert(AlertTypes.LogWriteError, query, exception);
+                    SendAlert(alert);
+                }
+            }
         }
     }
 }

@@ -85,6 +85,21 @@ namespace Gaois.QueryLogger
             // Body inner HTML
             sb.AppendParagraph(alert.Type);
 
+            // Add query data
+            if (alert.Query != null)
+            {
+                sb.Append("<table>");
+                sb.Append($"<tr>Query ID<td></td><td>{alert.Query.QueryID}</td></tr>");
+                sb.Append($"<tr>Application Name<td></td><td>{alert.Query.ApplicationName}</td></tr>");
+                sb.Append($"<tr>Query Category<td></td><td>{alert.Query.QueryCategory}</td></tr>");
+                sb.Append($"<tr>Query Terms<td></td><td>{alert.Query.QueryTerms}</td></tr>");
+                sb.Append($"<tr>Query Text<td></td><td>{alert.Query.QueryText}</td></tr>");
+                sb.Append($"<tr>Host<td></td><td>{alert.Query.Host}</td></tr>");
+                sb.Append($"<tr>Log Date<td></td><td>{alert.Query.LogDate}</td></tr>");
+                sb.Append("</table>");
+            }
+
+            // Add exception data
             if (alert.Exception != null)
             {
                 sb.AppendParagraph(alert.Exception.Message);

@@ -1,5 +1,4 @@
-﻿using Gaois.QueryLogger.AspNetCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Gaois.QueryLogger.Tests.AspNetCore
@@ -14,7 +13,7 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             var serviceProvider = new ServiceCollection()
                 .Configure<QueryLoggerSettings>(configuration)
                 .AddTransient<IAlertService, EmailAlertService>()
-                .AddSingleton<ILogStore, SqlLogStore>()
+                .AddSingleton<ILogStore, MockLogStore>()
                 .BuildServiceProvider();
             _store = serviceProvider.GetService<ILogStore>();
         }

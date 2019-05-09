@@ -13,60 +13,17 @@ namespace Gaois.QueryLogger
         /// Gets the queue of logs waiting to be written
         /// </summary>
         public abstract BlockingCollection<Query> LogQueue { get; }
-
-        private void RetryEnqueue(Query query)
-        {
-            Enqueue(new[] { query });
-        }
-
+        
         /// <summary>
-        /// Consumes the log queue and writes logs to the data store in a separate thread
+        /// Queues query data for logging to a data store
         /// </summary>
-        protected void ConsumeQueue()
-        {
-            Task.Run(async () =>
-            {
-                foreach (var query in LogQueue.GetConsumingEnumerable())
-                {
-                    try
-                    {   
-                        await WriteLogAsync(query).ConfigureAwait(false);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        break;
-                    }
-                    catch (Exception exception)
-                    {
-                        var alert = new Alert
-                        {
-                            Type = AlertTypes.LogWriteError,
-                            Query = query,
-                            Exception = exception
-                        };
-
-                        RetryEnqueue(query);
-                        SendAlert(alert);
-                    }
-                }
-            });
-        }
-
-        /// <summary>
-        /// Verifies that the log queue is being processed; if not, initializes queue consumption.
-        /// </summary>
-        public abstract void ProcessQueue();
-
-        /// <summary>
-        /// Sends an alert to designated users using the configured alert services
-        /// </summary>
-        /// <param name="alert"></param>
-        protected abstract void SendAlert(Alert alert);
+        /// <param name="query">The <see cref="Query"/> object to be logged</param>
+        public void Enqueue(Query query) => Enqueue(query);
 
         /// <summary>
         /// Queues query data for logging to a data store
         /// </summary>
-        /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
+        /// <param name="queries">An array of <see cref="Query"/> objects to be logged</param>
         public abstract void Enqueue(Query[] queries);
 
         /// <summary>
@@ -86,5 +43,28 @@ namespace Gaois.QueryLogger
         /// </summary>
         /// <param name="alert"></param>
         public abstract void Alert(Alert alert);
+
+        /// <summary>
+        /// Sends an alert to designated users using the configured alert services
+        /// </summary>
+        /// <param name="alert"></param>
+        protected abstract void SendAlert(Alert alert);
+
+        /// <summary>
+        /// Determines whether an alert should be sent
+        /// </summary>
+        /// <param name="lastAlertTime">Time the last alert was sent</param>
+        /// <param name="alertInterval">Interval to wait between sending alerts</param>
+        /// <returns>An <see cref="AlertStatus"/></returns>
+        protected AlertStatus ShouldAlert(DateTime? lastAlertTime, int alertInterval)
+        {
+            if (lastAlertTime is null)
+                return AlertStatus.NotSet;
+
+            if (lastAlertTime > (DateTime.UtcNow - TimeSpan.FromMilliseconds(alertInterval)))
+                return AlertStatus.Wait;
+
+            return AlertStatus.DoSend;
+        }
     }
 }

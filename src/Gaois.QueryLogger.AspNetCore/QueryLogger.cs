@@ -50,7 +50,6 @@ namespace Gaois.QueryLogger
             }
 
             _store.Enqueue(queries);
-            _store.ProcessQueue();
         }
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using Gaois.QueryLogger;
 using Microsoft.AspNetCore.Mvc;
 using Samples.AspNetCore.Models;
 
@@ -10,8 +7,22 @@ namespace Samples.AspNetCore.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IQueryLogger _queryLogger;
+
+        public HomeController(IQueryLogger queryLogger)
+        {
+            _queryLogger = queryLogger;
+        }
+
         public IActionResult Index()
         {
+            var query = new Query
+            {
+                QueryTerms = "tested"
+            };
+
+            _queryLogger.Log(query);
+
             return View();
         }
 
