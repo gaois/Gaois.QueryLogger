@@ -1,0 +1,7 @@
+# Fault tolerance and error handling
+
+Gaois.QueryLogger is built with fault tolerance and high volume-high concurrency environments in mind. As part of the logging process queries are placed in a concurrent queue in a separate background thread prior to data persistence. This is part of the reason why the `Log()` method adds little-to-no overhead to your server response time: enqueuing is a synchronous, near-instant process, while the process of writing the logs to the database happens asynchronously in another thread (a particular flavour of the Producer-Consumer pattern). Queuing the logs also means that, in the event of a passing database I/0 issue (maybe you are experiencing high traffic or particularly expensive query is running), the logs are preserved in memory until the write process can be successfully retried. You can specify the maximum queue size and retry interval in the [configuration settings](./CONFIGURATION.md).
+
+## Alert service
+
+Because the log queue in consumed in a background thread database errors and any other write-related exceptions will not be returned to the calling thread. It's important, however, that you know if the logging service is experiencing issues for any reason. To this end, Gaois.QueryLogger comes with an e-mail alert service in the box. Specify you mail details in the [configuration settings](./CONFIGURATION.md) and you will be notified of any problems. Setting the `AlertInterval` ensures that you do not receive many duplicate e-mails if the log queue gets backed up.
