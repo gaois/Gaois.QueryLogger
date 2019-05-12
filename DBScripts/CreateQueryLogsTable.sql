@@ -1,5 +1,10 @@
 USE [YOUR_DATABASE_NAME]
 
+/**
+You might want to set the length of the [QueryTerms] and [QueryText] columns with respect to your own storage requirements:
+Gaois.QueryLogger's MaxQueryTermsLength and MaxQueryTextLength settings allow you to truncate values that exceed defined lengths.
+**/
+
 IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE [TABLE_SCHEMA] = 'dbo' AND [TABLE_NAME] = 'QueryLogs')
 
 BEGIN
@@ -8,8 +13,8 @@ BEGIN
 		[QueryID] [uniqueidentifier] NOT NULL,
 		[ApplicationName] [nvarchar](50) NOT NULL,
 		[QueryCategory] [nvarchar](100) NULL,
-		[QueryTerms] [nvarchar](max) NULL,
-		[QueryText] [nvarchar](max) NULL,
+		[QueryTerms] [nvarchar](500) NULL,
+		[QueryText] [nvarchar](1000) NULL,
 		[Host] [nvarchar](100) NULL,
 		[IPAddress] [varchar](40) NULL,
 		[ExecutedSuccessfully] [bit] NOT NULL,
@@ -21,7 +26,6 @@ BEGIN
 	 WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
-
 
 --OPTIONAL: Add indexes to the QueryLogs table
 USE [YOUR_DATABASE_NAME]
