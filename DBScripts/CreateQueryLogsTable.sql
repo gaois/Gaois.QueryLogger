@@ -2,7 +2,7 @@ USE [YOUR_DATABASE_NAME]
 
 /**
 You might want to set the length of the [QueryTerms] and [QueryText] columns with respect to your own storage requirements:
-Gaois.QueryLogger's MaxQueryTermsLength and MaxQueryTextLength settings allow you to truncate values that exceed defined lengths.
+Gaois.QueryLogger's MaxQueryTermsLength and MaxQueryTextLength settings allow you to truncate values that exceed defined lengths, if necessary.
 **/
 
 IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE [TABLE_SCHEMA] = 'dbo' AND [TABLE_NAME] = 'QueryLogs')
