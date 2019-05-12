@@ -17,6 +17,8 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             // Top level
             Assert.Equal("RecordsApp", settings.CurrentValue.ApplicationName);
             Assert.True(settings.CurrentValue.IsEnabled);
+            Assert.Equal(500, settings.CurrentValue.MaxQueryTermsLength);
+            Assert.Equal(1000, settings.CurrentValue.MaxQueryTextLength);
             Assert.True(settings.CurrentValue.StoreClientIPAddress);
             Assert.Equal(IPAddressAnonymizationLevel.Partial, settings.CurrentValue.AnonymizeIPAddress);
             Assert.Equal(300000, settings.CurrentValue.AlertInterval);

@@ -6,6 +6,10 @@ The settings below can be configured to suit your particular needs. You can conf
 
 **ApplicationName** (`string`): Specifies a global name for your application that can be used in all queries logged. This means that many apps can all have different application names and share the same SQL database.
 
+**MaxQueryTermsLength** (`int?`): If set, query terms longer than the specified maximum length will be truncated.
+
+**MaxQueryTextLength** (`int?`): If set, query text longer than the specified maximum length will be truncated.
+
 **IsEnabled** (`bool`, default: **true**): Specifies whether the application is configured to log queries. Can be useful if you need to temporarily disable logging for any reason or if you wish to enable/disable logging based on environment variables.
 
 **StoreClientIPAddress** (`bool`, default: **true**): Specifies whether the client IP address should be logged. The logged IP address may or may not be subsequently anonymised in part, according to the selected `AnonymizeIPAddress` setting.

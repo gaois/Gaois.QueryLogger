@@ -2,6 +2,8 @@
   "QueryLogger": {
     "ApplicationName": "RecordsApp",
     "IsEnabled": true,
+    "MaxQueryTermsLength": 500,
+    "MaxQueryTextLength": 1000,
     "Store": {
       "ConnectionString": "Server=localhost;Database=recordsappdb;Trusted_Connection=True;"
     },

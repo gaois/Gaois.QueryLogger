@@ -11,7 +11,8 @@ namespace Gaois.QueryLogger
     {
         private static readonly Lazy<IMapper> _lazyMapper = new Lazy<IMapper>(() =>
         {
-            var configuration = new MapperConfiguration(config => {
+            var configuration = new MapperConfiguration(config => 
+            {
                 config.ShouldMapProperty = p => p.GetMethod.IsPublic || p.GetMethod.IsAssembly;
                 config.CreateMap<ConfigurationSettings, QueryLoggerSettings>();
                 config.CreateMap<ExcludedIPAddressSettings, ExcludedIPAddress>();
@@ -30,6 +31,21 @@ namespace Gaois.QueryLogger
 
         [ConfigurationProperty("isEnabled", DefaultValue = true)]
         public bool? IsEnabled => (bool?)this["isEnabled"];
+
+        [ConfigurationProperty("maxQueryTermsLength")]
+        public int? MaxQueryTermsLength => (int?)this["maxQueryTermsLength"];
+
+        [ConfigurationProperty("maxQueryTextLength")]
+        public int? MaxQueryTextLength => (int?)this["maxQueryTextLength"];
+
+        [ConfigurationProperty("storeClientIPAddress", DefaultValue = true)]
+        public bool StoreClientIPAddress => (bool)this["storeClientIPAddress"];
+
+        [ConfigurationProperty("anonymizeIPAddress", DefaultValue = IPAddressAnonymizationLevel.Partial)]
+        public IPAddressAnonymizationLevel AnonymizeIPAddress => (IPAddressAnonymizationLevel)this["anonymizeIPAddress"];
+
+        [ConfigurationProperty("alertInterval", DefaultValue = 300000)]
+        public int? AlertInterval => (int?)this["alertInterval"];
 
         [ConfigurationProperty("Store")]
         public QueryLoggerStoreSettings Store => this["Store"] as QueryLoggerStoreSettings;
@@ -55,15 +71,6 @@ namespace Gaois.QueryLogger
             [ConfigurationProperty("tableName", DefaultValue = "QueryLogs")]
             public string TableName => this["tableName"] as string;
         }
-
-        [ConfigurationProperty("storeClientIPAddress", DefaultValue = true)]
-        public bool StoreClientIPAddress => (bool)this["storeClientIPAddress"];
-
-        [ConfigurationProperty("anonymizeIPAddress", DefaultValue = IPAddressAnonymizationLevel.Partial)]
-        public IPAddressAnonymizationLevel AnonymizeIPAddress => (IPAddressAnonymizationLevel)this["anonymizeIPAddress"];
-
-        [ConfigurationProperty("alertInterval", DefaultValue = 300000)]
-        public int? AlertInterval => (int?)this["alertInterval"];
 
         [ConfigurationProperty("Email")]
         public EmailSettings Email => this["Email"] as EmailSettings;

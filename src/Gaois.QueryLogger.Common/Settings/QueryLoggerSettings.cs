@@ -18,9 +18,14 @@ namespace Gaois.QueryLogger
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
-        /// Specifies settings that configure the query logger store
+        /// If set, query terms longer than the specified maximum length will be truncated
         /// </summary>
-        public QueryLoggerStoreSettings Store { get; set; } = new QueryLoggerStoreSettings();
+        public int? MaxQueryTermsLength { get; set; }
+
+        /// <summary>
+        /// If set, query text longer than the specified maximum length will be truncated
+        /// </summary>
+        public int? MaxQueryTextLength { get; set; }
 
         /// <summary>
         /// Specifies whether the client IP address should be logged. The default value is true.
@@ -36,6 +41,11 @@ namespace Gaois.QueryLogger
         /// The interval of time (in milliseconds) to wait between sending alerts regarding an issue with the query logger service 
         /// </summary>
         public int AlertInterval { get; set; } = 300000;
+
+        /// <summary>
+        /// Specifies settings that configure the query logger store
+        /// </summary>
+        public QueryLoggerStoreSettings Store { get; set; } = new QueryLoggerStoreSettings();
 
         /// <summary>
         /// Specifies settings for sending e-mail notifications

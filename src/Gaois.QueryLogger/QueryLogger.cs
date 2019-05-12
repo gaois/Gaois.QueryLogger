@@ -30,9 +30,11 @@ namespace Gaois.QueryLogger
                 ipAddress = (query.IPAddress.IsNullOrWhiteSpace())
                     ? request.UserHostAddress : query.IPAddress;
 
+                query.QueryID = (query.QueryID is null) ? Guid.NewGuid() : query.QueryID;
                 query.ApplicationName = (query.ApplicationName.IsNullOrWhiteSpace())
                     ? _settings.ApplicationName : query.ApplicationName;
-                query.QueryID = (query.QueryID is null) ? Guid.NewGuid() : query.QueryID;
+                query.QueryTerms = query.QueryTerms.Truncate(_settings.MaxQueryTermsLength);
+                query.QueryText = query.QueryTerms.Truncate(_settings.MaxQueryTextLength);
                 query.Host = (query.Host.IsNullOrWhiteSpace()) ? host : query.Host;
                 query.IPAddress = IPAddressProcessor.Process(ipAddress, _settings);
                 query.LogDate = (query.LogDate is null) ? DateTime.UtcNow : query.LogDate;
