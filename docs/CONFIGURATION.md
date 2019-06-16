@@ -1,6 +1,6 @@
 # Gaois.QueryLogger Configuration
 
-The settings below can be configured to suit your particular needs. You can configure the query logger in code (ASP.NET Core only) or in your application configuration file. See the documentation for [ASP.NET Framework](https://github.com/gaois/Gaois.QueryLogger/tree/master/src/Gaois.QueryLogger) and [ASP.NET Core](https://github.com/gaois/Gaois.QueryLogger/tree/master/src/Gaois.QueryLogger.AspNetCore) for implementation details in your target framework.
+The settings below can be configured to suit your particular needs. You can configure the query logger in code (ASP.NET Core only) or in your application configuration file. See the documentation for [ASP.NET Framework](https://github.com/gaois/Gaois.QueryLogger/blob/master/docs/NET461.md) and [ASP.NET Core](https://github.com/gaois/Gaois.QueryLogger/blob/master/docs/ASPNETCORE.md) for implementation details in your target framework.
 
 ## Top level
 
