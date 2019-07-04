@@ -45,7 +45,7 @@ namespace Gaois.QueryLogger
                 query.ApplicationName = (query.ApplicationName.IsNullOrWhiteSpace())
                     ? _settings.Value.ApplicationName : query.ApplicationName;
                 query.QueryTerms = query.QueryTerms.Truncate(_settings.Value.MaxQueryTermsLength);
-                query.QueryText = query.QueryTerms.Truncate(_settings.Value.MaxQueryTextLength);
+                query.QueryText = query.QueryText.Truncate(_settings.Value.MaxQueryTextLength);
                 query.Host = (query.Host.IsNullOrWhiteSpace()) ? host : query.Host;
                 query.IPAddress = IPAddressProcessor.Process(ipAddress, _settings.Value);
                 query.LogDate = (query.LogDate is null) ? DateTime.UtcNow : query.LogDate;
