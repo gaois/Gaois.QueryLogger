@@ -23,6 +23,13 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- task: VSBuild@1
+  inputs:
+    solution: './tests/Gaois.QueryLogger.Tests/Gaois.QueryLogger.Tests.csproj'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
 - task: VSTest@2
   inputs:
     testAssemblyVer2: |
