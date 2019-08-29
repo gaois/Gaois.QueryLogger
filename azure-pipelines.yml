@@ -13,5 +13,5 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
+- script: dotnet build ./src/Gaois.QueryLogger.AspNetCore/Gaois.QueryLogger.AspNetCore.csproj --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
