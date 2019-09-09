@@ -16,7 +16,7 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             _context = new MockHttpContextData();
         }
 
-        [Fact]
+        /*[Fact]
         public void LoggingDisabled()
         {
             var serviceProvider = GetServiceProvider(settings => settings.IsEnabled = false);
@@ -84,7 +84,7 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             Assert.Null(queuedUserSpecifiedQuery.QueryCategory);
             Assert.NotEqual(_context.Host, queuedUserSpecifiedQuery.Host);
             Assert.NotEqual(processedContextIP, queuedUserSpecifiedQuery.IPAddress);
-        }
+        }*/
 
         private ServiceProvider GetServiceProvider(IConfigurationSection configuration) =>
             new ServiceCollection()

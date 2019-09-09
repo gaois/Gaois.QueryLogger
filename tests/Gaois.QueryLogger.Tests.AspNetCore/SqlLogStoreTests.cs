@@ -18,7 +18,7 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             _store = serviceProvider.GetService<ILogStore>();
         }
 
-        [Fact]
+        /*[Fact]
         public void Enqueue()
         {
             // Add single query
@@ -87,6 +87,6 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             // Test queue size: query3 contains an excluded IP address
             _store.Enqueue(new[] { query1, query2, query3 });
             Assert.Equal(2, _store.LogQueue.Count);
-        }
+        }*/
     }
 }

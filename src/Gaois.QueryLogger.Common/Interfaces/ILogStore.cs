@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Gaois.QueryLogger
@@ -12,7 +11,7 @@ namespace Gaois.QueryLogger
         /// <summary>
         /// Gets the queue of logs waiting to be written
         /// </summary>
-        BlockingCollection<Query> LogQueue { get; }
+        Channel<Query> LogQueue { get; }
 
         /// <summary>
         /// Queues query data for logging to a data store

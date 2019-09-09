@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using System;
-using System.Collections.Concurrent;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Gaois.QueryLogger
@@ -15,7 +15,7 @@ namespace Gaois.QueryLogger
     {
         private static readonly Lazy<SqlLogStore> _logStore = new Lazy<SqlLogStore>(() => new SqlLogStore(_settings));
         private static QueryLoggerSettings _settings = ConfigurationSettings.Settings;
-        private BlockingCollection<Query> _logQueue;
+        private Channel<Query> _logQueue;
         private DateTime? _lastAlertTime;
         private bool _isInRetryMode;
 
@@ -32,8 +32,13 @@ namespace Gaois.QueryLogger
         /// <summary>
         /// Gets the queue of logs waiting to be written
         /// </summary>
-        public override BlockingCollection<Query> LogQueue => _logQueue ??
-            (_logQueue = new BlockingCollection<Query>(_settings.Store.MaxQueueSize));
+        public override Channel<Query> LogQueue => _logQueue ??
+            (_logQueue = Channel.CreateBounded<Query>(new BoundedChannelOptions(_settings.Store.MaxQueueSize)
+            {
+                FullMode = BoundedChannelFullMode.DropOldest,
+                SingleWriter = false,
+                SingleReader = true
+            }));
 
         /// <summary>
         /// Sends an alert to designated users using the configured alert services
@@ -74,6 +79,7 @@ namespace Gaois.QueryLogger
                 {
                     IsBackground = true
                 };
+
                 thread.Start();
             }
 
@@ -85,11 +91,19 @@ namespace Gaois.QueryLogger
 
                 try
                 {
-                    if (!LogQueue.TryAdd(query, _settings.Store.MaxQueueRetryInterval))
+                    async Task<bool> RetryWriteAsync(Query q)
                     {
-                        var alert = new Alert(AlertTypes.QueueFull, query);
-                        SendAlert(alert);
+                        while (await LogQueue.Writer.WaitToWriteAsync())
+                        {
+                            if (LogQueue.Writer.TryWrite(q))
+                                return true;
+                        }
+
+                        return false;
                     }
+
+                    if (!LogQueue.Writer.TryWrite(query))
+                        _ = new ValueTask<bool>(RetryWriteAsync(query));
                 }
                 catch (Exception exception)
                 {
@@ -144,7 +158,15 @@ namespace Gaois.QueryLogger
         /// </remarks>
         private async void ConsumeQueue()
         {
-            foreach (var query in LogQueue.GetConsumingEnumerable())
+            while (await LogQueue.Reader.WaitToReadAsync())
+            {
+                if (LogQueue.Reader.TryRead(out Query query))
+                {
+                    await WriteLogAsync(query).ConfigureAwait(false);
+                }
+            }
+
+            /*foreach (var query in LogQueue.GetConsumingEnumerable())
             {
                 try
                 {
@@ -169,7 +191,7 @@ namespace Gaois.QueryLogger
                     var alert = new Alert(AlertTypes.LogWriteError, query, exception);
                     SendAlert(alert);
                 }
-            }
+            }*/
         }
     }
 }

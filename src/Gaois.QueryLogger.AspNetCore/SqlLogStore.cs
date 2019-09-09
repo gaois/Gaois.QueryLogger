@@ -1,10 +1,10 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Concurrent;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Gaois.QueryLogger.AspNetCore
@@ -16,7 +16,7 @@ namespace Gaois.QueryLogger.AspNetCore
     {
         private readonly IOptionsMonitor<QueryLoggerSettings> _settings;
         private readonly IAlertService _alertService;
-        private BlockingCollection<Query> _logQueue;
+        private Channel<Query> _logQueue;
         private DateTime? _lastAlertTime;
         private bool _isInRetryMode;
 
@@ -34,8 +34,13 @@ namespace Gaois.QueryLogger.AspNetCore
         /// <summary>
         /// Gets the queue of logs waiting to be written
         /// </summary>
-        public override BlockingCollection<Query> LogQueue => _logQueue ?? 
-            (_logQueue = new BlockingCollection<Query>(_settings.CurrentValue.Store.MaxQueueSize));
+        public override Channel<Query> LogQueue => _logQueue ?? 
+            (_logQueue = Channel.CreateBounded<Query>(new BoundedChannelOptions(_settings.CurrentValue.Store.MaxQueueSize)
+            {
+                FullMode = BoundedChannelFullMode.DropOldest,
+                SingleWriter = false,
+                SingleReader = true
+            }));
 
         /// <summary>
         /// Sends an alert to designated users using the configured alert services
@@ -70,12 +75,13 @@ namespace Gaois.QueryLogger.AspNetCore
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         public override void Enqueue(Query[] queries)
         {
-            if (_logQueue is null)
+            if (_logQueue is default(Channel<Query>))
             {
                 var thread = new Thread(new ThreadStart(ConsumeQueue))
                 {
                     IsBackground = true
                 };
+
                 thread.Start();
             }
 
@@ -87,11 +93,19 @@ namespace Gaois.QueryLogger.AspNetCore
 
                 try
                 {
-                    if (!LogQueue.TryAdd(query, _settings.CurrentValue.Store.MaxQueueRetryInterval))
+                    async Task<bool> RetryWriteAsync(Query q)
                     {
-                        var alert = new Alert(AlertTypes.QueueFull, query);
-                        SendAlert(alert);
+                        while (await LogQueue.Writer.WaitToWriteAsync())
+                        {
+                            if (LogQueue.Writer.TryWrite(q))
+                                return true;
+                        }
+
+                        return false;
                     }
+
+                    if (!LogQueue.Writer.TryWrite(query))
+                        _ = new ValueTask<bool>(RetryWriteAsync(query));
                 }
                 catch (Exception exception)
                 {
@@ -146,30 +160,29 @@ namespace Gaois.QueryLogger.AspNetCore
         /// </remarks>
         private async void ConsumeQueue()
         {
-            foreach (var query in LogQueue.GetConsumingEnumerable())
+            while (await LogQueue.Reader.WaitToReadAsync())
             {
-                try
+                if (LogQueue.Reader.TryRead(out Query query))
                 {
-                    // if in retry mode pause before attemping write
-                    if (_isInRetryMode)
-                        await Task.Delay(_settings.CurrentValue.Store.MaxQueueRetryInterval);
+                    try
+                    {
+                        // if in retry mode pause before attemping write
+                        if (_isInRetryMode)
+                            await Task.Delay(_settings.CurrentValue.Store.MaxQueueRetryInterval);
 
-                    await WriteLogAsync(query).ConfigureAwait(false);
+                        await WriteLogAsync(query).ConfigureAwait(false);
 
-                    // if we got here without exception logs are being written successfully
-                    if (_isInRetryMode)
-                        _isInRetryMode = false;
-                }
-                catch (Exception exception)
-                {
-                    _isInRetryMode = true;
+                        // if we got here without exception logs are being written successfully
+                        if (_isInRetryMode)
+                            _isInRetryMode = false;
+                    }
+                    catch (Exception exception)
+                    {
+                        _isInRetryMode = true;
 
-                    // Return query to queue, if possible.
-                    // If queue is full query will be discarded, but we have maintained First-In First-Out consistency.
-                    _ = LogQueue.TryAdd(query);
-
-                    var alert = new Alert(AlertTypes.LogWriteError, query, exception);
-                    SendAlert(alert);
+                        var alert = new Alert(AlertTypes.LogWriteError, query, exception);
+                        SendAlert(alert);
+                    }
                 }
             }
         }
