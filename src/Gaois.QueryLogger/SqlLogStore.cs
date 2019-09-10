@@ -151,7 +151,6 @@ namespace Gaois.QueryLogger
         /// <summary>
         /// Consumes the log queue and writes logs to the data store
         /// </summary>
-        /// <remarks>
         // Async void methods are generally considered an antipattern, however (I believe) it makes sense here as:
         // 1. We are consuming a long-running (= application lifetime) queue in a separate thread.
         // 2. Because the task effectively does not end or return there is no point awaiting it.

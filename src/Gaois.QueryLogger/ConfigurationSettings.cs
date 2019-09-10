@@ -11,11 +11,13 @@ namespace Gaois.QueryLogger
     {
         private static readonly Lazy<IMapper> _lazyMapper = new Lazy<IMapper>(() =>
         {
-            var configuration = new MapperConfiguration(config => 
+            var configuration = new MapperConfiguration(config =>
             {
                 config.ShouldMapProperty = p => p.GetMethod.IsPublic || p.GetMethod.IsAssembly;
                 config.CreateMap<ConfigurationSettings, QueryLoggerSettings>();
-                config.CreateMap<ExcludedIPAddressSettings, ExcludedIPAddress>();
+                config.CreateMap<QueryLoggerStoreConfigurationSettings, QueryLoggerStoreSettings>();
+                config.CreateMap<EmailConfigurationSettings, EmailSettings>();
+                config.CreateMap<ExcludedIPAddressConfigurationSettings, ExcludedIPAddress>();
             });
 
             return configuration.CreateMapper();
@@ -48,8 +50,8 @@ namespace Gaois.QueryLogger
         public int? AlertInterval => (int?)this["alertInterval"];
 
         [ConfigurationProperty("Store")]
-        public QueryLoggerStoreSettings Store => this["Store"] as QueryLoggerStoreSettings;
-        public class QueryLoggerStoreSettings : ConfigurationElement
+        public QueryLoggerStoreConfigurationSettings Store => this["Store"] as QueryLoggerStoreConfigurationSettings;
+        public class QueryLoggerStoreConfigurationSettings : ConfigurationElement
         {
             [ConfigurationProperty("connectionStringName")]
             public string ConnectionStringName => this["connectionStringName"] as string;
@@ -73,8 +75,8 @@ namespace Gaois.QueryLogger
         }
 
         [ConfigurationProperty("Email")]
-        public EmailSettings Email => this["Email"] as EmailSettings;
-        public class EmailSettings : ConfigurationElement
+        public EmailConfigurationSettings Email => this["Email"] as EmailConfigurationSettings;
+        public class EmailConfigurationSettings : ConfigurationElement
         {
             public MailAddress FromMailAddress => GetMailAddress();
 
@@ -127,7 +129,7 @@ namespace Gaois.QueryLogger
         [ConfigurationProperty("ExcludedIPAddresses", IsDefaultCollection = true)]
         [ConfigurationCollection(typeof(ExcludedIPAddressCollection), AddItemName = "add", ClearItemsName = "clear", RemoveItemName = "remove")]
         public ExcludedIPAddressCollection ExcludedIPAddresses => this["ExcludedIPAddresses"] as ExcludedIPAddressCollection;
-        public class ExcludedIPAddressSettings : ConfigurationElement
+        public class ExcludedIPAddressConfigurationSettings : ConfigurationElement
         {
             [ConfigurationProperty("name")]
             public string Name => this["name"] as string;
@@ -138,9 +140,9 @@ namespace Gaois.QueryLogger
 
         public class ExcludedIPAddressCollection : ConfigurationElementCollection
         {
-            public ExcludedIPAddressSettings this[int index]
+            public ExcludedIPAddressConfigurationSettings this[int index]
             {
-                get => (ExcludedIPAddressSettings)BaseGet(index);
+                get => (ExcludedIPAddressConfigurationSettings)BaseGet(index);
                 set
                 {
                     if (BaseGet(index) != null)
@@ -149,15 +151,15 @@ namespace Gaois.QueryLogger
                 }
             }
 
-            public void Add(ExcludedIPAddressSettings settings) => BaseAdd(settings);
+            public void Add(ExcludedIPAddressConfigurationSettings settings) => BaseAdd(settings);
 
             public void Clear() => BaseClear();
 
-            protected override ConfigurationElement CreateNewElement() => new ExcludedIPAddressSettings();
+            protected override ConfigurationElement CreateNewElement() => new ExcludedIPAddressConfigurationSettings();
 
-            protected override object GetElementKey(ConfigurationElement element) => ((ExcludedIPAddressSettings)element).IPAddress;
+            protected override object GetElementKey(ConfigurationElement element) => ((ExcludedIPAddressConfigurationSettings)element).IPAddress;
 
-            public void Remove(ExcludedIPAddressSettings settings) => BaseRemove(settings.IPAddress);
+            public void Remove(ExcludedIPAddressConfigurationSettings settings) => BaseRemove(settings.IPAddress);
 
             public void RemoveAt(int index) => BaseRemoveAt(index);
 
