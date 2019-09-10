@@ -61,7 +61,7 @@ namespace Gaois.QueryLogger
             catch (Exception exception)
             {
                 // Last port of call if there is an error and we also can't send an alert.
-                // We catch the exception as we don't want the logger to tank its parent application by throwing exceptions continuously if alert service is not available.
+                // We catch the exception as we don't want the logger to take down its parent application by throwing exceptions continuously if the alert service is not available.
                 // We write the exception to a trace to provide some degree of visibility for the error.
                 Trace.WriteLine(exception);
             }
@@ -152,46 +152,36 @@ namespace Gaois.QueryLogger
         /// Consumes the log queue and writes logs to the data store
         /// </summary>
         /// <remarks>
-        /// Async void methods are generally considered an antipattern, however (I believe) it makes sense here as:
-        /// 1. We are consuming a long-running (= application lifetime) queue in a separate thread
-        /// 2. Because the task effectively does not end/return there is no point awaiting it
-        /// </remarks>
+        // Async void methods are generally considered an antipattern, however (I believe) it makes sense here as:
+        // 1. We are consuming a long-running (= application lifetime) queue in a separate thread.
+        // 2. Because the task effectively does not end or return there is no point awaiting it.
         private async void ConsumeQueue()
         {
             while (await LogQueue.Reader.WaitToReadAsync())
             {
                 if (LogQueue.Reader.TryRead(out Query query))
                 {
-                    await WriteLogAsync(query).ConfigureAwait(false);
+                    try
+                    {
+                        // if in retry mode pause before attemping write
+                        if (_isInRetryMode)
+                            await Task.Delay(_settings.Store.MaxQueueRetryInterval);
+
+                        await WriteLogAsync(query).ConfigureAwait(false);
+
+                        // if we got here without exception logs are being written successfully
+                        if (_isInRetryMode)
+                            _isInRetryMode = false;
+                    }
+                    catch (Exception exception)
+                    {
+                        _isInRetryMode = true;
+
+                        var alert = new Alert(AlertTypes.LogWriteError, query, exception);
+                        SendAlert(alert);
+                    }
                 }
             }
-
-            /*foreach (var query in LogQueue.GetConsumingEnumerable())
-            {
-                try
-                {
-                    // if in retry mode pause before attemping write
-                    if (_isInRetryMode)
-                        await Task.Delay(_settings.Store.MaxQueueRetryInterval);
-
-                    await WriteLogAsync(query).ConfigureAwait(false);
-
-                    // if we got here without exception logs are being written successfully
-                    if (_isInRetryMode)
-                        _isInRetryMode = false;
-                }
-                catch (Exception exception)
-                {
-                    _isInRetryMode = true;
-
-                    // Return query to queue, if possible.
-                    // If queue is full query will be discarded, but we have maintained First-In First-Out consistency.
-                    _ = LogQueue.TryAdd(query);
-
-                    var alert = new Alert(AlertTypes.LogWriteError, query, exception);
-                    SendAlert(alert);
-                }
-            }*/
         }
     }
 }

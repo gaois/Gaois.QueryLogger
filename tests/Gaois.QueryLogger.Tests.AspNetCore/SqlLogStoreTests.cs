@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Gaois.QueryLogger.Tests.AspNetCore
@@ -18,24 +19,28 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             _store = serviceProvider.GetService<ILogStore>();
         }
 
-        /*[Fact]
+        [Fact]
         public void Enqueue()
         {
+            var queue = new List<Query>();
+
             // Add single query
             var query = new Query()
             {
                 QueryTerms = "test"
             };
-
-            // Test queue size
+            
             _store.Enqueue(new[] { query });
-            Assert.Single(_store.LogQueue);
 
-            // Test query value
-            var queuedQuery = _store.LogQueue.Take();
-            Assert.Equal("test", queuedQuery.QueryTerms);
+            if (_store.LogQueue.Reader.TryRead(out Query singleQuery))
+                queue.Add(singleQuery);
+
+            Assert.Single(queue);
+            Assert.Equal("test", queue[0].QueryTerms);
 
             // Add multiple queries
+            queue = new List<Query>();
+
             var query1 = new Query()
             {
                 QueryTerms = "test1"
@@ -52,21 +57,25 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             };
 
             // Test queue size
-            // query3 contains an excluded IP address
             _store.Enqueue(new[] { query1, query2, query3 });
-            Assert.Equal(3, _store.LogQueue.Count);
 
-            // Test query values
-            var queuedQuery1 = _store.LogQueue.Take();
-            var queuedQuery2 = _store.LogQueue.Take();
-            var queuedQuery3 = _store.LogQueue.Take();
-            Assert.Equal("test1", queuedQuery1.QueryTerms);
-            Assert.Equal("test2", queuedQuery2.QueryTerms);
-            Assert.Equal("test3", queuedQuery3.QueryTerms);
+            if (_store.LogQueue.Reader.TryRead(out Query q1))
+                queue.Add(q1);
+
+            if (_store.LogQueue.Reader.TryRead(out Query q2))
+                queue.Add(q2);
+
+            if (_store.LogQueue.Reader.TryRead(out Query q3))
+                queue.Add(q3);
+
+            Assert.Equal(3, queue.Count);
+            Assert.Equal("test1", queue[0].QueryTerms);
+            Assert.Equal("test2", queue[1].QueryTerms);
+            Assert.Equal("test3", queue[2].QueryTerms);
         }
 
         [Fact]
-        public void EnqueueWithExcludedIPAddresses()
+        public async void EnqueueWithExcludedIPAddresses()
         {
             var query1 = new Query()
             {
@@ -86,7 +95,17 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
 
             // Test queue size: query3 contains an excluded IP address
             _store.Enqueue(new[] { query1, query2, query3 });
-            Assert.Equal(2, _store.LogQueue.Count);
-        }*/
+            _store.LogQueue.Writer.Complete();
+
+            var queue = new List<Query>();
+
+            while (await _store.LogQueue.Reader.WaitToReadAsync())
+            {
+                if (_store.LogQueue.Reader.TryRead(out Query query))
+                    queue.Add(query);
+            }
+
+            Assert.Equal(2, queue.Count);
+        }
     }
 }

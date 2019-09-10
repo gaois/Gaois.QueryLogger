@@ -4,7 +4,7 @@
     <TargetFramework>net461</TargetFramework>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.7.1-alpha</Version>
+    <Version>0.7.2-alpha</Version>
     <Authors>Ronan Doherty</Authors>
     <Company>Fiontar &amp; Scoil na Gaeilge, Dublin City University</Company>
     <Copyright>Copyright 2019</Copyright>
