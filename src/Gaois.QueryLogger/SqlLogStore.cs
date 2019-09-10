@@ -11,7 +11,7 @@ namespace Gaois.QueryLogger
     /// <summary>
     /// Stores log data in a SQL Server database
     /// </summary>
-    public sealed class SqlLogStore : LogStore, ILogStore
+    public sealed class SqlLogStore : LogStore, ILogStore, IDisposable
     {
         private static readonly Lazy<SqlLogStore> _logStore = new Lazy<SqlLogStore>(() => new SqlLogStore(_settings));
         private static QueryLoggerSettings _settings = ConfigurationSettings.Settings;
@@ -73,7 +73,7 @@ namespace Gaois.QueryLogger
         /// <param name="queries">The <see cref="Query"/> object or objects to be logged</param>
         public override void Enqueue(Query[] queries)
         {
-            if (_logQueue is null)
+            if (_logQueue is default(Channel<Query>))
             {
                 var thread = new Thread(new ThreadStart(ConsumeQueue))
                 {
@@ -146,6 +146,15 @@ namespace Gaois.QueryLogger
 
             using (var db = new SqlConnection(_settings.Store.ConnectionString))
                 await db.ExecuteAsync(SqlQueries.WriteLog(_settings.Store.TableName), queries).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Marks log queue channel as complete on <see cref="SqlLogStore"/> disposal.
+        /// </summary>
+        public void Dispose()
+        {
+            if (_logQueue is Channel<Query>)
+                _ = LogQueue.Writer.TryComplete();
         }
 
         /// <summary>
