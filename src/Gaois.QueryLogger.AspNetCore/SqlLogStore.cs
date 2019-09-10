@@ -12,7 +12,7 @@ namespace Gaois.QueryLogger.AspNetCore
     /// <summary>
     /// Stores log data in a SQL Server database
     /// </summary>
-    public sealed class SqlLogStore : LogStore, ILogStore, IDisposable
+    public sealed class SqlLogStore : LogStore, ILogStore
     {
         private readonly IOptionsMonitor<QueryLoggerSettings> _settings;
         private readonly IAlertService _alertService;
@@ -148,15 +148,6 @@ namespace Gaois.QueryLogger.AspNetCore
             using (var db = new SqlConnection(_settings.CurrentValue.Store.ConnectionString))
                 await db.ExecuteAsync(SqlQueries.WriteLog(_settings.CurrentValue.Store.TableName), queries)
                     .ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Marks log queue channel as complete on <see cref="SqlLogStore"/> disposal.
-        /// </summary>
-        public void Dispose()
-        {
-            if (_logQueue is Channel<Query>)
-                _ = LogQueue.Writer.TryComplete();
         }
 
         /// <summary>
