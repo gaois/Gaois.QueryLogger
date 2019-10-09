@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Concurrent;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Gaois.QueryLogger.Tests.AspNetCore
@@ -9,7 +9,7 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
     {
         private readonly IOptionsMonitor<QueryLoggerSettings> _settings;
         private readonly IAlertService _alertService;
-        private BlockingCollection<Query> _logQueue;
+        private Channel<Query> _logQueue;
 
         public MockLogStore(
             IOptionsMonitor<QueryLoggerSettings> settings,
@@ -19,8 +19,13 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             _alertService = alertService;
         }
 
-        public BlockingCollection<Query> LogQueue => _logQueue ??
-            (_logQueue = new BlockingCollection<Query>(_settings.CurrentValue.Store.MaxQueueSize));
+        public Channel<Query> LogQueue => _logQueue ??
+            (_logQueue = Channel.CreateBounded<Query>(new BoundedChannelOptions(_settings.CurrentValue.Store.MaxQueueSize)
+            {
+                FullMode = BoundedChannelFullMode.DropOldest,
+                SingleWriter = false,
+                SingleReader = true
+            }));
 
         public void Alert(Alert alert) => throw new NotImplementedException();
 
@@ -34,7 +39,19 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
                     && _settings.CurrentValue.ExcludedIPAddresses.Find(x => x.IPAddress == query.IPAddress) != null)
                     continue;
 
-                LogQueue.Add(query);
+                async Task<bool> RetryWriteAsync(Query q)
+                {
+                    while (await LogQueue.Writer.WaitToWriteAsync())
+                    {
+                        if (LogQueue.Writer.TryWrite(q))
+                            return true;
+                    }
+
+                    return false;
+                }
+
+                if (!LogQueue.Writer.TryWrite(query))
+                    _ = new ValueTask<bool>(RetryWriteAsync(query));
             }
         }
 

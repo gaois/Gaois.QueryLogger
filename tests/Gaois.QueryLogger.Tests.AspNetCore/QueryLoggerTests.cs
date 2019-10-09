@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Gaois.QueryLogger.Tests.AspNetCore
@@ -17,7 +18,7 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
         }
 
         [Fact]
-        public void LoggingDisabled()
+        public async void LoggingDisabled()
         {
             var serviceProvider = GetServiceProvider(settings => settings.IsEnabled = false);
             var queryLogger = serviceProvider.GetService<IQueryLogger>();
@@ -34,11 +35,21 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             };
 
             queryLogger.Log(query1, query2);
-            Assert.Empty(store.LogQueue);
+            store.LogQueue.Writer.Complete();
+
+            var queue = new List<Query>();
+
+            while (await store.LogQueue.Reader.WaitToReadAsync())
+            {
+                if (store.LogQueue.Reader.TryRead(out Query query))
+                    queue.Add(query);
+            }
+
+            Assert.Empty(queue);
         }
         
         [Fact]
-        public void LoggingEnabled()
+        public async void LoggingEnabled()
         {
             var configuration = TestHelper.GetQueryLoggerConfiguration("typicalsettings.json");
             var serviceProvider = GetServiceProvider(configuration);
@@ -66,11 +77,20 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             };
             
             queryLogger.Log(autoPopulatedQuery, userSpecifiedQuery);
+            store.LogQueue.Writer.Complete();
 
-            var queueCount = store.LogQueue.Count;
+            var queue = new List<Query>();
+
+            while (await store.LogQueue.Reader.WaitToReadAsync())
+            {
+                if (store.LogQueue.Reader.TryRead(out Query query))
+                    queue.Add(query);
+            }
+
+            var queueCount = queue.Count;
             Assert.Equal(2, queueCount);
 
-            var queuedAutoPopulatedQuery = store.LogQueue.Take();
+            var queuedAutoPopulatedQuery = queue[0];
             var processedContextIP = IPAddressProcessor.Process(_context.IPAddress, settings.CurrentValue);
             Assert.NotNull(queuedAutoPopulatedQuery.QueryID);
             Assert.Equal("RecordsApp", queuedAutoPopulatedQuery.ApplicationName);
@@ -78,7 +98,7 @@ namespace Gaois.QueryLogger.Tests.AspNetCore
             Assert.Equal(_context.Host, queuedAutoPopulatedQuery.Host);
             Assert.Equal(processedContextIP, queuedAutoPopulatedQuery.IPAddress);
 
-            var queuedUserSpecifiedQuery = store.LogQueue.Take();
+            var queuedUserSpecifiedQuery = queue[1];
             Assert.Equal(userSpecifiedQueryID, queuedUserSpecifiedQuery.QueryID);
             Assert.Equal("MyTestApp", queuedUserSpecifiedQuery.ApplicationName);
             Assert.Null(queuedUserSpecifiedQuery.QueryCategory);
