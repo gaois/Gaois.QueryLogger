@@ -6,12 +6,9 @@ A simple, configurable query logger for ASP.NET and ASP.NET Core applications. I
 
 **Note:** This is a **prerelease version** for testing purposes. The API surface is now relatively stable and we are focusing on adding additonal features, unit tests and documentation.
 
-- [Package status](#package-status)
-- [Features](#features)
-- [Documentation](#documentation)
-- [Who is using this?](#who-is-using-this)
-- [Additional credits](#additional-credits)
-- [Roadmap](#roadmap)
+## Documentation
+
+Learn how to install and configure the query logger on our documentation site at [docs.gaois.ie](https://docs.gaois.ie/en/software/querylogger/v0.7/intro).
 
 ## Package status
 
@@ -29,26 +26,3 @@ A simple, configurable query logger for ASP.NET and ASP.NET Core applications. I
 - By default, the library partially anonymises user IP addresses by removing the last octet of IPv4 client IP addresses or the last 80 bits of an IPv6 address. This setting can be turned off.
 - Performance: logging adds no additional overhead to server response times. We log over 100,000 queries per day in production with ease.
 - Includes its own e-mail notification service that will alert you in the event of any logging errors.
-
-## Documentation
-
-Installation and usage vary slightly according to the target framework. Follow the links below to see the relevant documentation.
-
-- Read the documentation for ASP.NET Framework 4.6.1+ [here](./docs/NET461.md).
-- Read the documentation for ASP.NET Core 2.1+ [here](./docs/ASPNETCORE.md).
-
-Further documentation regarding [configuration options](./docs/CONFIGURATION.md) and [custom log data](./docs/LOGDATA.md) is also available.
-
-## Who is using this?
-
-Gaois.QueryLogger is in production use at [www.tearma.ie](https://www.tearma.ie), [www.duchas.ie](https://www.duchas.ie), [www.gaois.ie](https://www.gaois.ie), [www.ainm.ie](https://www.ainm.ie), [www.logainm.ie](https://www.logainm.ie), and [meitheal.logainm.ie](https://meitheal.logainm.ie).
-
-## Additional credits
-
-The architecture of Gaois.QueryLogger is heavily inspired by the [StackExchange.Exceptional](https://github.com/NickCraver/StackExchange.Exceptional) library. Gaois.QueryLogger makes use of two other third-party open-source libraries: [Dapper](https://github.com/StackExchange/Dapper/) and [AutoMapper](https://automapper.org/).
-
-## Roadmap
-
-Planned developments for this library:
-
-- Add sample projects.
